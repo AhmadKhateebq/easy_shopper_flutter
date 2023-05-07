@@ -35,7 +35,9 @@ class _NavState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return MaterialApp(
+      theme: AppBorders.themeData,
+      home: SafeArea(
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -67,6 +69,10 @@ class _NavState extends State<HomePage> {
           unselectedFontSize: 13.0,
         ),
       ),
-    );
+    ),
+      debugShowCheckedModeBanner: false,
+   )
+    
+    ;
   }
 }

@@ -11,8 +11,20 @@ import 'Constants/connection.dart';
 
 void main() {
   //in each app run check if the user is logged in or not
-  //SharedPreferences.getInstance();
-  runApp(_Login());
+  String token = "";
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences.getInstance().then((value) {
+    token = value.getString("userToken") != null
+        ? value.getString("userToken")!
+        : "";
+  });
+
+  if (token != "" || token != null) {
+    print("route switched to main page");
+    runApp(HomePage());
+  } else {
+    runApp(_Login());
+  }
 }
 
 class _Login extends StatelessWidget {
