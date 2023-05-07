@@ -9,6 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Constants/connection.dart';
 
 void main() {
+
+  //in each app run check if the user is logged in or not
   //SharedPreferences.getInstance();
   runApp(_Login());
 }
@@ -101,7 +103,8 @@ class _LoginHomeState extends State<LoginHome> {
                                 String response = value.body;
                                 print("login response: " + response);
                                 print(value.statusCode);
-                                if (value.statusCode == 200) {
+                                if (value.statusCode == 200 || value.statusCode == 201) {
+                                  //store token in the session
                                   SharedPreferences.getInstance().then((prefs) {
                                     prefs.setString("userToken", response);
                                   });
@@ -129,9 +132,6 @@ class _LoginHomeState extends State<LoginHome> {
                                 }
                               });
 
-                              /*    LoginApis.getUser().then((value) {
-                                print("get user ${value.body}");
-                              }); */
                             },
                             icon: Icon(
                               Icons.login,
