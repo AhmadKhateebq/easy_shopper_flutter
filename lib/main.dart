@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Apis/LoginApis.dart';
 import 'package:graduation_project/Pages/Regestration/userInfo.dart';
+import 'package:graduation_project/Pages/admin/admin_page.dart';
 import 'package:graduation_project/Style/borders.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Constants/connection.dart';
 
 void main() {
-
   //in each app run check if the user is logged in or not
   //SharedPreferences.getInstance();
   runApp(_Login());
@@ -101,12 +101,19 @@ class _LoginHomeState extends State<LoginHome> {
 
                               LoginApis.login(username, password).then((value) {
                                 String response = value.body;
-                                print("login response: " + response);
+                                print("login response: " +
+                                    response +
+                                    "status ${value.statusCode}");
                                 print(value.statusCode);
-                                if (value.statusCode == 200 || value.statusCode == 201) {
+                                if (value.statusCode == 200 ||
+                                    value.statusCode == 201) {
                                   //store token in the session
                                   SharedPreferences.getInstance().then((prefs) {
                                     prefs.setString("userToken", response);
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) {
+                                      return HomePage();
+                                    }));
                                   });
                                 } else if (value.statusCode == 418) {
                                   showDialog(
@@ -131,7 +138,6 @@ class _LoginHomeState extends State<LoginHome> {
                                       });
                                 }
                               });
-
                             },
                             icon: Icon(
                               Icons.login,
