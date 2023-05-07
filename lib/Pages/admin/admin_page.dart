@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:graduation_project/Apis/LoginApis.dart';
 import 'package:graduation_project/Pages/admin/supermarkets/supermarket_page.dart';
 import 'package:graduation_project/Pages/admin/users/users_page.dart';
 import 'package:graduation_project/Style/borders.dart';
-
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,10 +27,15 @@ class _NavState extends State<HomePage> {
     });
   }
 
-
   @override
   void initState() {
     super.initState();
+    SharedPreferences.getInstance().then((value) {
+      var token = value.getString("userToken");
+      LoginApis.getAllUsersList(token!).then((resp) {
+        print("get all users list: " + resp.body);
+      });
+    });
   }
 
   @override
@@ -38,41 +43,40 @@ class _NavState extends State<HomePage> {
     return MaterialApp(
       theme: AppBorders.themeData,
       home: SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            "Lazy Shopper",
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              "Lazy Shopper",
+            ),
+            backgroundColor: AppBorders.appColor,
+            centerTitle: true,
           ),
-          backgroundColor:  AppBorders.appColor,
-          centerTitle: true,
-        ),
-        body: Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          items:  <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.supervised_user_circle_rounded,
-                  color: AppBorders.appColor,
-                ),
-                label: "users"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_cart_rounded, color: AppBorders.appColor),
-                label: 'supermarkets'),
-          ],
-          currentIndex: _selectedIndex,
-          onTap: _onItemTap,
-          selectedItemColor: AppBorders.appColor,
-          selectedFontSize: 13.0,
-          unselectedFontSize: 13.0,
+          body: Center(
+            child: _widgetOptions.elementAt(_selectedIndex),
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.supervised_user_circle_rounded,
+                    color: AppBorders.appColor,
+                  ),
+                  label: "users"),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.shopping_cart_rounded,
+                      color: AppBorders.appColor),
+                  label: 'supermarkets'),
+            ],
+            currentIndex: _selectedIndex,
+            onTap: _onItemTap,
+            selectedItemColor: AppBorders.appColor,
+            selectedFontSize: 13.0,
+            unselectedFontSize: 13.0,
+          ),
         ),
       ),
-    ),
       debugShowCheckedModeBanner: false,
-   )
-    
-    ;
+    );
   }
 }

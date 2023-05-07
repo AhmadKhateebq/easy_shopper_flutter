@@ -17,14 +17,16 @@ void main() {
     token = value.getString("userToken") != null
         ? value.getString("userToken")!
         : "";
-  });
-
-  if (token != "" || token != null) {
+    if (token != "") {
     print("route switched to main page");
     runApp(HomePage());
   } else {
+    print("route switched to login page");
     runApp(_Login());
   }
+  });
+
+  
 }
 
 class _Login extends StatelessWidget {
