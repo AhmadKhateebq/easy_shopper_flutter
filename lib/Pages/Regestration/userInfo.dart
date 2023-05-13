@@ -34,7 +34,7 @@ class _UserInfoHomeState extends State<_UserInfoHome> {
             actions: [
               TextButton(
                   onPressed: () {
-                    if (switchToLogin == null || switchToLogin == true)
+                    if (switchToLogin == null || switchToLogin == false)
                       Navigator.of(alertContext).pop();
                     else {
                       Navigator.of(alertContext).pop();
@@ -53,17 +53,17 @@ class _UserInfoHomeState extends State<_UserInfoHome> {
           );
         });
   }
-
-  @override
-  Widget build(BuildContext context) {
-    MediaQueryData mediaQueryData = MediaQuery.of(context);
-    double screenWidth = mediaQueryData.size.width;
-    double screenHeight = mediaQueryData.size.height;
     TextEditingController userNameController = TextEditingController();
     TextEditingController firstNameController = TextEditingController();
     TextEditingController lastNameController = TextEditingController();
     TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
+    double screenWidth = mediaQueryData.size.width;
+    double screenHeight = mediaQueryData.size.height;
+
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 229, 229, 229),
@@ -239,7 +239,7 @@ class _UserInfoHomeState extends State<_UserInfoHome> {
                                         "register user response: ${response.body} status Code: ${response.statusCode}");
                                     if (response.statusCode == 200 ||
                                         response.statusCode == 201) {
-                                          
+
                                       SharedPreferences.getInstance()
                                           .then((prefs) {
                                         prefs.setString(

@@ -65,14 +65,14 @@ class _LoginHomeState extends State<LoginHome> {
         });
   }
 
+  TextEditingController usernameCont =  TextEditingController();
+  TextEditingController passwordCont =  TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQueryData = MediaQuery.of(context);
     double screenWidth = mediaQueryData.size.width;
     double screenHeight = mediaQueryData.size.height;
-
-    TextEditingController usernameCont = new TextEditingController();
-    TextEditingController passwordCont = new TextEditingController();
 
     return Scaffold(
         backgroundColor: Color.fromARGB(255, 229, 229, 229),

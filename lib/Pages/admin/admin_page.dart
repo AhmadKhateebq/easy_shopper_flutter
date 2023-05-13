@@ -45,14 +45,13 @@ class HomeBodyState extends State<HomeBody> {
       var token = value.getString("userToken");
       LoginApis.getUser().then((resp) {
         print("get all users list: "+resp.body + "status code ${resp.statusCode}");
-        return;
         try {
           List<dynamic> list = jsonDecode(resp.body);
           if (!mounted) return;
           setState(() {
             list.forEach((element) {
               print(element);
-              userInfo.add([element["userId"], element["name"]]);
+              userInfo.add([element["id"], element["username"]]);
             });
           });
         } on Exception catch (e) {
