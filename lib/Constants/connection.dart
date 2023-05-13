@@ -1,4 +1,5 @@
 class ConnectionUrls {
-  static String deviceIp = "192.168.1.14";
-  static  String urlIp = "http://"+deviceIp+":8085/";
+  static const String deviceIp = "172.19.24.23";
+  static const String localHost = "10.0.2.2";
+  static String urlIp = "http://" + localHost + ":8085/";
 }

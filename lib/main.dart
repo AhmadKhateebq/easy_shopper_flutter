@@ -1,11 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Apis/LoginApis.dart';
 import 'package:graduation_project/Pages/Regestration/userInfo.dart';
 import 'package:graduation_project/Pages/admin/admin_page.dart';
 import 'package:graduation_project/Style/borders.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 void main() {
   //in each app run check if the user is logged in or not
@@ -15,19 +13,18 @@ void main() {
     token = value.getString("userToken") != null
         ? value.getString("userToken")!
         : "";
+    print("userToken: " + token);
     if (token != "") {
-    print("route switched to main page");
-    runApp(HomePage());
-  } else {
-    print("route switched to login page");
-    runApp(_Login());
-  }
+      print("route switched to main page");
+      runApp(HomePage());
+    } else {
+      print("route switched to login page");
+      runApp(Login());
+    }
   });
-
-  
 }
 
-class _Login extends StatelessWidget {
+class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -48,6 +45,26 @@ class LoginHome extends StatefulWidget {
 }
 
 class _LoginHomeState extends State<LoginHome> {
+  showAlert(String msg) {
+    showDialog(
+        context: context,
+        builder: (alertContext) {
+          return AlertDialog(
+            content: Text(msg),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(alertContext).pop();
+                  },
+                  child: Text(
+                    "OK",
+                    style: TextStyle(color: AppBorders.appColor),
+                  ))
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQueryData = MediaQuery.of(context);
@@ -122,32 +139,16 @@ class _LoginHomeState extends State<LoginHome> {
                                   //store token in the session
                                   SharedPreferences.getInstance().then((prefs) {
                                     prefs.setString("userToken", response);
-                                    Navigator.of(context).push(
+                                    Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(builder: (context) {
                                       return HomePage();
                                     }));
                                   });
                                 } else if (value.statusCode == 418) {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          content: const Text(
-                                              "Wrong Username or Password"),
-                                          actions: [
-                                            TextButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: Text(
-                                                  "OK",
-                                                  style: TextStyle(
-                                                      color:
-                                                          AppBorders.appColor),
-                                                ))
-                                          ],
-                                        );
-                                      });
+                                  showAlert("Wrong username or password");
+                                  ;
+                                } else {
+                                  showAlert("Something went wrong");
                                 }
                               });
                             },

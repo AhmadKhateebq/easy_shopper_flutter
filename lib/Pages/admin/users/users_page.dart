@@ -13,7 +13,7 @@ class UsersPage extends StatelessWidget {
     }
     return Container(
         child: usersList.isEmpty
-            ? CircularProgressIndicator()
+            ? Text("Empty Users List")
             : Align(
                 alignment: Alignment.center,
                 child: Container(

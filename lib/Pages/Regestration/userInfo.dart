@@ -1,8 +1,10 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Apis/LoginApis.dart';
+import 'package:graduation_project/Pages/admin/admin_page.dart';
 import 'package:graduation_project/Style/borders.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserInfo extends StatelessWidget {
   @override
@@ -24,7 +26,7 @@ class _UserInfoHomeState extends State<_UserInfoHome> {
   final _formKey = GlobalKey<FormState>();
   bool validPassword = false;
 
-  void showAlert(String msg) {
+  void showAlert(String msg, {bool? switchToLogin}) {
     showDialog(
         context: context,
         builder: (alertContext) {
@@ -32,7 +34,15 @@ class _UserInfoHomeState extends State<_UserInfoHome> {
             actions: [
               TextButton(
                   onPressed: () {
-                    Navigator.of(alertContext).pop();
+                    if (switchToLogin == null || switchToLogin == true)
+                      Navigator.of(alertContext).pop();
+                    else {
+                      Navigator.of(alertContext).pop();
+                      Navigator.of(context).pushReplacement(
+                          new MaterialPageRoute(builder: (context) {
+                        return HomePage();
+                      }));
+                    }
                   },
                   child: Text(
                     "OK",
@@ -61,6 +71,7 @@ class _UserInfoHomeState extends State<_UserInfoHome> {
           width: double.infinity,
           alignment: Alignment.center,
           child: ListView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             children: [
               Container(
                 decoration: BoxDecoration(
@@ -164,14 +175,6 @@ class _UserInfoHomeState extends State<_UserInfoHome> {
                         Container(
                           margin: EdgeInsets.only(bottom: screenHeight * 0.01),
                           child: TextFormField(
-                              /* autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              validator: (value) {
-                                if (!validPassword)
-                                  return ("Please enter valid password");
-
-                                return null;
-                              }, */
                               controller: passwordController,
                               obscureText: true,
                               decoration: AppBorders.txtFieldDecoration(
@@ -198,12 +201,14 @@ class _UserInfoHomeState extends State<_UserInfoHome> {
                             child: ElevatedButton.icon(
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
-                                  String username = userNameController.text,
-                                      fname = firstNameController.text,
-                                      lname = lastNameController.text,
-                                      email = emailController.text,
+                                  String username =
+                                          userNameController.text.trim(),
+                                      fname = firstNameController.text.trim(),
+                                      lname = lastNameController.text.trim(),
+                                      email = emailController.text.trim(),
                                       password = passwordController.text;
                                   print("success ");
+                                  print("password: ${password} ");
                                   if (!validPassword) {
                                     showDialog(
                                         context: context,
@@ -234,7 +239,15 @@ class _UserInfoHomeState extends State<_UserInfoHome> {
                                         "register user response: ${response.body} status Code: ${response.statusCode}");
                                     if (response.statusCode == 200 ||
                                         response.statusCode == 201) {
-                                      showAlert("Account Created Successfuly");
+                                          
+                                      SharedPreferences.getInstance()
+                                          .then((prefs) {
+                                        prefs.setString(
+                                            "userToken", response.body);
+                                        showAlert("Account Created Successfuly",
+                                          switchToLogin: true);
+                                      });
+                                
                                     } else if (response.statusCode == 401) {
                                       showAlert(
                                           "Registration Failed : Unautharized");
