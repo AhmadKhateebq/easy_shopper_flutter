@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Apis/LoginApis.dart';
@@ -16,10 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _NavState extends State<HomePage> {
   int _selectedIndex = 0;
-  final List<Widget> _widgetOptions = [
-    UsersPage(),
-    SupermarketsPage(),
-  ];
+  var userInfo = List.empty(growable: true);
 
   void _onItemTap(int index) {
     setState(() {
@@ -33,18 +30,35 @@ class _NavState extends State<HomePage> {
     SharedPreferences.getInstance().then((value) {
       var token = value.getString("userToken");
       LoginApis.getAllUsersList(token!).then((resp) {
-        print("get all users list: " + resp.body);
+        print("get all users list: " + "status code ${resp.statusCode}");
+        try {
+          List<dynamic> list = jsonDecode(resp.body);
+          if (!mounted) return;
+          setState(() {
+            list.forEach((element) {
+              print(element);
+              userInfo.add([element["userId"], element["name"]]);
+            });
+          });
+        } on Exception catch (e) {
+          print("list exception: " + e.toString());
+        }
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _widgetOptions = [
+      UsersPage(userInfo),
+      SupermarketsPage(),
+    ];
     return MaterialApp(
       theme: AppBorders.themeData,
       home: SafeArea(
         child: Scaffold(
           appBar: AppBar(
+            leading: Icon(Icons.logout),
             title: const Text(
               "Lazy Shopper",
             ),
@@ -62,11 +76,11 @@ class _NavState extends State<HomePage> {
                     Icons.supervised_user_circle_rounded,
                     color: AppBorders.appColor,
                   ),
-                  label: "users"),
+                  label: "Users"),
               BottomNavigationBarItem(
                   icon: Icon(Icons.shopping_cart_rounded,
                       color: AppBorders.appColor),
-                  label: 'supermarkets'),
+                  label: 'Super Markets'),
             ],
             currentIndex: _selectedIndex,
             onTap: _onItemTap,

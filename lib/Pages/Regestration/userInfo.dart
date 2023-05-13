@@ -1,6 +1,5 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_pw_validator/Resource/Strings.dart';
 import 'package:graduation_project/Apis/LoginApis.dart';
 import 'package:graduation_project/Style/borders.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';

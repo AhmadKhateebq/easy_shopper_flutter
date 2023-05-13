@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Apis/LoginApis.dart';
@@ -7,7 +6,6 @@ import 'package:graduation_project/Pages/admin/admin_page.dart';
 import 'package:graduation_project/Style/borders.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'Constants/connection.dart';
 
 void main() {
   //in each app run check if the user is logged in or not
