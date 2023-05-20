@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Apis/LoginApis.dart';
@@ -42,16 +41,23 @@ class HomeBodyState extends State<HomeBody> {
   void initState() {
     super.initState();
     SharedPreferences.getInstance().then((value) {
-      var token = value.getString("userToken");
       LoginApis.getUser().then((resp) {
-        print("get all users list: "+resp.body + "status code ${resp.statusCode}");
+        print("get all users list: " +
+            resp.body +
+            "status code ${resp.statusCode}");
         try {
           List<dynamic> list = jsonDecode(resp.body);
           if (!mounted) return;
           setState(() {
             list.forEach((element) {
               print(element);
-              userInfo.add([element["id"], element["username"]]);
+              userInfo.add({
+                "id": element["id"],
+                "username": element["username"],
+                "fname": element["fname"],
+                "email": element["email"],
+                "lname": element["lname"]
+              });
             });
           });
         } on Exception catch (e) {
