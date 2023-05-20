@@ -11,7 +11,7 @@ class AdminApis {
     try {
       return delete(
         Uri.parse(
-          "${ConnectionUrls.urlIp}user/2",
+          "${ConnectionUrls.urlIp}user/${id}",
         ),
         headers: {
           "Authorization": "Bearer 1477",
