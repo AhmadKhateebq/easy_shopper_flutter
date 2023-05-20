@@ -79,96 +79,97 @@ class UsersPageState extends State {
       print(usersList);
     }
     return Container(
-        child: usersList.isEmpty
-            ? Text("Empty Users List")
-            : Align(
-                alignment: Alignment.center,
-                child: Container(
-                  child: ListView(
+        child: Align(
+            alignment: Alignment.center,
+            child: Container(
+              child: ListView(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          IconButton(
-                              onPressed: () {
-                                getUsers();
-                              },
-                              icon: Icon(Icons.refresh)),
-                          Text("Refresh List")
-                        ],
-                      ),
-                      for (int i = 0; i < usersList.length; i++)
-                        Container(
-                          decoration: AppBorders.containerDecoration(),
-                          margin:
-                              EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                          child: ListTile(
-                              leading: Icon(Icons.person),
-                              title: Text(usersList[i]["username"].toString()),
-                              subtitle:
-                                  Text("# ${usersList[i]["id"].toString()}"),
-                              trailing: Material(
-                                child: InkWell(
-                                  radius: 20,
-                                  borderRadius: BorderRadius.circular(50),
-                                  splashColor: Colors.grey,
-                                  child: Icon(
-                                    Icons.remove_circle,
-                                    color: AppBorders.appColor,
-                                  ),
-                                  onTap: () {
-                                    String username =
-                                            usersList[i]["username"].toString(),
-                                        lname =
-                                            usersList[i]["lastname"].toString(),
-                                        fname =
-                                            usersList[i]["fname"].toString(),
-                                        id = usersList[i]["id"].toString(),
-                                        email =
-                                            usersList[i]["email"].toString();
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                            content: Text(
-                                                "Do you want to delete the user (${username}) ?"),
-                                            actions: [
-                                              TextButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                    AdminApis.deleteUser(
-                                                            username,
-                                                            email,
-                                                            fname,
-                                                            lname,
-                                                            id)
-                                                        .then((response) {
-                                                      print(
-                                                          "delete user response ${response.body} , status ${response.statusCode}");
-                                                      if (response.statusCode ==
-                                                          200) {
-                                                        getUsers();
-                                                      } else {
-                                                        showAlert(
-                                                            "Error :  Couldn't delete user");
-                                                      }
-                                                    });
-                                                  },
-                                                  child: Text("Yes")),
-                                              TextButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: Text("No"))
-                                            ],
-                                          );
-                                        });
-                                  },
-                                ),
-                              )),
-                        )
+                      IconButton(
+                          onPressed: () {
+                            getUsers();
+                          },
+                          icon: Icon(Icons.refresh)),
+                      Text("Refresh List")
                     ],
                   ),
-                )));
+
+                  usersList.isEmpty
+                      ? Text("Empty Users List")
+                      : Column(children: [
+
+                        for (int i = 0; i < usersList.length; i++)
+                        Container(
+                            decoration: AppBorders.containerDecoration(),
+                            margin: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 5),
+                            child: ListTile(
+                                leading: Icon(Icons.person),
+                                title:
+                                    Text(usersList[i]["username"].toString()),
+                                subtitle:
+                                    Text("# ${usersList[i]["id"].toString()}"),
+                                trailing: Material(
+                                  child: InkWell(
+                                    radius: 20,
+                                    borderRadius: BorderRadius.circular(50),
+                                    splashColor: Colors.grey,
+                                    child: Icon(
+                                      Icons.remove_circle,
+                                      color: AppBorders.appColor,
+                                    ),
+                                    onTap: () {
+                                      String username = usersList[i]["username"]
+                                              .toString(),
+                                          id = usersList[i]["id"].toString();
+
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              content: Text(
+                                                  "Do you want to delete the user (${username}) ?"),
+                                              actions: [
+                                                TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      AdminApis.deleteUser(id)
+                                                          .then((response) {
+                                                        print(
+                                                            "delete user response ${response.body} , status ${response.statusCode}");
+                                                        if (response
+                                                                .statusCode ==
+                                                            202) {
+                                                          getUsers();
+                                                        } else {
+                                                          showAlert(
+                                                              "Error :  Couldn't delete user");
+                                                        }
+                                                      });
+                                                    },
+                                                    child: Text("Yes")),
+                                                TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: Text("No"))
+                                              ],
+                                            );
+                                          });
+                                    },
+                                  ),
+                                )),
+                          )
+
+                      ],)
+                          
+                        
+                ],
+              ),
+            )));
   }
 }
