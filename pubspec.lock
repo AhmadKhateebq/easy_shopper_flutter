@@ -90,10 +90,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_pw_validator
-      sha256: "46eb4296d72c615d2e7d068c3ce9d10028f1425ed0b155223a1ced7906a2f238"
+      sha256: "01960d4d701f6b972f3a2f324e202d840ecfe1b84e00522f92dece874b1c9b30"
       url: "https://pub.dev"
     source: hosted
-    version: "1.5.0"
+    version: "1.6.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter

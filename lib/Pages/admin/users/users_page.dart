@@ -144,7 +144,7 @@ class UsersPageState extends State {
                                                             id)
                                                         .then((response) {
                                                       print(
-                                                          "delete user response ${response} , status ${response.statusCode}");
+                                                          "delete user response ${response.body} , status ${response.statusCode}");
                                                       if (response.statusCode ==
                                                           200) {
                                                         getUsers();
