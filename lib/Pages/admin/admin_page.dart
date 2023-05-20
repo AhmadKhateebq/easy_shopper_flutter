@@ -94,7 +94,7 @@ class HomeBodyState extends State<HomeBody> {
   Widget build(BuildContext context) {
     final List<Widget> _widgetOptions = [
       UsersPage(userInfo),
-      SupermarketsPage(),
+      SupermarketListPage(),
     ];
     // TODO: implement build
     return SafeArea(
