@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:graduation_project/Style/borders.dart';
 
 import '../../../Apis/supermarketApi.dart';
 import '../../../model/supermarket.dart';
@@ -25,10 +26,13 @@ class _SupermarketListPageState extends State<SupermarketListPage> {
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
         setState(() {
-          supermarkets = jsonData.map<Supermarket>((item) => Supermarket.fromJson(item)).toList();
+          supermarkets = jsonData
+              .map<Supermarket>((item) => Supermarket.fromJson(item))
+              .toList();
         });
       } else {
-        print('Failed to fetch supermarkets. Status code: ${response.statusCode}');
+        print(
+            'Failed to fetch supermarkets. Status code: ${response.statusCode}');
       }
     } catch (e) {
       print('Exception occurred while fetching supermarkets: $e');
@@ -38,17 +42,20 @@ class _SupermarketListPageState extends State<SupermarketListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Supermarkets'),
-      ),
       body: ListView.builder(
         itemCount: supermarkets.length,
         itemBuilder: (context, index) {
           final supermarket = supermarkets[index];
-          return ListTile(
-            title: Text(supermarket.name),
-            subtitle: Text('ID: ${supermarket.id}'),
-            // Add more widgets to display other information
+          return Container(
+            margin: EdgeInsets.all(10),
+            decoration: AppBorders.containerDecoration(),
+            child: ListTile(
+              title: Text(supermarket.name),
+              onTap: () {
+                
+              },
+              // Add more widgets to display other information
+            ),
           );
         },
       ),

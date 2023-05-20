@@ -97,7 +97,10 @@ class UsersPageState extends State {
                   ),
 
                   usersList.isEmpty
-                      ? Text("Empty Users List")
+                      ? Align(
+                        alignment: Alignment.center,
+                        child: Text("Empty Users List"),)
+                      
                       : Column(children: [
 
                         for (int i = 0; i < usersList.length; i++)
