@@ -65,9 +65,9 @@ class _LoginHomeState extends State<LoginHome> {
         });
   }
 
-  TextEditingController usernameCont =  TextEditingController();
-  TextEditingController passwordCont =  TextEditingController();
-
+  TextEditingController usernameCont = TextEditingController();
+  TextEditingController passwordCont = TextEditingController();
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQueryData = MediaQuery.of(context);
@@ -76,9 +76,11 @@ class _LoginHomeState extends State<LoginHome> {
 
     return Scaffold(
         backgroundColor: Color.fromARGB(255, 229, 229, 229),
-        body: Container(
+        body: 
+        SingleChildScrollView(child:   Container(
             width: double.infinity,
-            child: Column(
+            child: 
+            Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
@@ -100,7 +102,9 @@ class _LoginHomeState extends State<LoginHome> {
                   padding: EdgeInsets.all(screenWidth * 0.05),
                   margin: EdgeInsets.all(screenWidth * 0.05),
                   decoration: AppBorders.containerDecoration(),
-                  child: Column(
+                  child: 
+                  
+                  Column(
                     children: [
                       Container(
                         margin: EdgeInsets.only(bottom: screenHeight * 0.03),
@@ -124,38 +128,61 @@ class _LoginHomeState extends State<LoginHome> {
                           width: double.infinity,
                           height: screenHeight * 0.07,
                           child: ElevatedButton.icon(
-                            onPressed: () {
-                              var username = usernameCont.text,
-                                  password = passwordCont.text;
+                            onPressed: isLoading
+                                ? null
+                                : () {
+                                    var username = usernameCont.text,
+                                        password = passwordCont.text;
 
-                              LoginApis.login(username, password).then((value) {
-                                String response = value.body;
-                                print("login response: " +
-                                    response +
-                                    "status ${value.statusCode}");
-                                print(value.statusCode);
-                                if (value.statusCode == 200 ||
-                                    value.statusCode == 201) {
-                                  //store token in the session
-                                  SharedPreferences.getInstance().then((prefs) {
-                                    prefs.setString("userToken", response);
-                                    Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(builder: (context) {
-                                      return HomePage();
-                                    }));
-                                  });
-                                } else if (value.statusCode == 418) {
-                                  showAlert("Wrong username or password");
-                                  ;
-                                } else {
-                                  showAlert("Something went wrong");
-                                }
-                              });
-                            },
-                            icon: Icon(
-                              Icons.login,
-                              size: screenWidth * 0.07,
-                            ),
+                                    if (username.isEmpty || password.isEmpty) {
+                                      showAlert("Empty username or password");
+                                      return;
+                                    }
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    LoginApis.login(username, password)
+                                        .then((value) {
+                                      String response = value.body;
+                                      print("login response: " +
+                                          response +
+                                          "status ${value.statusCode}");
+                                      print(value.statusCode);
+                                      if (value.statusCode == 200 ||
+                                          value.statusCode == 201) {
+                                        //store token in the session
+                                        SharedPreferences.getInstance()
+                                            .then((prefs) {
+                                          prefs.setString(
+                                              "userToken", response);
+                                          Navigator.of(context).pushReplacement(
+                                              MaterialPageRoute(
+                                                  builder: (context) {
+                                            return HomePage();
+                                          }));
+                                        });
+                                      } else if (value.statusCode == 418) {
+                                        showAlert("Wrong username or password");
+                                        ;
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                      } else {
+                                        showAlert("Something went wrong");
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                      }
+                                    });
+                                  },
+                            icon: isLoading
+                                ? CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                : Icon(
+                                    Icons.login,
+                                    size: screenWidth * 0.07,
+                                  ),
                             label: Text("Login",
                                 style: TextStyle(fontSize: screenWidth * 0.05)),
                             style: AppBorders.btnStyle(),
@@ -183,6 +210,7 @@ class _LoginHomeState extends State<LoginHome> {
                   ),
                 ),
               ],
-            )));
+            )),)
+      );
   }
 }
