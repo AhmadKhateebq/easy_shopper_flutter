@@ -5,7 +5,6 @@ import "package:http/http.dart" as http;
 import "package:shared_preferences/shared_preferences.dart";
 import '../model/supermarket.dart';
 
-String _adminHeader = "Bearer 1477";
 String header = "Bearer";
 
 class AddSupermarketApi {

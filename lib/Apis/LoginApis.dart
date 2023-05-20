@@ -2,11 +2,11 @@ import "dart:convert";
 
 import "package:graduation_project/Constants/connection.dart";
 import "package:http/http.dart" as http;
+import "package:shared_preferences/shared_preferences.dart";
 
 //admin header :
 //"Authorization": "Bearer 1477",
 
-String _adminHeader = "Bearer 1477";
 String header = "Bearer";
 
 class LoginApis {
@@ -28,8 +28,10 @@ class LoginApis {
 
   static Future<http.Response> getUser() async {
     try {
+      var prefs = await SharedPreferences.getInstance();
+      String token = prefs.getString("userToken")!;
       return http.get(Uri.parse("${ConnectionUrls.urlIp}user/"),
-          headers: {"Authorization": _adminHeader});
+          headers: {"Authorization": "${header} ${token}"});
     } on Exception catch (e) {
       print("get user exception: $e");
       return http.Response("error", 404);

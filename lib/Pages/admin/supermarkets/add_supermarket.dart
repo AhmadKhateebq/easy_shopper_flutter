@@ -1,54 +1,87 @@
 import 'package:flutter/material.dart';
+import 'package:graduation_project/Style/borders.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class AddSupermarketPage extends StatelessWidget {
-
-  Future<void> addSupermarkets() async {
-    try {
-      final response = await add_supermarket.addSupermarket();
-      if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body);
-        setState(() {
-          supermarkets = jsonData.map<Supermarket>((item) => Supermarket.fromJson(item)).toList();
-        });
-      } else {
-        print('Failed to add supermarkets. Status code: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Exception occurred while add supermarkets: $e');
-    }
+class AddSuperMarket extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return _AddSuperMarketState();
   }
+}
 
+class _AddSuperMarketState extends State<AddSuperMarket> {
+  TextEditingController _nameController = new TextEditingController();
+  TextEditingController _locationX = new TextEditingController();
+  TextEditingController _locationY = new TextEditingController();
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
+    double screenWidth = mediaQueryData.size.width;
+    double screenHeight = mediaQueryData.size.height;
+    // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Supermarket'),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: locationXController,
-              decoration: InputDecoration(labelText: 'Location X'),
-            ),
-            TextField(
-              controller: locationYController,
-              decoration: InputDecoration(labelText: 'Location Y'),
-            ),
-            TextField(
-              controller: nameController,
-              decoration: InputDecoration(labelText: 'Name'),
-            ),
-            SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: addSupermarkets(),
-              child: Text('Add Supermarket'),
-            ),
-          ],
+        title: const Text(
+          "New Super Market",
         ),
+        backgroundColor: AppBorders.appColor,
+        centerTitle: true,
+      ),
+      body: ListView(
+        children: [
+          Container(
+            margin: EdgeInsets.all(10),
+            child: TextFormField(
+                controller: _nameController,
+                decoration: AppBorders.txtFieldDecoration("Name")),
+          ),
+          Container(
+            margin: EdgeInsets.all(10),
+            child: TextFormField(
+                controller: _locationX,
+                decoration: AppBorders.txtFieldDecoration("Location X")),
+          ),
+          Container(
+            margin: EdgeInsets.all(10),
+            child: TextFormField(
+                controller: _locationY,
+                decoration: AppBorders.txtFieldDecoration("Location Y")),
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(
+                horizontal: screenWidth * 0.2, vertical: screenHeight * 0.06),
+            child: ElevatedButton.icon(
+              onPressed: () {
+                String name = _nameController.text,
+                    locationX = _locationX.text,
+                    locationY = _locationY.text;
+
+                if (name.isEmpty || locationX.isEmpty || locationY.isEmpty) {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          content: Text("Please fill all the info"),
+                          actions: [
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text("OK"))
+                          ],
+                        );
+                      });
+                  return;
+                }
+              },
+              icon: Icon(Icons.assignment),
+              label: Text("Submit"),
+              style: AppBorders.btnStyle(),
+            ),
+          )
+        ],
       ),
     );
   }

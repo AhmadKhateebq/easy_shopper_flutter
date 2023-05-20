@@ -102,10 +102,12 @@ class HomeBodyState extends State<HomeBody> {
       UsersPage(userInfo),
       SupermarketListPage(),
     ];
+    
     // TODO: implement build
     return SafeArea(
       child: Scaffold(
         drawer: Drawer(
+          width: 20,
           child: ListView(
             children: [
               ListTile(

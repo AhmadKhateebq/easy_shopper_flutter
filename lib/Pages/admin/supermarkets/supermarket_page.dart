@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:graduation_project/Pages/admin/supermarkets/add_supermarket.dart';
 import 'package:graduation_project/Style/borders.dart';
 
 import '../../../Apis/supermarketApi.dart';
@@ -42,6 +43,15 @@ class _SupermarketListPageState extends State<SupermarketListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: AppBorders.appColor,
+        onPressed: () {
+          Navigator.push(context, new MaterialPageRoute(builder: (context) {
+            return AddSuperMarket();
+          }));
+        },
+        label: Icon(Icons.add),
+      ),
       body: ListView.builder(
         itemCount: supermarkets.length,
         itemBuilder: (context, index) {
@@ -51,9 +61,7 @@ class _SupermarketListPageState extends State<SupermarketListPage> {
             decoration: AppBorders.containerDecoration(),
             child: ListTile(
               title: Text(supermarket.name),
-              onTap: () {
-                
-              },
+              onTap: () {},
               // Add more widgets to display other information
             ),
           );
