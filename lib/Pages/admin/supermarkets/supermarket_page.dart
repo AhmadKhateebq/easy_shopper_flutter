@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:graduation_project/Pages/admin/supermarkets/add_supermarket.dart';
+import 'package:graduation_project/Pages/admin/supermarkets/superMarketItems.dart';
 import 'package:graduation_project/Style/borders.dart';
 
 import '../../../Apis/supermarketApi.dart';
@@ -14,7 +16,7 @@ class SupermarketListPage extends StatefulWidget {
 
 class _SupermarketListPageState extends State<SupermarketListPage> {
   List<Supermarket> supermarkets = [];
-
+  bool loading = true;
   @override
   void initState() {
     super.initState();
@@ -23,10 +25,11 @@ class _SupermarketListPageState extends State<SupermarketListPage> {
 
   Future<void> fetchSupermarkets() async {
     try {
-      final response = await SupermarketApi.getAllSupermarketList();
+      final response = await SupermarketApis.getAllSupermarketList();
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
         setState(() {
+          loading = false;
           supermarkets = jsonData
               .map<Supermarket>((item) => Supermarket.fromJson(item))
               .toList();
@@ -43,30 +46,45 @@ class _SupermarketListPageState extends State<SupermarketListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: AppBorders.appColor,
-        onPressed: () {
-          Navigator.push(context, new MaterialPageRoute(builder: (context) {
-            return AddSuperMarket();
-          }));
-        },
-        label: Icon(Icons.add),
-      ),
-      body: ListView.builder(
-        itemCount: supermarkets.length,
-        itemBuilder: (context, index) {
-          final supermarket = supermarkets[index];
-          return Container(
-            margin: EdgeInsets.all(10),
-            decoration: AppBorders.containerDecoration(),
-            child: ListTile(
-              title: Text(supermarket.name),
-              onTap: () {},
-              // Add more widgets to display other information
-            ),
-          );
-        },
-      ),
-    );
+        floatingActionButton: FloatingActionButton.extended(
+          backgroundColor: AppBorders.appColor,
+          onPressed: () async {
+            await Navigator.push(context,
+                new MaterialPageRoute(builder: (context) {
+              return AddSuperMarket();
+            }));
+            fetchSupermarkets();
+          },
+          label: Icon(Icons.add),
+        ),
+        body: loading
+            ? Align(
+                alignment: Alignment.center, child: CircularProgressIndicator())
+            : supermarkets.isEmpty
+                ? Text("Empty Supermarkets")
+                : RefreshIndicator(
+                    child: ListView.builder(
+                      itemCount: supermarkets.length,
+                      itemBuilder: (context, index) {
+                        final supermarket = supermarkets[index];
+                        return Slidable(
+                          child: Container(
+                            margin: EdgeInsets.all(10),
+                            decoration: AppBorders.containerDecoration(),
+                            child: ListTile(
+                              title: Text(supermarket.name),
+                              onTap: () {
+                                Navigator.push(context,
+                                    new MaterialPageRoute(builder: (context) {
+                                  return SuperMarketItems();
+                                }));
+                              },
+                              // Add more widgets to display other information
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    onRefresh: fetchSupermarkets));
   }
 }

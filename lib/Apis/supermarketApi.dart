@@ -7,13 +7,34 @@ import '../model/supermarket.dart';
 
 String header = "Bearer";
 
-class SupermarketApi {
+class SupermarketApis {
   static Future<http.Response> getAllSupermarketList() async {
     try {
       var sp = await SharedPreferences.getInstance();
       String? token = sp.getString('userToken');
       return http.get(Uri.parse("${ConnectionUrls.urlIp}supermarkets/"),
           headers: {"Authorization": "${header} ${token}"});
+    } on Exception catch (e) {
+      print("get super exception: $e");
+      return http.Response("error", 404);
+    }
+  }
+
+  static Future<http.Response> addSupermarket(
+      String name, String locationX, String locationY) async {
+    try {
+      var sp = await SharedPreferences.getInstance();
+      String? token = sp.getString('userToken');
+      return http.post(Uri.parse("${ConnectionUrls.urlIp}supermarkets/"),
+          headers: {
+            "content-type": "application/json",
+            "Authorization": "${header} ${token}",
+          },
+          body: jsonEncode(<String, dynamic>{
+            "locationX": locationX,
+            "locationY": locationY,
+            "name": name
+          }));
     } on Exception catch (e) {
       print("get super exception: $e");
       return http.Response("error", 404);

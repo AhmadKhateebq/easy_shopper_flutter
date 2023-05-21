@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:graduation_project/Apis/SuperMarketsApis.dart';
+import 'package:graduation_project/Apis/supermarketApi.dart';
 import 'package:graduation_project/Style/borders.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -75,6 +77,13 @@ class _AddSuperMarketState extends State<AddSuperMarket> {
                       });
                   return;
                 }
+                Navigator.pop(context);
+
+                SupermarketApis.addSupermarket(name, locationX, locationY)
+                    .then((response) {
+                  print(
+                      "add supermarket response: ${response.body} , status: ${response.statusCode}");
+                });
               },
               icon: Icon(Icons.assignment),
               label: Text("Submit"),

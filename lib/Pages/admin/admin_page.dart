@@ -102,12 +102,15 @@ class HomeBodyState extends State<HomeBody> {
       UsersPage(userInfo),
       SupermarketListPage(),
     ];
-    
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
+    double screenWidth = mediaQueryData.size.width;
+    double screenHeight = mediaQueryData.size.height;
+
     // TODO: implement build
     return SafeArea(
       child: Scaffold(
         drawer: Drawer(
-          width: 20,
+          width: screenWidth * 0.4,
           child: ListView(
             children: [
               ListTile(
