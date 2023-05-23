@@ -68,6 +68,18 @@ class _SupermarketListPageState extends State<SupermarketListPage> {
                       itemBuilder: (context, index) {
                         final supermarket = supermarkets[index];
                         return Slidable(
+                          endActionPane:
+                              ActionPane(motion: ScrollMotion(),
+                              
+                               children: [
+                            IconButton(
+                              icon: Icon(Icons.delete),
+                              onPressed: () {
+                                
+                              },
+                            ),
+                            Text("Delete")
+                          ]),
                           child: Container(
                             margin: EdgeInsets.all(10),
                             decoration: AppBorders.containerDecoration(),

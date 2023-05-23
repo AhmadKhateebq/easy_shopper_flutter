@@ -36,7 +36,24 @@ class SupermarketApis {
             "name": name
           }));
     } on Exception catch (e) {
-      print("get super exception: $e");
+      print("add super exception: $e");
+      return http.Response("error", 404);
+    }
+  }
+
+  static Future<http.Response> deleteSuperMarket(String id) async {
+    try {
+      var sp = await SharedPreferences.getInstance();
+      String? token = sp.getString('userToken');
+      return http.delete(
+        Uri.parse("${ConnectionUrls.urlIp}supermarkets/${id}"),
+        headers: {
+          "content-type": "application/json",
+          "Authorization": "${header} ${token}",
+        },
+      );
+    } on Exception catch (e) {
+      print("add super exception: $e");
       return http.Response("error", 404);
     }
   }
