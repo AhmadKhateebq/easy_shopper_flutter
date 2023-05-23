@@ -49,11 +49,11 @@ class _SupermarketListPageState extends State<SupermarketListPage> {
         floatingActionButton: FloatingActionButton.extended(
           backgroundColor: AppBorders.appColor,
           onPressed: () async {
-            await Navigator.push(context,
-                new MaterialPageRoute(builder: (context) {
+            Navigator.push(context, new MaterialPageRoute(builder: (context) {
               return AddSuperMarket();
-            }));
-            fetchSupermarkets();
+            })).then((value) {
+              fetchSupermarkets();
+            });
           },
           label: Icon(Icons.add),
         ),
@@ -69,13 +69,20 @@ class _SupermarketListPageState extends State<SupermarketListPage> {
                         final supermarket = supermarkets[index];
                         return Slidable(
                           endActionPane:
-                              ActionPane(motion: ScrollMotion(),
-                              
-                               children: [
+                              ActionPane(motion: ScrollMotion(), children: [
                             IconButton(
                               icon: Icon(Icons.delete),
                               onPressed: () {
-                                
+                                SupermarketApis.deleteSuperMarket(
+                                        supermarket.id.toString())
+                                    .then((res) {
+                                  if (res.statusCode == 200 ||
+                                      res.statusCode == 204)
+                                    fetchSupermarkets();
+                                  ;
+                                  print(
+                                      "delete supermarket response: ${res.body} status : ${res.statusCode}");
+                                });
                               },
                             ),
                             Text("Delete")
