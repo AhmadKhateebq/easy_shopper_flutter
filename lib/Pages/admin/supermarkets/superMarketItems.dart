@@ -14,7 +14,7 @@ class SuperMarketItems extends StatefulWidget {
 
 class _SuperMarketItemsState extends State<SuperMarketItems> {
   var items = [];
-  bool errorLoading = false;
+  bool loading = true, errorLoading = false;
   fetchItems() {
     ItemApis.getAllItems().then((value) {
       String response = value.body;
@@ -28,10 +28,12 @@ class _SuperMarketItemsState extends State<SuperMarketItems> {
       }
       try {
         List<dynamic> fetchedList = jsonDecode(response);
-        print(fetchedList);
+        //  print(fetchedList);
         setState(() {
           items = fetchedList;
-          items.forEach((element) {});
+          items.forEach((element) {
+            print(element);
+          });
         });
       } catch (e) {
         setState(() {
@@ -45,6 +47,7 @@ class _SuperMarketItemsState extends State<SuperMarketItems> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    fetchItems();
   }
 
   @override
@@ -56,8 +59,8 @@ class _SuperMarketItemsState extends State<SuperMarketItems> {
         backgroundColor: AppBorders.appColor,
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Column(children: [
+      body: ListView(
+        children: [
           Visibility(
             child: ListTile(
               leading: Icon(
@@ -67,7 +70,22 @@ class _SuperMarketItemsState extends State<SuperMarketItems> {
               title: Text("Error Loading Items"),
             ),
             visible: errorLoading,
-          )
+          ),
+          for (int i = 0; i < items.length; i++)
+            Container(
+                margin: EdgeInsets.all(20),
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Image(
+                        image: NetworkImage(
+                            "https://www.eatthis.com/wp-content/uploads/sites/4/2020/07/frito-lay-chips.jpg")),
+                    SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                ))
           /* Container(
             margin: EdgeInsets.all(20),
             child: ElevatedButton.icon(
@@ -76,7 +94,7 @@ class _SuperMarketItemsState extends State<SuperMarketItems> {
                 icon: Icon(Icons.add_circle),
                 label: Text("Add Product")),
           ) */
-        ]),
+        ],
       ),
     );
   }

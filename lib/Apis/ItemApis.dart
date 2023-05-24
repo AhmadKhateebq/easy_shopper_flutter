@@ -14,7 +14,7 @@ class ItemApis {
       String? token =
           sp.getString('userToken') != null ? sp.getString('userToken') : "";
       return http.get(
-        Uri.parse("${ConnectionUrls.urlIp}list/"),
+        Uri.parse("${ConnectionUrls.urlIp}products/"),
         headers: {
           "Authorization": "${header} ${token}",
         },
