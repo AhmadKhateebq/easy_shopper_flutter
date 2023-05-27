@@ -79,23 +79,42 @@ class ChooseItemState extends State<ChooseItem> {
               height: screenHeight * 0.8,
               margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
               child: ListView.builder(
-               /* gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                /* gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
                     childAspectRatio: 1),*/
                 itemCount: items.length,
                 itemBuilder: (context, index) {
-                return
-                  Card(child: ListTile(
-                    onTap: (){
+                  return Card(
+                    child: ListTile(
+                      leading: Icon(Icons.food_bank),
+                      title: Text(items[index]['name']),
+                      trailing: IconButton(
+                        icon: Icon(Icons.add),
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                TextEditingController price = new TextEditingController();
+                                TextEditingController stock = new TextEditingController();
+                                return SimpleDialog(
+                                  title: Text("Add ${items[index]['name']}"),
+                                  children: [
 
-                    },
-                    leading: Icon(Icons.food_bank),
-                    title: Text(items[index]['name']),
-
-                  ) ,)
-                 ;
+                                    SimpleDialogOption(
+                                      child: TextFormField(
+                                        decoration:
+                                        AppBorders.txtFieldDecoration("Price")
+                                      ,
+                                      ),)
+                                  ],
+                                );
+                              });
+                        },
+                      ),
+                    ),
+                  );
                 },
               ))
         ],
