@@ -143,8 +143,7 @@ class HomeBodyState extends State<HomeBody> {
                 ),
                 label: "Users"),
             BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_cart_rounded,
-                    color: AppBorders.appColor),
+                icon: Icon(Icons.store, color: AppBorders.appColor),
                 label: 'Super Markets'),
           ],
           currentIndex: _selectedIndex,

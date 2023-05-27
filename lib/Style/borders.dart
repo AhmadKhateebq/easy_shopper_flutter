@@ -44,10 +44,11 @@ class AppBorders {
             borderRadius: BorderRadius.all(Radius.circular(radius))));
   }
 
-  static ButtonStyle btnStyle() {
+  static ButtonStyle btnStyle({Color? btnColor}) {
     return ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(appColor),
+        backgroundColor: MaterialStateProperty.all(btnColor == null ? appColor: btnColor),
         shape: MaterialStateProperty.all(const RoundedRectangleBorder(
+
             borderRadius:
                 BorderRadius.all(Radius.circular(AppBorders.radius)))));
   }

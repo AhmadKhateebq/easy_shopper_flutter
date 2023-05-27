@@ -91,6 +91,7 @@ class _SupermarketListPageState extends State<SupermarketListPage> {
                             margin: EdgeInsets.all(10),
                             decoration: AppBorders.containerDecoration(),
                             child: ListTile(
+                              leading: Icon(Icons.store),
                               title: Text(supermarket.name),
                               onTap: () {
                                 Navigator.push(context,
