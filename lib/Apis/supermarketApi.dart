@@ -8,6 +8,19 @@ import '../model/supermarket.dart';
 String header = "Bearer";
 
 class SupermarketApis {
+  static Future<http.Response> getSupermarketItems(String id) async {
+    try {
+      var sp = await SharedPreferences.getInstance();
+      String? token = sp.getString('userToken');
+      return http.get(
+          Uri.parse("${ConnectionUrls.urlIp}supermarkets/${id}/products"),
+          headers: {"Authorization": "${header} ${token}"});
+    } on Exception catch (e) {
+      print("getSupermarketItems exception: $e");
+      return http.Response("error", 404);
+    }
+  }
+
   static Future<http.Response> getAllSupermarketList() async {
     try {
       var sp = await SharedPreferences.getInstance();
@@ -16,6 +29,28 @@ class SupermarketApis {
           headers: {"Authorization": "${header} ${token}"});
     } on Exception catch (e) {
       print("get super exception: $e");
+      return http.Response("error", 404);
+    }
+  }
+
+  static Future<http.Response> addItemtoSupermarket(
+      String price, String stock, String supId, String itemId) async {
+    try {
+      var sp = await SharedPreferences.getInstance();
+      String? token = sp.getString('userToken');
+      return http.post(
+          Uri.parse(
+              "${ConnectionUrls.urlIp}supermarkets/${supId}/products/${itemId}"),
+          headers: {
+            "content-type": "application/json",
+            "Authorization": "${header} ${token}",
+          },
+          body: jsonEncode(<String, dynamic>{
+            "price": price,
+            "stock": stock,
+          }));
+    } on Exception catch (e) {
+      print("add super exception: $e");
       return http.Response("error", 404);
     }
   }

@@ -1,11 +1,16 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:graduation_project/Apis/supermarketApi.dart';
 
 import '../../../Apis/ItemApis.dart';
 import '../../../Style/borders.dart';
 
 class ChooseItem extends StatefulWidget {
+  String? id;
+  ChooseItem(String id) {
+    this.id = id;
+  }
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -95,19 +100,77 @@ class ChooseItemState extends State<ChooseItem> {
                         onPressed: () {
                           showDialog(
                               context: context,
-                              builder: (context) {
-                                TextEditingController price = new TextEditingController();
-                                TextEditingController stock = new TextEditingController();
+                              builder: (alertContext) {
+                                TextEditingController priceController =
+                                    new TextEditingController();
+                                TextEditingController stockController =
+                                    new TextEditingController();
                                 return SimpleDialog(
-                                  title: Text("Add ${items[index]['name']}"),
+                                  title: Text("${items[index]['name']}"),
                                   children: [
-
                                     SimpleDialogOption(
                                       child: TextFormField(
+                                        keyboardType: TextInputType.number,
+                                        controller: priceController,
                                         decoration:
-                                        AppBorders.txtFieldDecoration("Price")
-                                      ,
-                                      ),)
+                                            AppBorders.txtFieldDecoration(
+                                                "Price"),
+                                      ),
+                                    ),
+                                    SimpleDialogOption(
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.number,
+                                        controller: stockController,
+                                        decoration:
+                                            AppBorders.txtFieldDecoration(
+                                                "Stock"),
+                                      ),
+                                    ),
+                                    SimpleDialogOption(
+                                      child: ElevatedButton.icon(
+                                        label: Text("Add Item"),
+                                        style: AppBorders.btnStyle(),
+                                        onPressed: () {
+                                          String price = priceController.text;
+                                          String stock = stockController.text;
+
+                                          if (priceController.text.isEmpty ||
+                                              stockController.text.isEmpty) {
+                                            Navigator.pop(alertContext);
+                                            showDialog(
+                                                context: context,
+                                                builder: (alertContext2) {
+                                                  return AlertDialog(
+                                                    content: Text(
+                                                        "Please fill the price and stock"),
+                                                    actions: [
+                                                      TextButton(
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                alertContext2);
+                                                          },
+                                                          child: Text("OK"))
+                                                    ],
+                                                  );
+                                                });
+
+                                            return;
+                                          }
+                                          SupermarketApis.addItemtoSupermarket(
+                                                  price,
+                                                  stock,
+                                                  widget.id!,
+                                                  items[index]['id'].toString())
+                                              .then((res) {
+                                            Navigator.pop(alertContext);
+                                            print(
+                                                "resposne : ${res} ${res.statusCode}");
+                                            Navigator.pop(context);
+                                          });
+                                        },
+                                        icon: Icon(Icons.add),
+                                      ),
+                                    )
                                   ],
                                 );
                               });

@@ -96,7 +96,7 @@ class _SupermarketListPageState extends State<SupermarketListPage> {
                               onTap: () {
                                 Navigator.push(context,
                                     new MaterialPageRoute(builder: (context) {
-                                  return SuperMarketItems();
+                                  return SuperMarketItems(supermarket.name,supermarket.id.toString());
                                 }));
                               },
                               // Add more widgets to display other information
