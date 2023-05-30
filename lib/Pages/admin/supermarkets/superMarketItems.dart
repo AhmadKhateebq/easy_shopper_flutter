@@ -90,12 +90,28 @@ class SuperMarketItemsBodyState extends State<SuperMarketItemsBody> {
                 icon: Icon(Icons.delete_forever),
                 onPressed: () {
                   SupermarketApis.removeProduct(
-                          supID!, items[index]['product']['name'].toString())
+                          supID!, items[index]['product']['id'].toString())
                       .then((res) {
                     print(
                         "remove product response : ${res} status : ${res.statusCode}");
-                    if (res.statusCode != 200) return;
-                    fetchItems();
+                    if (res.statusCode == 200 || res.statusCode == 204) {
+                      fetchItems();
+                    } else {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              content: Text("Erorr Deleting item"),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text("OK"))
+                              ],
+                            );
+                          });
+                    }
                   });
                 },
               ),
