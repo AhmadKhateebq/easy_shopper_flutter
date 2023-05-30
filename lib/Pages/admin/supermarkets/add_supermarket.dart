@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:graduation_project/Apis/SuperMarketsApis.dart';
 import 'package:graduation_project/Apis/supermarketApi.dart';
 import 'package:graduation_project/Style/borders.dart';
 import 'package:http/http.dart' as http;

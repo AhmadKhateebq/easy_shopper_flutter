@@ -20,7 +20,18 @@ class SupermarketApis {
       return http.Response("error", 404);
     }
   }
-
+ static Future<http.Response> removeProduct(String supId , String prodID) async {
+    try {
+      var sp = await SharedPreferences.getInstance();
+      String? token = sp.getString('userToken');
+      return http.delete(
+          Uri.parse("${ConnectionUrls.urlIp}supermarkets/${supId}/products/${prodID}"),
+          headers: {"Authorization": "${header} ${token}"});
+    } on Exception catch (e) {
+      print("removeProduct exception: $e");
+      return http.Response("error", 404);
+    }
+  }
   static Future<http.Response> getAllSupermarketList() async {
     try {
       var sp = await SharedPreferences.getInstance();

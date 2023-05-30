@@ -6,11 +6,12 @@ import 'package:graduation_project/Apis/supermarketApi.dart';
 import 'package:graduation_project/Pages/admin/supermarkets/chooseItem.dart';
 import 'package:graduation_project/Style/borders.dart';
 
+String? supID, supName;
+
 class SuperMarketItems extends StatelessWidget {
-  String? supID, supName;
-  SuperMarketItems(supName, id) {
-    this.supID = id;
-    this.supName = supName;
+  SuperMarketItems(name, id) {
+    supID = id;
+    supName = name;
   }
   @override
   Widget build(BuildContext context) {
@@ -87,7 +88,16 @@ class SuperMarketItemsBodyState extends State<SuperMarketItemsBody> {
               subtitle: Text("${items[index]['price'].toString()} NIS"),
               trailing: IconButton(
                 icon: Icon(Icons.delete_forever),
-                onPressed: () {},
+                onPressed: () {
+                  SupermarketApis.removeProduct(
+                          supID!, items[index]['product']['name'].toString())
+                      .then((res) {
+                    print(
+                        "remove product response : ${res} status : ${res.statusCode}");
+                    if (res.statusCode != 200) return;
+                    fetchItems();
+                  });
+                },
               ),
             ),
           ),
