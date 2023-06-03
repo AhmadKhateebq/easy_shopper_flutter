@@ -111,7 +111,7 @@ class HomeBodyState extends State<HomeBody> {
     return SafeArea(
       child: Scaffold(
         drawer: Drawer(
-          width: screenWidth * 0.4,
+          width: screenWidth * 0.45,
           child: ListView(
             children: [
               ListTile(
@@ -122,12 +122,9 @@ class HomeBodyState extends State<HomeBody> {
                 },
               ),
               ListTile(
-                leading : Icon(Icons.add),
-                title : Text ("fuck you"),
-                onTap:(){
-
-                },
-
+                leading: Icon(Icons.create),
+                title: Text("Create Product",),
+                onTap: () {},
               )
             ],
           ),
