@@ -3,6 +3,7 @@ import 'package:graduation_project/Apis/LoginApis.dart';
 import 'package:graduation_project/Pages/Regestration/userInfo.dart';
 import 'package:graduation_project/Pages/admin/admin_page.dart';
 import 'package:graduation_project/Style/borders.dart';
+import 'package:graduation_project/customer/list_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
@@ -151,18 +152,28 @@ class _LoginHomeState extends State<LoginHome> {
                                         if (value.statusCode == 200 ||
                                             value.statusCode == 201) {
                                           //store token in the session
+
                                           SharedPreferences.getInstance()
                                               .then((prefs) {
                                             prefs.setString(
                                                 "userToken", response);
+                                            if (response == "1477") {
+                                              Navigator.of(context)
+                                                  .pushReplacement(
+                                                      MaterialPageRoute(
+                                                          builder: (context) {
+                                                return HomePage();
+                                              }));
+                                            } else {
+                                              Navigator.of(context)
+                                                  .pushReplacement(
+                                                      MaterialPageRoute(
+                                                          builder: (context) {
+                                                return CustomerHomePage();
+                                              }));
+                                            }
                                             /* prefs.setString(
                                                 "adminAuth", "Bearer 1447"); */
-                                            Navigator.of(context)
-                                                .pushReplacement(
-                                                    MaterialPageRoute(
-                                                        builder: (context) {
-                                              return HomePage();
-                                            }));
                                           });
                                         } else if (value.statusCode == 418) {
                                           showAlert(
