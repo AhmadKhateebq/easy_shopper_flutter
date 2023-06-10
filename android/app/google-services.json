@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "599037125617",
+    "project_id": "easy-shopper-69df9",
+    "storage_bucket": "easy-shopper-69df9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:599037125617:android:f6b7413090b6fbda5c5a50",
+        "android_client_info": {
+          "package_name": "com.example.graduation.graduation_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "599037125617-3vtt05dvu7agemvqj4bifk1ju56o9e1m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCbn6eAQDXDihBg5SnldNLNzKl84Flv2k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "599037125617-3vtt05dvu7agemvqj4bifk1ju56o9e1m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
