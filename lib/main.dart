@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Apis/LoginApis.dart';
 import 'package:graduation_project/Pages/admin/admin_page.dart';
@@ -5,10 +6,15 @@ import 'package:graduation_project/Style/borders.dart';
 import 'package:graduation_project/customer/list_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+import 'firebase_options.dart';
+
+void main() async{
   //in each app run check if the user is logged in or not
   String token = "";
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   SharedPreferences.getInstance().then((value) {
     token = value.getString("userToken") != null
         ? value.getString("userToken")!
