@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'firebase_options.dart';
 
-void main() async{
+void main() async {
   //in each app run check if the user is logged in or not
   String token = "";
   WidgetsFlutterBinding.ensureInitialized();
@@ -84,12 +84,13 @@ class _LoginHomeState extends State<LoginHome> {
         backgroundColor: Color.fromARGB(255, 229, 229, 229),
         body: SingleChildScrollView(
           child: Container(
+              alignment: Alignment.center,
               width: double.infinity,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    margin: EdgeInsets.only(top: 20),
+                    margin: EdgeInsets.only(top: 100),
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.white, width: 3)),
