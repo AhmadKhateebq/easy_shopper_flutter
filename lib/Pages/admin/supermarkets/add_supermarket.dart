@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Apis/supermarketApi.dart';
 import 'package:graduation_project/Style/borders.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class AddSuperMarket extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _AddSuperMarketState();
   }
 }
@@ -21,7 +18,6 @@ class _AddSuperMarketState extends State<AddSuperMarket> {
     MediaQueryData mediaQueryData = MediaQuery.of(context);
     double screenWidth = mediaQueryData.size.width;
     double screenHeight = mediaQueryData.size.height;
-    // TODO: implement build
     return Scaffold(
       appBar: AppBar(
         title: const Text(

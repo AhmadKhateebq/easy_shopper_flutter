@@ -1,23 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Apis/LoginApis.dart';
-import 'package:graduation_project/Pages/Regestration/userInfo.dart';
 import 'package:graduation_project/Pages/admin/admin_page.dart';
 import 'package:graduation_project/Style/borders.dart';
-import 'package:graduation_project/customer/list_page.dart';
+import 'package:graduation_project/customer/customer_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'Pages/Regestration/userInfo.dart';
 
 void main() {
   //in each app run check if the user is logged in or not
   String token = "";
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences.getInstance().then((value) {
-    token = value.getString("userToken") != null
+    token = (value.getString("userToken") != null
         ? value.getString("userToken")!
-        : "";
+        : "");
     print("userToken: " + token);
     if (token != "") {
-      print("route switched to main page");
-      runApp(HomePage());
+      if (token == "1477") {
+        print("route switched to admin page");
+        runApp(AdminHomePage());
+      } else {
+        print("route switched to main page");
+        runApp(CustomerHomePage());
+      }
     } else {
       print("route switched to login page");
       runApp(Login());
@@ -28,7 +34,6 @@ void main() {
 class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return MaterialApp(
       theme: AppBorders.themeData,
       home: LoginHome(),
@@ -40,7 +45,6 @@ class Login extends StatelessWidget {
 class LoginHome extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _LoginHomeState();
   }
 }
@@ -133,7 +137,6 @@ class _LoginHomeState extends State<LoginHome> {
                                   : () {
                                       var username = usernameCont.text,
                                           password = passwordCont.text;
-
                                       if (username.isEmpty ||
                                           password.isEmpty) {
                                         showAlert("Empty username or password");
@@ -152,7 +155,6 @@ class _LoginHomeState extends State<LoginHome> {
                                         if (value.statusCode == 200 ||
                                             value.statusCode == 201) {
                                           //store token in the session
-
                                           SharedPreferences.getInstance()
                                               .then((prefs) {
                                             prefs.setString(
@@ -162,7 +164,7 @@ class _LoginHomeState extends State<LoginHome> {
                                                   .pushReplacement(
                                                       MaterialPageRoute(
                                                           builder: (context) {
-                                                return HomePage();
+                                                return AdminHomePage();
                                               }));
                                             } else {
                                               Navigator.of(context)
@@ -203,25 +205,25 @@ class _LoginHomeState extends State<LoginHome> {
                                       TextStyle(fontSize: screenWidth * 0.05)),
                               style: AppBorders.btnStyle(),
                             )),
-                        /*     SizedBox(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text("Dont have an account?"),
-                          TextButton(
-                              onPressed: () {
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return UserInfo();
-                                }));
-                              },
-                              child: Text(
-                                "Create Account",
-                                style: TextStyle(color: AppBorders.appColor),
-                              ))
-                        ],
-                      )) */
+                        SizedBox(
+                            child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text("Dont have an account?"),
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return UserInfo();
+                                  }));
+                                },
+                                child: Text(
+                                  "Create Account",
+                                  style: TextStyle(color: AppBorders.appColor),
+                                ))
+                          ],
+                        ))
                       ],
                     ),
                   ),

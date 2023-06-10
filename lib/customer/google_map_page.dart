@@ -62,6 +62,7 @@ class GoogleMapPage extends StatefulWidget {
 }
 
 class _GoogleMapPageState extends State<GoogleMapPage> {
+  // ignore: unused_field
   bool _isBottomSheetOpen = false;
   void _openBottomSheet(Supermarket_data supermarket) {
     setState(() {
@@ -202,7 +203,7 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
 
   Future<BitmapDescriptor> _createCustomIcon() async {
     final Uint8List markerIconBytes =
-        await _getBytesFromAsset('assets/icons/supermarket_icon.png', 100);
+        await _getBytesFromAsset('lib/Assets/icons/supermarket_icon.png', 100);
 
     return BitmapDescriptor.fromBytes(markerIconBytes);
   }

@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:graduation_project/Apis/ItemApis.dart';
 import 'package:graduation_project/Apis/supermarketApi.dart';
 import 'package:graduation_project/Pages/admin/supermarkets/chooseItem.dart';
 import 'package:graduation_project/Style/borders.dart';
@@ -15,7 +14,6 @@ class SuperMarketItems extends StatelessWidget {
   }
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: AppBar(
         title: Text("${supName} Items"),
@@ -34,7 +32,6 @@ class SuperMarketItemsBody extends StatefulWidget {
   }
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return SuperMarketItemsBodyState();
   }
 }
@@ -67,14 +64,12 @@ class SuperMarketItemsBodyState extends State<SuperMarketItemsBody> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fetchItems();
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     double screenWidth = MediaQuery.of(context).size.width,
         screenHeight = MediaQuery.of(context).size.height;
 

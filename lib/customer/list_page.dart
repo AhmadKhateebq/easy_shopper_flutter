@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:graduation_project/customer/customer_main.dart';
 import 'package:graduation_project/customer/google_map_page.dart';
 
 import 'dummy_data/product_list.dart';
 
-class CustomerHomePage extends StatefulWidget {
-  const CustomerHomePage({super.key});
+class CustomerListPage extends StatefulWidget {
+  const CustomerListPage({super.key});
 
   @override
-  State<CustomerHomePage> createState() => _CustomerHomePageState();
+  State<CustomerListPage> createState() => _CustomerListPageState();
 }
 
-class _CustomerHomePageState extends State<CustomerHomePage> {
+class _CustomerListPageState extends State<CustomerListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

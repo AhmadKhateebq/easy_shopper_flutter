@@ -9,7 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UserInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(body: _UserInfoHome());
   }
 }
@@ -17,7 +16,6 @@ class UserInfo extends StatelessWidget {
 class _UserInfoHome extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _UserInfoHomeState();
   }
 }
@@ -40,7 +38,7 @@ class _UserInfoHomeState extends State<_UserInfoHome> {
                       Navigator.of(alertContext).pop();
                       Navigator.of(context).pushReplacement(
                           new MaterialPageRoute(builder: (context) {
-                        return HomePage();
+                        return AdminHomePage();
                       }));
                     }
                   },
@@ -53,17 +51,17 @@ class _UserInfoHomeState extends State<_UserInfoHome> {
           );
         });
   }
-    TextEditingController userNameController = TextEditingController();
-    TextEditingController firstNameController = TextEditingController();
-    TextEditingController lastNameController = TextEditingController();
-    TextEditingController emailController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
+
+  TextEditingController userNameController = TextEditingController();
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQueryData = MediaQuery.of(context);
     double screenWidth = mediaQueryData.size.width;
     double screenHeight = mediaQueryData.size.height;
-
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 229, 229, 229),
@@ -239,15 +237,13 @@ class _UserInfoHomeState extends State<_UserInfoHome> {
                                         "register user response: ${response.body} status Code: ${response.statusCode}");
                                     if (response.statusCode == 200 ||
                                         response.statusCode == 201) {
-
                                       SharedPreferences.getInstance()
                                           .then((prefs) {
                                         prefs.setString(
                                             "userToken", response.body);
                                         showAlert("Account Created Successfuly",
-                                          switchToLogin: true);
+                                            switchToLogin: true);
                                       });
-                                
                                     } else if (response.statusCode == 401) {
                                       showAlert(
                                           "Registration Failed : Unautharized");
