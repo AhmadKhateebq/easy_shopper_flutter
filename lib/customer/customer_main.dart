@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:graduation_project/customer/dummy_data/product_list.dart';
 import 'package:graduation_project/customer/list_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
+import 'data_container.dart';
 import 'dummy_data/user_lists.dart';
 
 class CustomerHomePage extends StatefulWidget {
   const CustomerHomePage({super.key});
-
   @override
   State<CustomerHomePage> createState() => _CustomerHomePageState();
 }
@@ -48,7 +47,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                       Text('Privacy: ${list.isPrivate ? 'Private' : 'Shared'}'),
                   trailing: Text('Items: ${list.items.length}'),
                   onTap: () {
-                    dummyProducts = list.items;
+                    productList = list.items;
                     Navigator.push(
                       context,
                       MaterialPageRoute(
