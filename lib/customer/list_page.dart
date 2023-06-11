@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:graduation_project/customer/customer_main.dart';
 import 'package:graduation_project/customer/google_map_page.dart';
 
 import 'dummy_data/product_list.dart';
