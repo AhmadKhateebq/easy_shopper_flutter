@@ -103,6 +103,7 @@ class HomeBodyState extends State<HomeBody> {
     ];
     MediaQueryData mediaQueryData = MediaQuery.of(context);
     double screenWidth = mediaQueryData.size.width;
+    // ignore: unused_local_variable
     double screenHeight = mediaQueryData.size.height;
 
     return SafeArea(

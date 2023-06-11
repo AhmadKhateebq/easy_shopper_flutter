@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graduation_project/customer/google_map_page.dart';
 
-import 'dummy_data/product_list.dart';
+import 'data_container.dart';
 
 class CustomerListPage extends StatefulWidget {
   const CustomerListPage({super.key});
@@ -21,9 +21,9 @@ class _CustomerListPageState extends State<CustomerListPage> {
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: dummyProducts.length,
+              itemCount: productList.length,
               itemBuilder: (context, index) {
-                final product = dummyProducts[index];
+                final product = productList[index];
                 return ListTile(
                   title: Text(product.name),
                   subtitle: Text(product.brand),

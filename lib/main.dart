@@ -22,7 +22,9 @@ void main() {
         runApp(AdminHomePage());
       } else {
         print("route switched to main page");
-        runApp(CustomerHomePage());
+        runApp(MaterialApp(
+          home: CustomerHomePage(),
+        ));
       }
     } else {
       print("route switched to login page");

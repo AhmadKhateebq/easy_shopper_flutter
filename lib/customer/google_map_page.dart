@@ -6,7 +6,7 @@ import 'package:geolocator/geolocator.dart' as geolocator;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/services.dart';
 
-import 'dummy_data/not_contain_product.dart';
+import 'data_container.dart';
 import 'model/product_data.dart';
 import 'model/supermarket_data.dart';
 import 'dummy_data/supermarket_list.dart';
@@ -30,7 +30,6 @@ class MyApp extends StatelessWidget {
 
 List<Widget> _buildDoNotContainList() {
   List<Product> doNotContainProducts = doNotContain;
-
   return [
     const SizedBox(height: 16),
     Text(
@@ -47,6 +46,33 @@ List<Widget> _buildDoNotContainList() {
           return ListTile(
             title: Text(product.name),
             subtitle: Text(product.description),
+            tileColor: Colors.red[100],
+          );
+        }).toList(),
+      ),
+    ),
+  ];
+}
+
+List<Widget> _buildDoContainList() {
+  List<Product> doContainProducts = doContain;
+  return [
+    const SizedBox(height: 16),
+    Text(
+      'Contains:',
+      style: const TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    const SizedBox(height: 8),
+    SingleChildScrollView(
+      child: Column(
+        children: doContainProducts.map((product) {
+          return ListTile(
+            title: Text(product.name),
+            subtitle: Text(product.description),
+            tileColor: Colors.green[100],
           );
         }).toList(),
       ),
@@ -122,6 +148,7 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
                         'Containing Size: ${supermarket.containingSize}',
                         style: TextStyle(fontSize: 16),
                       ),
+                      ..._buildDoContainList(),
                       ..._buildDoNotContainList(),
                     ],
                   ),
