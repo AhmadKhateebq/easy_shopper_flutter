@@ -8,6 +8,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Pages/Regestration/userInfo.dart';
 
 void main() {
+  runApp(MaterialApp(
+    home: CustomerHomePage(),
+  ));
+}
+
+void run() {
   //in each app run check if the user is logged in or not
   String token = "";
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:graduation_project/customer/google_map_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../main.dart';
 import 'data_container.dart';
 
 class CustomerListPage extends StatefulWidget {
@@ -16,6 +18,22 @@ class _CustomerListPageState extends State<CustomerListPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('My List'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            alignment: Alignment.topLeft,
+            onPressed: () {
+              // Clear token in shared preferences
+              SharedPreferences.getInstance()
+                  .then((prefs) => prefs.setString("userToken", ""));
+              // Redirect user to login page
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => Login()),
+              );
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [

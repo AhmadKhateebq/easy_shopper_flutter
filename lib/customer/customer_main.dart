@@ -17,10 +17,28 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Lists'),
+        title: Row(
+          children: [
+            IconButton(
+              icon: Icon(Icons.logout),
+              onPressed: () {
+                // Clear token in shared preferences
+                SharedPreferences.getInstance()
+                    .then((prefs) => prefs.setString("userToken", ""));
+                // Redirect user to login page
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => Login()),
+                );
+              },
+            ),
+            Text('My Lists'),
+          ],
+        ),
         actions: [
           IconButton(
-            icon: Icon(Icons.logout),
+            icon: Icon(Icons.post_add_rounded),
+            alignment: Alignment.topLeft,
             onPressed: () {
               // Clear token in shared preferences
               SharedPreferences.getInstance()
