@@ -62,13 +62,17 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                 return ListTile(
                   title: Text(list.name),
                   leading: Container(
-                    width: 20,
-                    height: 20,
+                    width: 40,
+                    height: 40,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.blue,
+                      color: Color.fromARGB(255, 210, 33, 33),
                     ),
-                    child: Icon(Icons.circle, color: Colors.white),
+                    child: Icon(
+                      Icons.list,
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      size: 30,
+                    ),
                   ),
                   subtitle:
                       Text('Privacy: ${list.isPrivate ? 'Private' : 'Shared'}'),

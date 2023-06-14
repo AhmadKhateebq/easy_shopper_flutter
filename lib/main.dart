@@ -10,6 +10,7 @@ import 'Pages/Regestration/userInfo.dart';
 void main() {
   runApp(MaterialApp(
     home: CustomerHomePage(),
+    debugShowCheckedModeBanner: false,
   ));
 }
 
