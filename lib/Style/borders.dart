@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class AppBorders {
   static const double radius = 15;
   static Color appColor = Color(0xFFee1754);
+  // static Color appColor = Color.fromARGB(255, 235, 148, 34);
   static ThemeData themeData = ThemeData(
       focusColor: appColor,
       primaryColor: appColor,
@@ -46,9 +47,9 @@ class AppBorders {
 
   static ButtonStyle btnStyle({Color? btnColor}) {
     return ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(btnColor == null ? appColor: btnColor),
+        backgroundColor:
+            MaterialStateProperty.all(btnColor == null ? appColor : btnColor),
         shape: MaterialStateProperty.all(const RoundedRectangleBorder(
-
             borderRadius:
                 BorderRadius.all(Radius.circular(AppBorders.radius)))));
   }
