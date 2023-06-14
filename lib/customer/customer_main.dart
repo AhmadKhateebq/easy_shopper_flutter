@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:graduation_project/Style/borders.dart';
 import 'package:graduation_project/customer/list_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -35,9 +36,15 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
             Text('My Lists'),
           ],
         ),
+        backgroundColor: AppBorders.appColor, // Set the background color
+        elevation: 10, // Set the elevation (shadow) of the app bar
+        centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(Icons.post_add_rounded),
+            icon: Icon(
+              Icons.post_add_rounded,
+              size: 35,
+            ),
             alignment: Alignment.topLeft,
             onPressed: () {
               // Clear token in shared preferences
@@ -65,9 +72,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color.fromARGB(255, 210, 33, 33),
-                    ),
+                        shape: BoxShape.circle, color: AppBorders.appColor),
                     child: Icon(
                       Icons.list,
                       color: Color.fromARGB(255, 255, 255, 255),
