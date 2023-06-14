@@ -61,6 +61,15 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                 final list = userListData[index];
                 return ListTile(
                   title: Text(list.name),
+                  leading: Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.blue,
+                    ),
+                    child: Icon(Icons.circle, color: Colors.white),
+                  ),
                   subtitle:
                       Text('Privacy: ${list.isPrivate ? 'Private' : 'Shared'}'),
                   trailing: Text('Items: ${list.items.length}'),
