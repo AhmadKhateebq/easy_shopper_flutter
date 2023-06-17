@@ -32,13 +32,6 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                 logout(context);
               },
             ),
-            ListTile(
-              leading: Icon(Icons.create),
-              title: Text(
-                "Create Product",
-              ),
-              onTap: () {},
-            )
           ],
         ),
       ),
