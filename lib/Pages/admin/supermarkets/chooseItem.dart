@@ -13,7 +13,6 @@ class ChooseItem extends StatefulWidget {
   }
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return ChooseItemState();
   }
 }
@@ -52,7 +51,6 @@ class ChooseItemState extends State<ChooseItem> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fetchItems();
   }
@@ -61,7 +59,6 @@ class ChooseItemState extends State<ChooseItem> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width,
         screenHeight = MediaQuery.of(context).size.height;
-    // TODO: implement build
     return Scaffold(
       appBar: AppBar(
         title: Text("Super Market Items"),

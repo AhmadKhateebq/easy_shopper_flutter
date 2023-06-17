@@ -1,47 +1,109 @@
 import 'package:flutter/material.dart';
 import 'package:graduation_project/customer/google_map_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import 'dummy_data/product_list.dart';
+import '../Pages/login/login.dart';
+import '../Style/borders.dart';
 
-class CustomerHomePage extends StatefulWidget {
-  const CustomerHomePage({super.key});
+import 'data_container.dart';
+
+class CustomerListPage extends StatefulWidget {
+  const CustomerListPage({super.key});
 
   @override
-  State<CustomerHomePage> createState() => _CustomerHomePageState();
+  State<CustomerListPage> createState() => _CustomerListPageState();
 }
 
-class _CustomerHomePageState extends State<CustomerHomePage> {
+class _CustomerListPageState extends State<CustomerListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('My List'),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: dummyProducts.length,
-              itemBuilder: (context, index) {
-                final product = dummyProducts[index];
-                return ListTile(
-                  title: Text(product.name),
-                  subtitle: Text(product.brand),
-                  onTap: () {
-                    // Handle product item tap
-                  },
-                );
-              },
+        backgroundColor: AppBorders.appColor,
+        elevation: 10,
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.add,
+              size: 30,
             ),
-          ),
-          ElevatedButton(
+            alignment: Alignment.topLeft,
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => GoogleMapPage()));
+              SharedPreferences.getInstance().then((prefs) {
+                prefs.setString("userToken", "");
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => Login()),
+                );
+              });
             },
-            child: Text('Show Map'),
           ),
         ],
+      ),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+              child: GridView.count(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                crossAxisCount: 2,
+                children: productList.map((product) {
+                  return Card(
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage(product.imageUrl),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                product.name,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 4.0),
+                              Text(product.category),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+            Positioned(
+              bottom: MediaQuery.of(context).size.height * 0.02,
+              left: MediaQuery.of(context).size.width * 0.25,
+              right: MediaQuery.of(context).size.width * 0.25,
+              child: ButtonTheme(
+                alignedDropdown: true,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => GoogleMapPage()),
+                    );
+                  },
+                  style: AppBorders.btnStyle(),
+                  child: Text('Find Supermarkets'),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

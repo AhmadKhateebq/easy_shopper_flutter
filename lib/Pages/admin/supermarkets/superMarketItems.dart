@@ -14,7 +14,6 @@ class SuperMarketItems extends StatelessWidget {
   }
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: AppBar(
         title: Text("${supName} Items"),
@@ -33,7 +32,6 @@ class SuperMarketItemsBody extends StatefulWidget {
   }
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return SuperMarketItemsBodyState();
   }
 }
@@ -66,14 +64,12 @@ class SuperMarketItemsBodyState extends State<SuperMarketItemsBody> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fetchItems();
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     double screenWidth = MediaQuery.of(context).size.width,
         screenHeight = MediaQuery.of(context).size.height;
 

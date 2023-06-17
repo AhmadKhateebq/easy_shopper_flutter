@@ -5,10 +5,11 @@ import 'package:graduation_project/Apis/LoginApis.dart';
 import 'package:graduation_project/Pages/admin/supermarkets/supermarket_page.dart';
 import 'package:graduation_project/Pages/admin/users/users_page.dart';
 import 'package:graduation_project/Style/borders.dart';
-import 'package:graduation_project/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HomePage extends StatelessWidget {
+import '../login/login.dart';
+
+class AdminHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,7 +23,6 @@ class HomePage extends StatelessWidget {
 class HomeBody extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return HomeBodyState();
   }
 }
@@ -104,9 +104,9 @@ class HomeBodyState extends State<HomeBody> {
     ];
     MediaQueryData mediaQueryData = MediaQuery.of(context);
     double screenWidth = mediaQueryData.size.width;
+    // ignore: unused_local_variable
     double screenHeight = mediaQueryData.size.height;
 
-    // TODO: implement build
     return SafeArea(
       child: Scaffold(
         drawer: Drawer(
@@ -122,7 +122,9 @@ class HomeBodyState extends State<HomeBody> {
               ),
               ListTile(
                 leading: Icon(Icons.create),
-                title: Text("Create Product",),
+                title: Text(
+                  "Create Product",
+                ),
                 onTap: () {},
               )
             ],
