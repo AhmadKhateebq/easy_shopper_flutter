@@ -2,7 +2,7 @@
     package="com.example.graduation.graduation_project">
     <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="graduation_project"
+        android:label="Easy Shopper"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -22,6 +22,11 @@
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
               />
+            <meta-data
+              android:name="com.google.firebase.messaging.default_notification_channel_id"
+              android:value="ch1"
+            />
+            
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

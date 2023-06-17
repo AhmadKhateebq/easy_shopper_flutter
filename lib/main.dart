@@ -1,9 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:graduation_project/Apis/LoginApis.dart';
 import 'package:graduation_project/Pages/admin/admin_page.dart';
 import 'package:graduation_project/Style/borders.dart';
+import 'package:graduation_project/Utils/Notifications.dart';
 import 'package:graduation_project/customer/list_page.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'firebase_options.dart';
@@ -12,9 +16,9 @@ void main() async {
   //in each app run check if the user is logged in or not
   String token = "";
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+
+  // var FBtoken = await FirebaseMessaging.instance.getToken();
+  // print("Fb token : ${FBtoken}");
   SharedPreferences.getInstance().then((value) {
     token = value.getString("userToken") != null
         ? value.getString("userToken")!
@@ -50,7 +54,40 @@ class LoginHome extends StatefulWidget {
   }
 }
 
+final flnPlugin = new FlutterLocalNotificationsPlugin();
+
+Future<void> messageHandler(RemoteMessage msg) async {
+  print("message arrived ${msg.notification!.title}");
+  NotificationsManager.showNotification(
+      flnPlugin, msg.notification!.title!, msg.notification!.body!);
+}
+
 class _LoginHomeState extends State<LoginHome> {
+  _setUpFirebase() async {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+
+    await NotificationsManager.initializeFLN(flnPlugin);
+
+    var permission = await Permission.notification.status;
+
+    if (!permission.isGranted) {
+      print("notification permission is not granted");
+      var res = await Permission.notification.request();
+    }
+    FirebaseMessaging.onMessage.listen(messageHandler);
+    FirebaseMessaging.instance.getToken().then((value) {
+      print("firebase token : ${value}");
+    });
+  }
+
+  @override
+  initState() {
+    super.initState();
+    _setUpFirebase();
+  }
+
   showAlert(String msg) {
     showDialog(
         context: context,
