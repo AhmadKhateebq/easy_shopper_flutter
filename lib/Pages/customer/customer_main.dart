@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Style/borders.dart';
-import 'package:graduation_project/customer/list_page.dart';
+import 'package:graduation_project/Pages/customer/list_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../Pages/login/login.dart';
+import '../login/login.dart';
 import 'data_container.dart';
 import 'dummy_data/user_lists.dart';
 
@@ -64,6 +64,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
       body: Padding(
         padding: EdgeInsets.symmetric(vertical: 8.0), // Add vertical spacing
         child: ListView.builder(
+          //get data from api
           itemCount: userListData.length,
           itemBuilder: (context, index) {
             final list = userListData[index];

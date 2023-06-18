@@ -3,10 +3,10 @@ import 'package:graduation_project/Apis/LoginApis.dart';
 import 'package:graduation_project/Pages/Regestration/userInfo.dart';
 import 'package:graduation_project/Pages/admin/admin_page.dart';
 import 'package:graduation_project/Style/borders.dart';
-import 'package:graduation_project/customer/list_page.dart';
+import 'package:graduation_project/Pages/customer/list_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../customer/customer_main.dart';
+import '../customer/customer_main.dart';
 
 class Login extends StatelessWidget {
   @override
@@ -114,76 +114,76 @@ class _LoginHomeState extends State<LoginHome> {
                               onPressed: isLoading
                                   ? null
                                   : () {
-                                var username = usernameCont.text,
-                                    password = passwordCont.text;
+                                      var username = usernameCont.text,
+                                          password = passwordCont.text;
 
-                                if (username.isEmpty ||
-                                    password.isEmpty) {
-                                  showAlert("Empty username or password");
-                                  return;
-                                }
-                                setState(() {
-                                  isLoading = true;
-                                });
-                                LoginApis.login(username, password)
-                                    .then((value) {
-                                  String response = value.body;
-                                  print("login response: " +
-                                      response +
-                                      "status ${value.statusCode}");
-                                  print(value.statusCode);
-                                  if (value.statusCode == 200 ||
-                                      value.statusCode == 201) {
-                                    //store token in the session
-
-                                    SharedPreferences.getInstance()
-                                        .then((prefs) {
-                                      prefs.setString(
-                                          "userToken", response);
-                                      if (response == "1477") {
-                                        Navigator.of(context)
-                                            .pushReplacement(
-                                            MaterialPageRoute(
-                                                builder: (context) {
-                                                  return AdminHomePage();
-                                                }));
-                                      } else {
-                                        Navigator.of(context)
-                                            .pushReplacement(
-                                            MaterialPageRoute(
-                                                builder: (context) {
-                                                  return CustomerHomePage();
-                                                }));
+                                      if (username.isEmpty ||
+                                          password.isEmpty) {
+                                        showAlert("Empty username or password");
+                                        return;
                                       }
-                                      /* prefs.setString(
+                                      setState(() {
+                                        isLoading = true;
+                                      });
+                                      LoginApis.login(username, password)
+                                          .then((value) {
+                                        String response = value.body;
+                                        print("login response: " +
+                                            response +
+                                            "status ${value.statusCode}");
+                                        print(value.statusCode);
+                                        if (value.statusCode == 200 ||
+                                            value.statusCode == 201) {
+                                          //store token in the session
+
+                                          SharedPreferences.getInstance()
+                                              .then((prefs) {
+                                            prefs.setString(
+                                                "userToken", response);
+                                            if (response == "1477") {
+                                              Navigator.of(context)
+                                                  .pushReplacement(
+                                                      MaterialPageRoute(
+                                                          builder: (context) {
+                                                return AdminHomePage();
+                                              }));
+                                            } else {
+                                              Navigator.of(context)
+                                                  .pushReplacement(
+                                                      MaterialPageRoute(
+                                                          builder: (context) {
+                                                return CustomerHomePage();
+                                              }));
+                                            }
+                                            /* prefs.setString(
                                                 "adminAuth", "Bearer 1447"); */
-                                    });
-                                  } else if (value.statusCode == 418) {
-                                    showAlert(
-                                        "Wrong username or password");
-                                    ;
-                                    setState(() {
-                                      isLoading = false;
-                                    });
-                                  } else {
-                                    showAlert("Something went wrong");
-                                    setState(() {
-                                      isLoading = false;
-                                    });
-                                  }
-                                });
-                              },
+                                          });
+                                        } else if (value.statusCode == 418) {
+                                          showAlert(
+                                              "Wrong username or password");
+                                          ;
+                                          setState(() {
+                                            isLoading = false;
+                                          });
+                                        } else {
+                                          showAlert("Something went wrong");
+                                          setState(() {
+                                            isLoading = false;
+                                          });
+                                        }
+                                      });
+                                    },
                               icon: isLoading
                                   ? CircularProgressIndicator(
-                                color: Colors.white,
-                              )
+                                      color: Colors.white,
+                                    )
                                   : Icon(
-                                Icons.login,
-                                size: screenWidth * 0.07,
-                              ),
+                                      Icons.login,
+                                      size: screenWidth * 0.07,
+                                    ),
                               label: Text("Login",
                                   style:
-                                  TextStyle(fontSize: screenWidth * 0.05)),
+                                      TextStyle(fontSize: screenWidth * 0.05)),
                               style: AppBorders.btnStyle(),
                             )),
                         /*     SizedBox(

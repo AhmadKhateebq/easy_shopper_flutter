@@ -1,4 +1,5 @@
 class Supermarket_data {
+  // int id;
   final String name;
   final double locationX;
   final double locationY;

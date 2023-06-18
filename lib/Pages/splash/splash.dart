@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:graduation_project/Pages/admin/admin_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../Style/borders.dart';
-import '../../customer/customer_main.dart';
+import '../customer/customer_main.dart';
 import '../login/login.dart';
 
 class SplashScreen extends StatefulWidget {
