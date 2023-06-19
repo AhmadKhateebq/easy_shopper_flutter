@@ -22,10 +22,31 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppBorders.appColor,
-      body: Center(
-        child: CircularProgressIndicator(), // Loading indicator widget
-      ),
-    );
+        backgroundColor: Colors.white,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.only(top: 20),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 3),
+                ),
+                child: CircleAvatar(
+                  backgroundColor: AppBorders.appColor,
+                  radius: MediaQuery.of(context).size.width * 0.15,
+                  child: Image.asset(
+                    "lib/Assets/Images/cart.png",
+                    width: MediaQuery.of(context).size.width * 0.15,
+                    height: MediaQuery.of(context).size.height * 0.15,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              CircularProgressIndicator(),
+            ],
+          ),
+        ));
   }
 }

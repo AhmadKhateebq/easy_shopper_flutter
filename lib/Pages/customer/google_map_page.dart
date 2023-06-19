@@ -53,57 +53,124 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
       backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
         return DraggableScrollableSheet(
-          initialChildSize:
-              0.3, // Initial height of the sheet (0.3 means 30% of the screen)
-          maxChildSize:
-              0.8, // Maximum height of the sheet (1.0 means full screen)
-          minChildSize:
-              0.1, // Minimum height of the sheet (0.1 means 10% of the screen)
+          initialChildSize: 0.341,
+          maxChildSize: 0.8,
+          minChildSize: 0.1,
           expand: false,
           builder: (BuildContext context, ScrollController scrollController) {
             return Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(35.0)),
+                boxShadow: const [
+                  BoxShadow(
+                    blurRadius: 5.0,
+                    spreadRadius: 2.0,
+                    color: ui.Color.fromARGB(255, 39, 36, 36),
+                  ),
+                ],
               ),
               child: SingleChildScrollView(
                 controller: scrollController,
-                child: Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        supermarket.name,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 20.0),
+                      decoration: BoxDecoration(
+                        color: AppBorders.appColor,
+                        borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(35.0)),
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Location: ${supermarket.locationX}, ${supermarket.locationY}',
-                        style: const TextStyle(fontSize: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 5.0,
+                            width: 50.0,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(2.5),
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Contain Percentage: ${supermarket.containPercentage}%',
-                        style: TextStyle(fontSize: 16),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            supermarket.name,
+                            style: const TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            'Location: ${supermarket.locationX}, ${supermarket.locationY}',
+                            style: const TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            'Contain Percentage: ${supermarket.containPercentage}%',
+                            style: const TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            'Original Items Size: ${supermarket.originalItemsSize}',
+                            style: const TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            'Containing Size: ${supermarket.containingSize}',
+                            style: const TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          const Divider(
+                            color: Colors.black,
+                            height: 1,
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            'Contains:',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          ..._buildDoContainList(),
+                          const SizedBox(height: 12),
+                          const Divider(
+                            color: Colors.black,
+                            height: 1,
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            'Do Not Contain:',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          ..._buildDoNotContainList(),
+                        ],
                       ),
-                      SizedBox(height: 8),
-                      Text(
-                        'Original Items Size: ${supermarket.originalItemsSize}',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        'Containing Size: ${supermarket.containingSize}',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      ..._buildDoContainList(),
-                      ..._buildDoNotContainList(),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             );
@@ -209,9 +276,6 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Google Maps Interface'),
-      ),
       body: GoogleMap(
         initialCameraPosition:
             CameraPosition(target: _initialPosition, zoom: 14),
@@ -230,22 +294,22 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
 List<Widget> _buildDoNotContainList() {
   List<Product> doNotContainProducts = doNotContain;
   return [
-    const SizedBox(height: 16),
-    Text(
-      'Do Not Contain:',
-      style: const TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-    const SizedBox(height: 8),
+    // const SizedBox(height: 16),
+    // const SizedBox(height: 8),
     SingleChildScrollView(
       child: Column(
         children: doNotContainProducts.map((product) {
           return ListTile(
-            title: Text(product.name),
+            title: Text(
+              product.name,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
             subtitle: Text(product.description),
             tileColor: Colors.red[400],
+            contentPadding: const EdgeInsets.all(8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
           );
         }).toList(),
       ),
@@ -256,22 +320,22 @@ List<Widget> _buildDoNotContainList() {
 List<Widget> _buildDoContainList() {
   List<Product> doContainProducts = doContain;
   return [
-    const SizedBox(height: 16),
-    Text(
-      'Contains:',
-      style: const TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-    const SizedBox(height: 8),
+    // const SizedBox(height: 16),
+    // const SizedBox(height: 8),
     SingleChildScrollView(
       child: Column(
         children: doContainProducts.map((product) {
           return ListTile(
-            title: Text(product.name),
+            title: Text(
+              product.name,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
             subtitle: Text(product.description),
             tileColor: Colors.green[400],
+            contentPadding: const EdgeInsets.all(8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
           );
         }).toList(),
       ),
