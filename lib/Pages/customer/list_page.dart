@@ -94,7 +94,8 @@ class _CustomerListPageState extends State<CustomerListPage> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => GoogleMapPage()),
+                      MaterialPageRoute(
+                          builder: (context) => GoogleMapHomePage()),
                     );
                   },
                   style: AppBorders.btnStyle(),

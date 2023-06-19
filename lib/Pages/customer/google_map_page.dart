@@ -8,75 +8,28 @@ import 'package:flutter/services.dart';
 
 import '../../Style/borders.dart';
 import 'data_container.dart';
+import 'loadingScreen.dart';
 import 'model/product_data.dart';
 import 'model/supermarket_data.dart';
 import 'dummy_data/supermarket_list.dart';
 
-void main() => runApp(const MyApp());
+void main() => runApp(const GoogleMapHomePage());
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class GoogleMapHomePage extends StatelessWidget {
+  const GoogleMapHomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Supermarkets location',
       theme: AppBorders.themeData,
-      home: const GoogleMapPage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const LoadingScreen(),
+        '/map': (context) => const GoogleMapPage(),
+      },
     );
   }
-}
-
-List<Widget> _buildDoNotContainList() {
-  List<Product> doNotContainProducts = doNotContain;
-  return [
-    const SizedBox(height: 16),
-    Text(
-      'Do Not Contain:',
-      style: const TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-    const SizedBox(height: 8),
-    SingleChildScrollView(
-      child: Column(
-        children: doNotContainProducts.map((product) {
-          return ListTile(
-            title: Text(product.name),
-            subtitle: Text(product.description),
-            tileColor: Colors.red[400],
-          );
-        }).toList(),
-      ),
-    ),
-  ];
-}
-
-List<Widget> _buildDoContainList() {
-  List<Product> doContainProducts = doContain;
-  return [
-    const SizedBox(height: 16),
-    Text(
-      'Contains:',
-      style: const TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-    const SizedBox(height: 8),
-    SingleChildScrollView(
-      child: Column(
-        children: doContainProducts.map((product) {
-          return ListTile(
-            title: Text(product.name),
-            subtitle: Text(product.description),
-            tileColor: Colors.green[400],
-          );
-        }).toList(),
-      ),
-    ),
-  ];
 }
 
 class GoogleMapPage extends StatefulWidget {
@@ -272,4 +225,56 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
       ),
     );
   }
+}
+
+List<Widget> _buildDoNotContainList() {
+  List<Product> doNotContainProducts = doNotContain;
+  return [
+    const SizedBox(height: 16),
+    Text(
+      'Do Not Contain:',
+      style: const TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    const SizedBox(height: 8),
+    SingleChildScrollView(
+      child: Column(
+        children: doNotContainProducts.map((product) {
+          return ListTile(
+            title: Text(product.name),
+            subtitle: Text(product.description),
+            tileColor: Colors.red[400],
+          );
+        }).toList(),
+      ),
+    ),
+  ];
+}
+
+List<Widget> _buildDoContainList() {
+  List<Product> doContainProducts = doContain;
+  return [
+    const SizedBox(height: 16),
+    Text(
+      'Contains:',
+      style: const TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    const SizedBox(height: 8),
+    SingleChildScrollView(
+      child: Column(
+        children: doContainProducts.map((product) {
+          return ListTile(
+            title: Text(product.name),
+            subtitle: Text(product.description),
+            tileColor: Colors.green[400],
+          );
+        }).toList(),
+      ),
+    ),
+  ];
 }
