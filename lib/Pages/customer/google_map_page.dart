@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart' as geolocator;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/services.dart';
 
+import '../../Style/borders.dart';
 import 'data_container.dart';
 import 'model/product_data.dart';
 import 'model/supermarket_data.dart';
@@ -19,10 +20,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Google Maps Interface',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      title: 'Supermarkets location',
+      theme: AppBorders.themeData,
       home: const GoogleMapPage(),
     );
   }
@@ -46,7 +45,7 @@ List<Widget> _buildDoNotContainList() {
           return ListTile(
             title: Text(product.name),
             subtitle: Text(product.description),
-            tileColor: Colors.red[100],
+            tileColor: Colors.red[400],
           );
         }).toList(),
       ),
@@ -72,7 +71,7 @@ List<Widget> _buildDoContainList() {
           return ListTile(
             title: Text(product.name),
             subtitle: Text(product.description),
-            tileColor: Colors.green[100],
+            tileColor: Colors.green[400],
           );
         }).toList(),
       ),
