@@ -53,121 +53,117 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
       backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
         return DraggableScrollableSheet(
-          initialChildSize: 0.341,
+          initialChildSize: 0.085,
           maxChildSize: 0.8,
-          minChildSize: 0.1,
+          minChildSize: 0.05,
           expand: false,
           builder: (BuildContext context, ScrollController scrollController) {
-            return Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(35.0)),
-                boxShadow: const [
-                  BoxShadow(
-                    blurRadius: 5.0,
-                    spreadRadius: 2.0,
-                    color: ui.Color.fromARGB(255, 39, 36, 36),
-                  ),
-                ],
-              ),
-              child: SingleChildScrollView(
-                controller: scrollController,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 20.0),
-                      decoration: BoxDecoration(
-                        color: AppBorders.appColor,
-                        borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(35.0)),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 5.0,
-                            width: 50.0,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(2.5),
-                            ),
+            return ClipRRect(
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(22.0)),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  // borderRadius:
+                  //     const BorderRadius.vertical(top: Radius.circular(50.0)),
+                ),
+                child: CustomScrollView(
+                  controller: scrollController,
+                  slivers: <Widget>[
+                    SliverAppBar(
+                      // Sticky header
+                      backgroundColor: AppBorders.appColor,
+                      automaticallyImplyLeading: false,
+                      pinned: true,
+                      // expandedHeight: 40,
+                      flexibleSpace: FlexibleSpaceBar(
+                          titlePadding: EdgeInsets.symmetric(vertical: 5),
+                          centerTitle: true,
+                          title: Column(
+                            children: [
+                              // SizedBox(
+                              //   height: 12,
+                              // ),
+                              Container(
+                                height: 5.0,
+                                width: 50.0,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(2.5),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 12,
+                              ),
+                              Text(
+                                supermarket.name,
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          )
+                          //stop
                           ),
-                        ],
-                      ),
                     ),
-                    Container(
+                    SliverPadding(
                       padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            supermarket.name,
-                            style: const TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
+                      sliver: SliverList(
+                        delegate: SliverChildListDelegate(
+                          [
+                            Text(
+                              'Contain Percentage: ${supermarket.containPercentage}%',
+                              style: const TextStyle(
+                                fontSize: 18,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            'Location: ${supermarket.locationX}, ${supermarket.locationY}',
-                            style: const TextStyle(
-                              fontSize: 18,
+                            const SizedBox(height: 12),
+                            Text(
+                              'Original Items Size: ${supermarket.originalItemsSize}',
+                              style: const TextStyle(
+                                fontSize: 18,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            'Contain Percentage: ${supermarket.containPercentage}%',
-                            style: const TextStyle(
-                              fontSize: 18,
+                            const SizedBox(height: 12),
+                            Text(
+                              'Containing Size: ${supermarket.containingSize}',
+                              style: const TextStyle(
+                                fontSize: 18,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            'Original Items Size: ${supermarket.originalItemsSize}',
-                            style: const TextStyle(
-                              fontSize: 18,
+                            const SizedBox(height: 12),
+                            const Divider(
+                              color: Colors.black,
+                              height: 1,
                             ),
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            'Containing Size: ${supermarket.containingSize}',
-                            style: const TextStyle(
-                              fontSize: 18,
+                            const SizedBox(height: 12),
+                            Text(
+                              'Contains:',
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 12),
-                          const Divider(
-                            color: Colors.black,
-                            height: 1,
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            'Contains:',
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                            const SizedBox(height: 8),
+                            ..._buildDoContainList(),
+                            const SizedBox(height: 12),
+                            const Divider(
+                              color: Colors.black,
+                              height: 1,
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                          ..._buildDoContainList(),
-                          const SizedBox(height: 12),
-                          const Divider(
-                            color: Colors.black,
-                            height: 1,
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            'Do Not Contain:',
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                            const SizedBox(height: 12),
+                            Text(
+                              'Do Not Contain:',
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                          ..._buildDoNotContainList(),
-                        ],
+                            const SizedBox(height: 8),
+                            ..._buildDoNotContainList(),
+                          ],
+                        ),
                       ),
                     ),
                   ],
