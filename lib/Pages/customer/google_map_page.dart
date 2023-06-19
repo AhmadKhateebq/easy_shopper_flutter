@@ -139,21 +139,6 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
                             ),
                             const SizedBox(height: 12),
                             Text(
-                              'Contains:',
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            ..._buildDoContainList(),
-                            const SizedBox(height: 12),
-                            const Divider(
-                              color: Colors.black,
-                              height: 1,
-                            ),
-                            const SizedBox(height: 12),
-                            Text(
                               'Do Not Contain:',
                               style: const TextStyle(
                                 fontSize: 20,
@@ -162,6 +147,21 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
                             ),
                             const SizedBox(height: 8),
                             ..._buildDoNotContainList(),
+                            const SizedBox(height: 12),
+                            const Divider(
+                              color: Colors.black,
+                              height: 1,
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              'Contain:',
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            ..._buildDoContainList(),
                           ],
                         ),
                       ),
@@ -290,24 +290,47 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
 List<Widget> _buildDoNotContainList() {
   List<Product> doNotContainProducts = doNotContain;
   return [
-    // const SizedBox(height: 16),
-    // const SizedBox(height: 8),
     SingleChildScrollView(
       child: Column(
-        children: doNotContainProducts.map((product) {
-          return ListTile(
-            title: Text(
-              product.name,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            subtitle: Text(product.description),
-            tileColor: Colors.red[400],
-            contentPadding: const EdgeInsets.all(8),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          );
-        }).toList(),
+        children: [
+          GridView.count(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            crossAxisCount: 2, // Adjust the crossAxisCount here
+            children: doNotContainProducts.map((product) {
+              return Card(
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(product.imageUrl),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            product.name,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 4.0),
+                          Text(product.category),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        ],
       ),
     ),
   ];
@@ -320,20 +343,45 @@ List<Widget> _buildDoContainList() {
     // const SizedBox(height: 8),
     SingleChildScrollView(
       child: Column(
-        children: doContainProducts.map((product) {
-          return ListTile(
-            title: Text(
-              product.name,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            subtitle: Text(product.description),
-            tileColor: Colors.green[400],
-            contentPadding: const EdgeInsets.all(8),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          );
-        }).toList(),
+        children: [
+          GridView.count(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            crossAxisCount: 2, // Adjust the crossAxisCount here
+            children: doContainProducts.map((product) {
+              return Card(
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(product.imageUrl),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            product.name,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 4.0),
+                          Text(product.category),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        ],
       ),
     ),
   ];
