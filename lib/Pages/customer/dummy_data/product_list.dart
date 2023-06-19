@@ -25,5 +25,13 @@ List<Product> dummyProducts = [
     imageUrl:
         "https://drive.google.com/uc?export=download&id=10wVzpj92cqzacwX9Dl8Kt-OcffZDa1Os",
   ),
+  Product(
+    name: 'Product 4',
+    brand: 'Brand 4',
+    category: 'Category 4',
+    description: 'Description 4',
+    imageUrl:
+        "https://drive.google.com/uc?export=download&id=10wVzpj92cqzacwX9Dl8Kt-OcffZDa1Os",
+  ),
   // Add more dummy products as needed
 ];

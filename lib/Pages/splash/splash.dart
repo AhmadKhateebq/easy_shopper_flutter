@@ -18,7 +18,6 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     // Add any necessary initialization or data loading logic here
-
     // After a certain duration, navigate to the next screen
     Future.delayed(Duration(seconds: 3), () {
       SharedPreferences.getInstance().then((value) {
