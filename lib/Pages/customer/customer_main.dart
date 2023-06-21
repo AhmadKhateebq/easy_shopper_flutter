@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:graduation_project/Pages/customer/model/product_data.dart';
 import 'package:graduation_project/Style/borders.dart';
 import 'package:graduation_project/Pages/customer/list_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../login/login.dart';
 import 'data_container.dart';
 import 'dummy_data/user_lists.dart';
+import 'model/list_data.dart';
 
 class CustomerHomePage extends StatefulWidget {
   const CustomerHomePage({super.key});
@@ -14,9 +16,24 @@ class CustomerHomePage extends StatefulWidget {
 }
 
 class _CustomerHomePageState extends State<CustomerHomePage> {
+  int? _userid;
+  List<Product>? userList;
+  @override
+  void initState() {
+    super.initState();
+    SharedPreferences.getInstance().then((value) {
+      value.setInt("userId", 4);
+      setState(() async {
+        _userid = value.getInt("userId");
+        userList = await getSupermarketItems(_userid);
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQueryData = MediaQuery.of(context);
+
     double screenWidth = mediaQueryData.size.width;
     // ignore: unused_local_variable
     double screenHeight = mediaQueryData.size.height;
@@ -94,7 +111,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => CustomerListPage()),
+                          builder: (context) => CustomerListPage(list.id)),
                     );
                   },
                 ),
