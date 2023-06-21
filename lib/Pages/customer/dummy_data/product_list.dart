@@ -8,6 +8,7 @@ List<Product> dummyProducts = [
     description: 'Description 1',
     imageUrl:
         "https://drive.google.com/uc?export=download&id=10wVzpj92cqzacwX9Dl8Kt-OcffZDa1Os",
+    id: 1,
   ),
   Product(
     name: 'Product 2',
@@ -16,6 +17,7 @@ List<Product> dummyProducts = [
     description: 'Description 2',
     imageUrl:
         "https://drive.google.com/uc?export=download&id=10wVzpj92cqzacwX9Dl8Kt-OcffZDa1Os",
+    id: 2,
   ),
   Product(
     name: 'Product 3',
@@ -24,6 +26,7 @@ List<Product> dummyProducts = [
     description: 'Description 3',
     imageUrl:
         "https://drive.google.com/uc?export=download&id=10wVzpj92cqzacwX9Dl8Kt-OcffZDa1Os",
+    id: 3,
   ),
   Product(
     name: 'Product 4',
@@ -32,6 +35,7 @@ List<Product> dummyProducts = [
     description: 'Description 4',
     imageUrl:
         "https://drive.google.com/uc?export=download&id=10wVzpj92cqzacwX9Dl8Kt-OcffZDa1Os",
+    id: 4,
   ),
   // Add more dummy products as needed
 ];

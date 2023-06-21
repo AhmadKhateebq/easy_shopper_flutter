@@ -19,6 +19,7 @@ List<UserList> userListData = [
         description: 'Description 1',
         imageUrl:
             "https://drive.google.com/uc?export=download&id=10wVzpj92cqzacwX9Dl8Kt-OcffZDa1Os",
+        id: 1,
       ),
       Product(
         name: 'Product 2',
@@ -27,6 +28,7 @@ List<UserList> userListData = [
         description: 'Description 2',
         imageUrl:
             "https://drive.google.com/uc?export=download&id=10wVzpj92cqzacwX9Dl8Kt-OcffZDa1Os",
+        id: 2,
       ),
       Product(
         name: 'Product 3',
@@ -35,54 +37,7 @@ List<UserList> userListData = [
         description: 'Description 3',
         imageUrl:
             "https://drive.google.com/uc?export=download&id=10wVzpj92cqzacwX9Dl8Kt-OcffZDa1Os",
-      ),
-      Product(
-        name: 'Product 3',
-        brand: 'Brand 3',
-        category: 'Category 3',
-        description: 'Description 3',
-        imageUrl:
-            "https://drive.google.com/uc?export=download&id=10wVzpj92cqzacwX9Dl8Kt-OcffZDa1Os",
-      ),
-      Product(
-        name: 'Product 3',
-        brand: 'Brand 3',
-        category: 'Category 3',
-        description: 'Description 3',
-        imageUrl:
-            "https://drive.google.com/uc?export=download&id=10wVzpj92cqzacwX9Dl8Kt-OcffZDa1Os",
-      ),
-      Product(
-        name: 'Product 3',
-        brand: 'Brand 3',
-        category: 'Category 3',
-        description: 'Description 3',
-        imageUrl:
-            "https://drive.google.com/uc?export=download&id=10wVzpj92cqzacwX9Dl8Kt-OcffZDa1Os",
-      ),
-      Product(
-        name: 'Product 3',
-        brand: 'Brand 3',
-        category: 'Category 3',
-        description: 'Description 3',
-        imageUrl:
-            "https://drive.google.com/uc?export=download&id=10wVzpj92cqzacwX9Dl8Kt-OcffZDa1Os",
-      ),
-      Product(
-        name: 'Product 3',
-        brand: 'Brand 3',
-        category: 'Category 3',
-        description: 'Description 3',
-        imageUrl:
-            "https://drive.google.com/uc?export=download&id=10wVzpj92cqzacwX9Dl8Kt-OcffZDa1Os",
-      ),
-      Product(
-        name: 'Product 3',
-        brand: 'Brand 3',
-        category: 'Category 3',
-        description: 'Description 3',
-        imageUrl:
-            "https://drive.google.com/uc?export=download&id=10wVzpj92cqzacwX9Dl8Kt-OcffZDa1Os",
+        id: 3,
       ),
     ],
   ),
@@ -102,6 +57,7 @@ List<UserList> userListData = [
         description: 'Description 4',
         imageUrl:
             "https://drive.google.com/uc?export=download&id=10wVzpj92cqzacwX9Dl8Kt-OcffZDa1Os",
+        id: 4,
       ),
       Product(
         name: 'Product 5',
@@ -110,6 +66,7 @@ List<UserList> userListData = [
         description: 'Description 5',
         imageUrl:
             "https://drive.google.com/uc?export=download&id=10wVzpj92cqzacwX9Dl8Kt-OcffZDa1Os",
+        id: 5,
       ),
     ],
   ),
@@ -127,6 +84,7 @@ List<UserList> userListData = [
         description: 'Description 6',
         imageUrl:
             "https://drive.google.com/uc?export=download&id=10wVzpj92cqzacwX9Dl8Kt-OcffZDa1Os",
+        id: 6,
       ),
       Product(
         name: 'Product 7',
@@ -135,6 +93,7 @@ List<UserList> userListData = [
         description: 'Description 7',
         imageUrl:
             "https://drive.google.com/uc?export=download&id=10wVzpj92cqzacwX9Dl8Kt-OcffZDa1Os",
+        id: 7,
       ),
       Product(
         name: 'Product 8',
@@ -143,6 +102,7 @@ List<UserList> userListData = [
         description: 'Description 8',
         imageUrl:
             "https://drive.google.com/uc?export=download&id=10wVzpj92cqzacwX9Dl8Kt-OcffZDa1Os",
+        id: 8,
       ),
     ],
   ),
