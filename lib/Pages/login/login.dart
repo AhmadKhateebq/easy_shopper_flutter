@@ -136,8 +136,8 @@ class _LoginHomeState extends State<LoginHome> {
 
                                           SharedPreferences.getInstance()
                                               .then((prefs) {
-                                            prefs.setString(
-                                                "userToken", response);
+                                            prefs.setString("userToken",
+                                                response); //ey.data.data,14
                                             if (response == "1477") {
                                               Navigator.of(context)
                                                   .pushReplacement(
@@ -146,6 +146,10 @@ class _LoginHomeState extends State<LoginHome> {
                                                 return AdminHomePage();
                                               }));
                                             } else {
+                                              //"ey.data.data,14", ...user
+                                              //split -> token,id
+                                              // prefs.setString("userToken", token)
+                                              // prefs.setString("userId", id)
                                               Navigator.of(context)
                                                   .pushReplacement(
                                                       MaterialPageRoute(

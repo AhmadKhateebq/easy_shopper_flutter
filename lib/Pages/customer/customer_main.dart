@@ -22,8 +22,9 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
   void initState() {
     super.initState();
     SharedPreferences.getInstance().then((value) {
+      value.setInt("userId", 4);
       setState(() async {
-        _userid = value.getInt("user_id");
+        _userid = value.getInt("userId");
         userList = await getSupermarketItems(_userid);
       });
     });
