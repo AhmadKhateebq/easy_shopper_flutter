@@ -65,7 +65,7 @@ class _LoginHomeState extends State<LoginHome> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    margin: EdgeInsets.only(top: 20),
+                    margin: EdgeInsets.only(top: screenHeight * 0.2),
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.white, width: 3)),
@@ -136,9 +136,9 @@ class _LoginHomeState extends State<LoginHome> {
 
                                           SharedPreferences.getInstance()
                                               .then((prefs) {
-                                            prefs.setString("userToken",
-                                                response); //ey.data.data,14
                                             if (response == "1477") {
+                                              prefs.setString(
+                                                  "userToken", response);
                                               Navigator.of(context)
                                                   .pushReplacement(
                                                       MaterialPageRoute(
@@ -146,10 +146,14 @@ class _LoginHomeState extends State<LoginHome> {
                                                 return AdminHomePage();
                                               }));
                                             } else {
-                                              //"ey.data.data,14", ...user
-                                              //split -> token,id
-                                              // prefs.setString("userToken", token)
-                                              // prefs.setString("userId", id)
+                                              List<String> userInfo =
+                                                  response.split(",");
+                                              prefs.setString(
+                                                  "userToken", userInfo[0]);
+                                              prefs.setInt("userId",
+                                                  int.parse(userInfo[1]));
+                                              
+
                                               Navigator.of(context)
                                                   .pushReplacement(
                                                       MaterialPageRoute(
