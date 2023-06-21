@@ -8,8 +8,8 @@ import 'model/product_data.dart';
 List<Product> productList = dummyProducts;
 List<Product> doNotContain = dummyProducts.sublist(3, 4);
 List<Product> doContain = dummyProducts.sublist(0, 3);
-List<Product> getSupermarketItems(_supermarketId) {
-  SupermarketApis.getSupermarketItems(_supermarketId).then((resp) {
+Future<List<Product>> getSupermarketItems(_supermarketId) async {
+  await SupermarketApis.getSupermarketItems(_supermarketId).then((resp) {
     print("get supermarket products list: " +
         resp.body +
         "status code ${resp.statusCode}");
