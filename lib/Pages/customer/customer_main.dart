@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../login/login.dart';
 import 'data_container.dart';
 import 'dummy_data/user_lists.dart';
-import 'model/list_data.dart';
 
 class CustomerHomePage extends StatefulWidget {
   const CustomerHomePage({super.key});

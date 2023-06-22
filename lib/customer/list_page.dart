@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:graduation_project/Pages/customer/google_map_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../login/login.dart';
-import '../../Style/borders.dart';
+import '../Pages/customer/data_container.dart';
+import '../Pages/customer/google_map_page.dart';
+import '../Pages/login/login.dart';
+import '../Style/borders.dart';
 
-import 'data_container.dart';
 
 class CustomerListPage extends StatefulWidget {
-  int? listId;
-  CustomerListPage(int _listId) {
-    this.listId = _listId;
-  }
+  const CustomerListPage({super.key});
 
   @override
   State<CustomerListPage> createState() => _CustomerListPageState();
@@ -20,7 +17,6 @@ class CustomerListPage extends StatefulWidget {
 class _CustomerListPageState extends State<CustomerListPage> {
   @override
   Widget build(BuildContext context) {
-    // List<Product> products = await getSupermarketItems(widget.listId);
     return Scaffold(
       appBar: AppBar(
         title: Text('My List'),
@@ -98,8 +94,7 @@ class _CustomerListPageState extends State<CustomerListPage> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => GoogleMapHomePage()),
+                      MaterialPageRoute(builder: (context) => GoogleMapPage()),
                     );
                   },
                   style: AppBorders.btnStyle(),
