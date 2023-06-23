@@ -1,65 +1,89 @@
+import 'dart:convert';
 
-import "package:http/http.dart" as http;
-import "package:shared_preferences/shared_preferences.dart";
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
-import "../Constants/connection.dart";
-
-String header = "Bearer";
+import '../Constants/connection.dart';
+import '../Pages/customer/model/list_data.dart';
 
 class ListApis {
-  static Future<http.Response> getListItems(String id) async {
+  static const String header = 'Bearer';
+  static String urlIp = ConnectionUrls.urlIp;
+
+  static Future<http.Response> _getRequest(String endpoint) async {
     try {
-      var sp = await SharedPreferences.getInstance();
-      String? token = sp.getString('userToken');
-      return http.get(Uri.parse("${ConnectionUrls.urlIp}list/${id}/items"),
-          headers: {"Authorization": "${header} ${token}"});
-    } on Exception catch (e) {
-      print("getListItems exception: $e");
-      return http.Response("error", 404);
+      final sp = await SharedPreferences.getInstance();
+      final token = sp.getString('userToken');
+      final url = Uri.parse('$urlIp$endpoint');
+      final response =
+          await http.get(url, headers: {'Authorization': '$header $token'});
+      return response;
+    } catch (e) {
+      print('Exception: $e');
+      return http.Response('error', 404);
     }
+  }
+
+  static Future<http.Response> _postRequest(
+      String endpoint, String body) async {
+    try {
+      final sp = await SharedPreferences.getInstance();
+      final token = sp.getString('userToken');
+      final url = Uri.parse('$urlIp$endpoint');
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': '$header $token',
+      };
+      final response = await http.post(url, headers: headers, body: body);
+      return response;
+    } catch (e) {
+      print('Exception: $e');
+      return http.Response('error', 404);
+    }
+  }
+
+  static Future<http.Response> _deleteRequest(String endpoint) async {
+    try {
+      final sp = await SharedPreferences.getInstance();
+      final token = sp.getString('userToken');
+      final url = Uri.parse('$urlIp$endpoint');
+      final response =
+          await http.delete(url, headers: {'Authorization': '$header $token'});
+      return response;
+    } catch (e) {
+      print('Exception: $e');
+      return http.Response('error', 404);
+    }
+  }
+
+  static Future<http.Response> getListItems(String id) async {
+    final endpoint = 'list/$id/items';
+    return _getRequest(endpoint);
   }
 
   static Future<http.Response> getListByUserId(String id) async {
-    try {
-      var sp = await SharedPreferences.getInstance();
-      String? token = sp.getString('userToken');
-      return http.get(Uri.parse("${ConnectionUrls.urlIp}${id}/list"),
-          headers: {"Authorization": "${header} ${token}"});
-    } on Exception catch (e) {
-      print("getListByUserId exception: $e");
-      return http.Response("error", 404);
-    }
+    final endpoint = '$id/list';
+    return _getRequest(endpoint);
   }
 
   static Future<http.Response> removeProduct(
-      String supId, String prodID) async {
-    try {
-      var sp = await SharedPreferences.getInstance();
-      String? token = sp.getString('userToken');
-      return http.delete(
-          Uri.parse("${ConnectionUrls.urlIp}list/${supId}/items/${prodID}"),
-          headers: {"Authorization": "${header} ${token}"});
-    } on Exception catch (e) {
-      print("removeProduct exception: $e");
-      return http.Response("error", 404);
-    }
+      String supId, String prodId) async {
+    final endpoint = 'list/$supId/items/$prodId';
+    return _deleteRequest(endpoint);
   }
 
-  static Future<http.Response> addItemtolist(
-      String supId, String itemId) async {
+  static Future<http.Response> createList(UserList userList) async {
+    final sp = await SharedPreferences.getInstance();
+    final userId = sp.getInt('userId');
+    final endpoint = '/$userId/list';
+    final userListJson = userList.toJson();
+
     try {
-      var sp = await SharedPreferences.getInstance();
-      String? token = sp.getString('userToken');
-      return http.post(
-        Uri.parse("${ConnectionUrls.urlIp}list/${supId}/items/${itemId}"),
-        headers: {
-          "content-type": "application/json",
-          "Authorization": "${header} ${token}",
-        },
-      );
-    } on Exception catch (e) {
-      print("add super exception: $e");
-      return http.Response("error", 404);
+      final response = await _postRequest(endpoint, userListJson);
+      return response;
+    } catch (e) {
+      print('Exception: $e');
+      return http.Response('error', 404);
     }
   }
 }
