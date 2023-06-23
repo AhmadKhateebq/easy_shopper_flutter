@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:graduation_project/Style/borders.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../Apis/ListApis.dart';
@@ -56,6 +57,7 @@ class _CreateListScreenState extends State<CreateListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Create List'),
+        backgroundColor: AppBorders.appColor,
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -78,6 +80,7 @@ class _CreateListScreenState extends State<CreateListScreen> {
             ),
             ElevatedButton(
               onPressed: createList,
+              style: AppBorders.btnStyle(),
               child: Text('Create List'),
             ),
           ],

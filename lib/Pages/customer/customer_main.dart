@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:graduation_project/Style/borders.dart';
 import 'package:graduation_project/Pages/customer/list_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
+import '../../Apis/ListApis.dart';
+import 'create_list.dart';
 import 'data_container.dart';
 import 'model/list_data.dart';
 
@@ -67,7 +71,11 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
               ),
               alignment: Alignment.topLeft,
               onPressed: () {
-                Navigator.pushNamed(context, '/add-list');
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CreateListScreen(),
+                    ));
               },
             ),
           ],
@@ -81,6 +89,9 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
               } else if (snapshot.hasError) {
                 // Handle the error state
                 return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (!snapshot.hasData) {
+                // Handle the case where there is no data available
+                return Center(child: Text('No data available'));
               } else {
                 // Data has been successfully fetched
                 List<UserList> userList = snapshot.data!;
@@ -94,38 +105,44 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                       final list = userList[index];
                       return Column(
                         children: [
-                          ListTile(
-                            title: Text(list.name),
-                            leading: Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppBorders.appColor,
-                              ),
-                              child: Icon(
-                                Icons.list,
-                                color: Color.fromARGB(255, 255, 255, 255),
-                                size: 30,
-                              ),
+                          Slidable(
+                            startActionPane: ActionPane(
+                              extentRatio: 0.3,
+                              motion: const BehindMotion(),
+                              children: [
+                                SlidableAction(
+                                  backgroundColor: Colors.red,
+                                  icon: Icons.delete,
+                                  label: 'delete',
+                                  onPressed: (context) =>
+                                      deleteList(context, list.id),
+                                )
+                              ],
                             ),
-                            subtitle: Text(
-                              'Privacy: ${list.isPrivate ? 'Private' : 'Shared'}',
+                            endActionPane: ActionPane(
+                              extentRatio: 0.3,
+                              motion: const BehindMotion(),
+                              children: [
+                                SlidableAction(
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 89, 83, 83),
+                                  icon: Icons.settings,
+                                  label: 'Settings',
+                                  onPressed: (context) => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            CustomerListPage(list.id)),
+                                  ),
+                                )
+                              ],
                             ),
-                            trailing: Text('Items: ${list.items.length}'),
-                            onTap: () {
-                              productList = list.items;
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        CustomerListPage(list.id)),
-                              );
-                            },
-                          ),
-                          SizedBox(
-                              height:
-                                  8.0), // Add vertical spacing between tiles
+                            child: buildListListTile(list),
+                            // SizedBox(
+                            //     height:
+                            //         8.0),
+                          )
+                          // Add vertical spacing between tiles
                         ],
                       );
                     },
@@ -134,6 +151,34 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
               }
             }));
   }
+
+  Widget buildListListTile(UserList list) => ListTile(
+        title: Text(list.name),
+        leading: Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: AppBorders.appColor,
+          ),
+          child: Icon(
+            Icons.list,
+            color: Color.fromARGB(255, 255, 255, 255),
+            size: 30,
+          ),
+        ),
+        subtitle: Text(
+          'Privacy: ${list.isPrivate ? 'Private' : 'Shared'}',
+        ),
+        trailing: Text('Items: ${list.items.length}'),
+        onTap: () {
+          productList = list.items;
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CustomerListPage(list.id)),
+          );
+        },
+      );
 
   logout(BuildContext context) {
     showDialog(
@@ -160,4 +205,68 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
           );
         });
   }
+
+  deleteList(BuildContext context, int id) {
+    showDialog(
+      context: context,
+      builder: (alertContext) {
+        return Builder(
+          builder: (context) {
+            return AlertDialog(
+              content: Text("Do you want to delete this list?"),
+              actions: [
+                TextButton(
+                  onPressed: () async {
+                    await _deleteOnAction(id, context);
+                    Navigator.pop(context);
+
+                    // Fetch user lists again to update the UI
+                    _userListFuture = initializeUser();
+                    setState(() {});
+                  },
+                  child: Text("Yes"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("No"),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _deleteOnAction(int id, BuildContext context) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    int? userId = preferences.getInt('userId');
+    if (userId == null) {
+      return;
+    }
+    print(id);
+    http.Response response = await ListApis.removeList(id, userId);
+    if (response.statusCode == 204) {
+      _showSnackBar(context, "List Deleted", Colors.red);
+    } else {
+      // List creation failed
+      // Display an error message or handle the failure
+      print('Failed to delete list. Status code: ${response.statusCode}');
+    }
+  }
+}
+
+void _settingsOnAction(int id, BuildContext context) {
+  print(id);
+  _showSnackBar(context, "List Deleted", const Color.fromARGB(255, 89, 83, 83));
+}
+
+void _showSnackBar(BuildContext context, String _mesaage, Color color) {
+  final snackBar = SnackBar(
+    content: Text(_mesaage),
+    backgroundColor: color,
+  );
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
