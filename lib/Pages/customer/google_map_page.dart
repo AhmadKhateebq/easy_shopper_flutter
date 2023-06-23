@@ -13,7 +13,7 @@ import 'model/product_data.dart';
 import 'model/supermarket_data.dart';
 import 'dummy_data/supermarket_list.dart';
 
-void main() => runApp(const GoogleMapHomePage());
+// void main() => runApp(const GoogleMapHomePage());
 
 class GoogleMapHomePage extends StatelessWidget {
   const GoogleMapHomePage({Key? key}) : super(key: key);
@@ -22,6 +22,7 @@ class GoogleMapHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Supermarkets location',
+      debugShowCheckedModeBanner: false,
       theme: AppBorders.themeData,
       initialRoute: '/',
       routes: {

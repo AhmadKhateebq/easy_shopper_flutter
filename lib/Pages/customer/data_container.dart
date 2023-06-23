@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:graduation_project/Pages/customer/model/list_data.dart';
+
 import '../../Apis/supermarketApi.dart';
 import '../../Apis/listApis.dart';
 import 'dummy_data/product_list.dart';
@@ -28,32 +30,97 @@ Future<List<Product>> getSupermarketItems(_supermarketId) async {
   return List.empty();
 }
 
-List<Product> getListtItems(_listId) {
-  ListApis.getListItems(_listId).then((resp) {
-    print("get list products list: " +
-        resp.body +
-        "status code ${resp.statusCode}");
-    try {
-      List<dynamic> responsList = jsonDecode(resp.body);
-      List<Product> products = List.empty(growable: true);
-      responsList.forEach((element) {
-        print(element);
-        products.add(_decodeProduct(element));
-      });
-      return products;
-    } on Exception catch (e) {
-      print("list exception: " + e.toString());
-    }
-  });
-  return List.empty();
+Future<List<Product>> getListItems(_listId) async {
+  final resp = await ListApis.getListItems(_listId);
+  print("get list products list: " +
+      resp.body +
+      " status code ${resp.statusCode}");
+
+  try {
+    List<dynamic> responseList = jsonDecode(resp.body);
+    List<Product> products = [];
+
+    responseList.forEach((element) {
+      print(element);
+      products.add(_decodeProduct(element));
+    });
+
+    return products;
+  } catch (e) {
+    print("list exception: " + e.toString());
+    return [];
+  }
 }
 
+Future<List<UserList>> getUserListByUserId(int _userId) async {
+  final resp = await ListApis.getListByUserId(_userId.toString());
+  print("get lists list: " + resp.body + " status code ${resp.statusCode}");
+
+  try {
+    List<dynamic> responseList = jsonDecode(resp.body);
+    List<UserList> products = [];
+
+    responseList.forEach((element) {
+      print(element);
+      products.add(_decodeList(element));
+    });
+
+    return products;
+  } catch (e) {
+    print("list exception: " + e.toString());
+    return [];
+  }
+}
+
+// getListByUserId
 Product _decodeProduct(dynamic element) {
+  int itemId = element['id'];
+  String itemName = element['name'];
+  String itemBrand = element['brand'];
+  String itemCategory = element['category'];
+  String itemDescription = element['description'];
+  String itemImageUrl = element['imageUrl'];
   return Product(
-      id: element["id"],
-      name: element["name"],
-      brand: element["brand"],
-      category: element["category"],
-      description: element["description"],
-      imageUrl: element["iimageUrld"]);
+    id: itemId,
+    name: itemName,
+    brand: itemBrand,
+    category: itemCategory,
+    description: itemDescription,
+    imageUrl: itemImageUrl,
+  );
+}
+
+UserList _decodeList(dynamic element) {
+  int id = element['id'];
+  bool isPrivate = element['private'];
+  int userId = element['userId'];
+  String name = element['name'];
+
+  // Decoding usersSharedWith
+  List<SharedWith> sharedWith = [];
+  List<dynamic> sharedWithList = element['usersSharedWith'];
+  sharedWithList.forEach((sharedWithElement) {
+    int sharedUserId = sharedWithElement['userId'];
+    bool canEdit = sharedWithElement['canEdit'];
+    SharedWith sharedWithUser =
+        SharedWith(userId: sharedUserId, canEdit: canEdit);
+    sharedWith.add(sharedWithUser);
+  });
+
+  // Decoding items
+  List<Product> items = [];
+  List<dynamic> itemsList = element['items'];
+  itemsList.forEach((itemElement) {
+    Product item = _decodeProduct(itemElement);
+    items.add(item);
+  });
+
+  return UserList(
+    id: id,
+    isPrivate: isPrivate,
+    userId: userId,
+    name: name,
+    usersSharedWith: sharedWith,
+    items: items,
+  );
 }

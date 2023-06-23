@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'product_data.dart';
 
 class UserList {
@@ -16,6 +18,17 @@ class UserList {
     required this.usersSharedWith,
     required this.items,
   });
+  String toJson() {
+    return jsonEncode(<String, dynamic>{
+      'id': id,
+      'isPrivate': isPrivate,
+      'userId': userId,
+      'name': name,
+      'usersSharedWith':
+          usersSharedWith.map((sharedWith) => sharedWith.toJson()).toList(),
+      'items': items.map((product) => product.toJson()).toList(),
+    });
+  }
 }
 
 class SharedWith {
@@ -26,4 +39,10 @@ class SharedWith {
     required this.userId,
     required this.canEdit,
   });
+  Map<String, dynamic> toJson() {
+    return {
+      'userId': userId,
+      'canEdit': canEdit,
+    };
+  }
 }

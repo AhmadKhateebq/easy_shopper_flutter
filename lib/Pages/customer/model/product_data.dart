@@ -13,4 +13,14 @@ class Product {
     required this.imageUrl,
     required id,
   });
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'brand': brand,
+      'category': category,
+      'description': description,
+      'imageUrl': imageUrl,
+    };
+  }
 }
