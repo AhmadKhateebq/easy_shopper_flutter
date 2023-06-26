@@ -9,13 +9,13 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../Apis/supermarketApi.dart';
-import '../../Style/borders.dart';
-import 'data_container.dart';
-import 'googleMap/buildData.dart';
+import '../../../Apis/supermarketApi.dart';
+import '../../../Style/borders.dart';
+import '../data_container.dart';
+import 'buildData.dart';
 import 'loadingScreen.dart';
-import 'model/product_data.dart';
-import 'model/supermarket_data.dart';
+import '../model/product_data.dart';
+import '../model/supermarket_data.dart';
 
 void main() => runApp(GoogleMapHomePage());
 List<Product> _listOfProducts = [];
