@@ -11,7 +11,7 @@ class Product {
     required this.category,
     required this.description,
     required this.imageUrl,
-    required id,
+    this.id,
   });
   Map<String, dynamic> toJson() {
     return {

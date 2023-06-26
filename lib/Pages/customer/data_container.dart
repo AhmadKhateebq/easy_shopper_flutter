@@ -30,22 +30,31 @@ Future<List<Product>> getSupermarketItems(_supermarketId) async {
   return List.empty();
 }
 
-Future<List<Product>> getListItems(_listId) async {
-  final resp = await ListApis.getListItems(_listId);
+Future<List<Product>> getListItems(int? listId) async {
+  if (listId == null) {
+    return [];
+  }
+
+  final resp = await ListApis.getListItems(listId.toString());
   print("get list products list: " +
       resp.body +
       " status code ${resp.statusCode}");
 
   try {
-    List<dynamic> responseList = jsonDecode(resp.body);
-    List<Product> products = [];
+    dynamic responseBody = jsonDecode(resp.body);
+    if (responseBody is List) {
+      List<Product> products = responseBody.map((element) {
+        print(element);
+        return _decodeProduct(element);
+      }).toList();
 
-    responseList.forEach((element) {
-      print(element);
-      products.add(_decodeProduct(element));
-    });
-
-    return products;
+      return products;
+    } else if (responseBody is Map) {
+      Product product = _decodeProduct(responseBody);
+      return [product];
+    } else {
+      throw Exception("Invalid response body format");
+    }
   } catch (e) {
     print("list exception: " + e.toString());
     return [];
