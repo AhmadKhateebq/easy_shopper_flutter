@@ -72,6 +72,11 @@ class ListApis {
     return _deleteRequest(endpoint);
   }
 
+  static Future<http.Response> removeList(int listId, int userId) async {
+    final endpoint = '$userId/list/$listId/';
+    return _deleteRequest(endpoint);
+  }
+
   static Future<http.Response> createList(UserList userList) async {
     final sp = await SharedPreferences.getInstance();
     final userId = sp.getInt('userId');

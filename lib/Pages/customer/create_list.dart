@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:graduation_project/Style/borders.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../Apis/ListApis.dart';
+import 'customer_main.dart';
 import 'model/list_data.dart';
 
 class CreateListScreen extends StatefulWidget {
@@ -43,7 +45,11 @@ class _CreateListScreenState extends State<CreateListScreen> {
     if (response.statusCode == 200) {
       // List creation successful
       // Navigate to a specific page (replace with your desired page)
-      Navigator.pushReplacementNamed(context, '/customer_main');
+      // Navigator.pushReplacementNamed(context, '/customer_main');
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => CustomerHomePage()),
+      );
     } else {
       // List creation failed
       // Display an error message or handle the failure
@@ -56,6 +62,7 @@ class _CreateListScreenState extends State<CreateListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Create List'),
+        backgroundColor: AppBorders.appColor,
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -78,6 +85,7 @@ class _CreateListScreenState extends State<CreateListScreen> {
             ),
             ElevatedButton(
               onPressed: createList,
+              style: AppBorders.btnStyle(),
               child: Text('Create List'),
             ),
           ],

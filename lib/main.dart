@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => Login(),
         '/add-list': (context) => CreateListScreen(),
-        '/customer_main': (context) => CustomerHomePage(),
+        // '/customer_main': (context) => CustomerHomePage(),
         //  '/': (context) => const LoadingScreen(),
         // '/map': (context) => const GoogleMapPage(),
       },

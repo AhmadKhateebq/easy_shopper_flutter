@@ -1,19 +1,21 @@
+import 'dart:convert';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart' as geolocator;
+import 'package:graduation_project/model/supermarket.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/services.dart';
 
+import '../../Apis/supermarketApi.dart';
 import '../../Style/borders.dart';
-import 'data_container.dart';
 import 'loadingScreen.dart';
 import 'model/product_data.dart';
 import 'model/supermarket_data.dart';
-import 'dummy_data/supermarket_list.dart';
 
-// void main() => runApp(const GoogleMapHomePage());
+void main() => runApp(GoogleMapHomePage());
+List<Product> _listOfProducts = [];
 
 class GoogleMapHomePage extends StatelessWidget {
   const GoogleMapHomePage({Key? key}) : super(key: key);
@@ -41,6 +43,21 @@ class GoogleMapPage extends StatefulWidget {
 }
 
 class _GoogleMapPageState extends State<GoogleMapPage> {
+  bool loading = true;
+  LatLng userLatLong = LatLng(31.9753133, 35.1960417);
+  @override
+  void initState() {
+    _createCustomIcon().then((BitmapDescriptor value) {
+      setState(() {
+        myIcon = value;
+      });
+    });
+    _getUserLocation();
+    fetchSupermarkets(
+        .5, _listOfProducts, userLatLong.latitude, userLatLong.longitude);
+    super.initState();
+  }
+
   // ignore: unused_field
   bool _isBottomSheetOpen = false;
   void _openBottomSheet(Supermarket_data supermarket) {
@@ -97,7 +114,7 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
                                 height: 12,
                               ),
                               Text(
-                                supermarket.name,
+                                supermarket.supermarket.name,
                                 style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -147,7 +164,7 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
                               ),
                             ),
                             const SizedBox(height: 8),
-                            ..._buildDoNotContainList(),
+                            ..._buildDoNotContainList(supermarket.dontContains),
                             const SizedBox(height: 12),
                             const Divider(
                               color: Colors.black,
@@ -162,7 +179,7 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
                               ),
                             ),
                             const SizedBox(height: 8),
-                            ..._buildDoContainList(),
+                            ..._buildDoContainList(supermarket.contains),
                           ],
                         ),
                       ),
@@ -181,12 +198,40 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
     });
   }
 
+  Future<void> fetchSupermarkets(
+      double radius, List<Product> products, double x, double y) async {
+    print("entered");
+    try {
+      final response = await SupermarketApis.getSupermarketsWithListOfItems(
+          radius, products, x, y);
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+        print(json);
+        print(jsonData);
+        setState(() {
+          loading = false;
+          supermarketsList = jsonData
+              .map<Supermarket_data>(
+                  (item) => Supermarket_data.parseSupermarketData(item))
+              .toList();
+        });
+      } else {
+        print(
+            'Failed to fetch supermarkets. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Exception occurred while fetching supermarkets: $e');
+    }
+  }
+
   late GoogleMapController _mapController;
   final LatLng _initialPosition = const LatLng(31.9753133, 35.1960417);
+  List<Supermarket_data> supermarketsList = [];
   Set<Marker> _createMarkers() {
     Set<Marker> markers = {};
 
-    for (final supermarket in supermarkets) {
+    for (final supermarketData in supermarketsList) {
+      Supermarket supermarket = supermarketData.supermarket;
       final LatLng position =
           LatLng(supermarket.locationX, supermarket.locationY);
 
@@ -198,7 +243,7 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
         ),
         icon: myIcon, // Set default marker icon
         onTap: () {
-          _openBottomSheet(supermarket);
+          _openBottomSheet(supermarketData);
           ;
         },
       );
@@ -221,6 +266,8 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
 
         print(
             'User Location - Latitude: ${position.latitude}, Longitude: ${position.longitude}');
+        LatLng _userLatLong = LatLng(position.latitude, position.longitude);
+        userLatLong = _userLatLong;
       } catch (e) {
         print('Failed to get location: $e');
       }
@@ -261,16 +308,6 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
       BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan);
 
   @override
-  void initState() {
-    _createCustomIcon().then((BitmapDescriptor value) {
-      setState(() {
-        myIcon = value;
-      });
-    });
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: GoogleMap(
@@ -288,7 +325,7 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
   }
 }
 
-List<Widget> _buildDoNotContainList() {
+List<Widget> _buildDoNotContainList(List<Product> doNotContain) {
   List<Product> doNotContainProducts = doNotContain;
   return [
     SingleChildScrollView(
@@ -337,7 +374,7 @@ List<Widget> _buildDoNotContainList() {
   ];
 }
 
-List<Widget> _buildDoContainList() {
+List<Widget> _buildDoContainList(List<Product> doContain) {
   List<Product> doContainProducts = doContain;
   return [
     // const SizedBox(height: 16),
