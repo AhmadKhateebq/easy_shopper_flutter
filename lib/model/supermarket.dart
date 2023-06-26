@@ -1,8 +1,8 @@
 class Supermarket {
   final int id;
   final String name;
-  final String locationX;
-  final String locationY;
+  final double locationX;
+  final double locationY;
 
   Supermarket({
     required this.id,
@@ -15,8 +15,8 @@ class Supermarket {
     return Supermarket(
       id: json['id'],
       name: json['name'],
-      locationX: json['locationX'],
-      locationY: json['locationY'],
+      locationX: double.parse(json['locationX']),
+      locationY: double.parse(json['locationY']),
     );
   }
 }

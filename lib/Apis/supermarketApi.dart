@@ -4,6 +4,8 @@ import "package:graduation_project/Constants/connection.dart";
 import "package:http/http.dart" as http;
 import "package:shared_preferences/shared_preferences.dart";
 
+import "../Pages/customer/model/product_data.dart";
+
 String header = "Bearer";
 
 class SupermarketApis {
@@ -63,6 +65,35 @@ class SupermarketApis {
             "price": price,
             "stock": stock,
           }));
+    } on Exception catch (e) {
+      print("add super exception: $e");
+      return http.Response("error", 404);
+    }
+  }
+
+  static Future<http.Response> getSupermarketsWithListOfItems(
+      double radius, List<Product> products, double x, double y) async {
+    try {
+      var sp = await SharedPreferences.getInstance();
+      String? token = sp.getString('userToken');
+      List<Map<String, dynamic>> productJsonList =
+          products.map((product) => product.toJson()).toList();
+      print(productJsonList);
+      Map<String, dynamic> requestBody = {
+        'Coordinates': [
+          {'x': x.toString(), 'y': y.toString()},
+        ],
+        'products': productJsonList
+      };
+      print(requestBody);
+      return http.post(
+          Uri.parse(
+              "${ConnectionUrls.urlIp}/supermarkets/near-with-items/$radius"),
+          headers: {
+            "content-type": "application/json",
+            "Authorization": "${header} ${token}",
+          },
+          body: jsonEncode(requestBody));
     } on Exception catch (e) {
       print("add super exception: $e");
       return http.Response("error", 404);
