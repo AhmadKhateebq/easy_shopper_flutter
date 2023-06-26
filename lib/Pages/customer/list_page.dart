@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Pages/customer/google_map_page.dart';
-import 'package:graduation_project/Pages/customer/model/product_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../login/login.dart';
@@ -8,6 +7,7 @@ import '../../Style/borders.dart';
 
 import 'data_container.dart';
 
+// ignore: must_be_immutable
 class CustomerListPage extends StatefulWidget {
   int? listId;
   CustomerListPage(int _listId) {

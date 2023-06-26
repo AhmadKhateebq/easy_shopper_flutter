@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../Apis/supermarketApi.dart';
 import '../../Style/borders.dart';
 import 'data_container.dart';
+import 'googleMap/buildData.dart';
 import 'loadingScreen.dart';
 import 'model/product_data.dart';
 import 'model/supermarket_data.dart';
@@ -80,10 +81,10 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
     }
   }
 
-  _setPrefsForTesting(SharedPreferences preferences) {
-    preferences.setInt('listId', 14);
-    preferences.setString('userToken', "1477");
-  }
+  // _setPrefsForTesting(SharedPreferences preferences) {
+  //   preferences.setInt('listId', 14);
+  //   preferences.setString('userToken', "1477");
+  // }
 
   // ignore: unused_field
   bool _isBottomSheetOpen = false;
@@ -191,7 +192,7 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
                               ),
                             ),
                             const SizedBox(height: 8),
-                            ..._buildDoNotContainList(supermarket.dontContains),
+                            ...buildDoNotContainList(supermarket.dontContains),
                             const SizedBox(height: 12),
                             const Divider(
                               color: Colors.black,
@@ -206,7 +207,7 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
                               ),
                             ),
                             const SizedBox(height: 8),
-                            ..._buildDoContainList(supermarket.contains),
+                            ...buildDoContainList(supermarket.contains),
                           ],
                         ),
                       ),
@@ -350,104 +351,4 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
       ),
     );
   }
-}
-
-List<Widget> _buildDoNotContainList(List<Product> doNotContain) {
-  List<Product> doNotContainProducts = doNotContain;
-  return [
-    SingleChildScrollView(
-      child: Column(
-        children: [
-          GridView.count(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            crossAxisCount: 2, // Adjust the crossAxisCount here
-            children: doNotContainProducts.map((product) {
-              return Card(
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(product.imageUrl),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            product.name,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 4.0),
-                          Text(product.category),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
-        ],
-      ),
-    ),
-  ];
-}
-
-List<Widget> _buildDoContainList(List<Product> doContain) {
-  List<Product> doContainProducts = doContain;
-  return [
-    // const SizedBox(height: 16),
-    // const SizedBox(height: 8),
-    SingleChildScrollView(
-      child: Column(
-        children: [
-          GridView.count(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            crossAxisCount: 2, // Adjust the crossAxisCount here
-            children: doContainProducts.map((product) {
-              return Card(
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(product.imageUrl),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            product.name,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 4.0),
-                          Text(product.category),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
-        ],
-      ),
-    ),
-  ];
 }

@@ -128,12 +128,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                                       const Color.fromARGB(255, 89, 83, 83),
                                   icon: Icons.settings,
                                   label: 'Settings',
-                                  onPressed: (context) => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            CustomerListPage(list.id)),
-                                  ),
+                                  onPressed: settingsList(context, list.id),
                                 )
                               ],
                             ),
@@ -238,6 +233,14 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
         );
       },
     );
+  }
+
+  settingsList(BuildContext context, int id) {
+    _settingsOnAction(id, context);
+    (context) => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => CustomerListPage(id)),
+        );
   }
 
   Future<void> _deleteOnAction(int id, BuildContext context) async {
