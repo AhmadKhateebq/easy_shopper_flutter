@@ -7,15 +7,18 @@ import 'package:geolocator/geolocator.dart' as geolocator;
 import 'package:graduation_project/model/supermarket.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Apis/supermarketApi.dart';
 import '../../Style/borders.dart';
+import 'data_container.dart';
 import 'loadingScreen.dart';
 import 'model/product_data.dart';
 import 'model/supermarket_data.dart';
 
 void main() => runApp(GoogleMapHomePage());
 List<Product> _listOfProducts = [];
+late int? _listId;
 
 class GoogleMapHomePage extends StatelessWidget {
   const GoogleMapHomePage({Key? key}) : super(key: key);
@@ -47,15 +50,39 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
   LatLng userLatLong = LatLng(31.9753133, 35.1960417);
   @override
   void initState() {
+    super.initState();
     _createCustomIcon().then((BitmapDescriptor value) {
       setState(() {
         myIcon = value;
       });
     });
     _getUserLocation();
-    fetchSupermarkets(
-        .5, _listOfProducts, userLatLong.latitude, userLatLong.longitude);
-    super.initState();
+    initializeUser().then((List<Product> value) {
+      _listOfProducts = value;
+      fetchSupermarkets(
+        1,
+        _listOfProducts,
+        userLatLong.latitude,
+        userLatLong.longitude,
+      );
+    });
+  }
+
+  Future<List<Product>> initializeUser() async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    // _setPrefsForTesting(preferences);
+    _listId = preferences.getInt('listId')!;
+    print(preferences.getInt('listId'));
+    if (_listId != null) {
+      return getListItems(_listId);
+    } else {
+      return [];
+    }
+  }
+
+  _setPrefsForTesting(SharedPreferences preferences) {
+    preferences.setInt('listId', 14);
+    preferences.setString('userToken', "1477");
   }
 
   // ignore: unused_field
