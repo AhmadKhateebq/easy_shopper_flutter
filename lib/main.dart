@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-
-// import 'Pages/customer/google_map_page.dart';
-// import 'Pages/customer/list_page.dart';
-// import 'Pages/customer/loadingScreen.dart';
 import 'Pages/customer/create_list.dart';
-import 'Pages/customer/customer_main.dart';
 import 'Pages/login/login.dart';
 import 'Pages/splash/splash.dart';
 

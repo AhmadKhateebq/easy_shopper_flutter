@@ -9,7 +9,6 @@ import '../customer/customer_main.dart';
 class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return MaterialApp(
       theme: AppBorders.themeData,
       home: LoginHome(),
@@ -21,7 +20,6 @@ class Login extends StatelessWidget {
 class LoginHome extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _LoginHomeState();
   }
 }
@@ -152,7 +150,6 @@ class _LoginHomeState extends State<LoginHome> {
                                                   "userToken", userInfo[0]);
                                               prefs.setInt("userId",
                                                   int.parse(userInfo[1]));
-                                              
 
                                               Navigator.of(context)
                                                   .pushReplacement(
