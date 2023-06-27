@@ -21,7 +21,6 @@ class CustomerListPage extends StatefulWidget {
 class _CustomerListPageState extends State<CustomerListPage> {
   @override
   Widget build(BuildContext context) {
-    // List<Product> products = await getSupermarketItems(widget.listId);
     return Scaffold(
       appBar: AppBar(
         title: Text('My List'),
@@ -36,6 +35,7 @@ class _CustomerListPageState extends State<CustomerListPage> {
             ),
             alignment: Alignment.topLeft,
             onPressed: () {
+              return;
               SharedPreferences.getInstance().then((prefs) {
                 prefs.setString("userToken", "");
                 Navigator.pushReplacement(
@@ -70,9 +70,9 @@ class _CustomerListPageState extends State<CustomerListPage> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.all(8.0),
+                          padding: EdgeInsets.symmetric(vertical: 8.0),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
                                 product.name,
@@ -89,14 +89,14 @@ class _CustomerListPageState extends State<CustomerListPage> {
                 }).toList(),
               ),
             ),
-            Positioned(
-              bottom: MediaQuery.of(context).size.height * 0.02,
-              left: MediaQuery.of(context).size.width * 0.25,
-              right: MediaQuery.of(context).size.width * 0.25,
+            Align(
+              alignment: Alignment.center,
               child: ButtonTheme(
                 alignedDropdown: true,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    var prefs = await SharedPreferences.getInstance();
+                    prefs.setInt("listId", widget.listId!);
                     Navigator.push(
                       context,
                       MaterialPageRoute(

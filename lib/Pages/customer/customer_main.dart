@@ -103,42 +103,37 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                     itemCount: userList.length,
                     itemBuilder: (context, index) {
                       final list = userList[index];
-                      return Column(
-                        children: [
-                          Slidable(
-                            startActionPane: ActionPane(
-                              extentRatio: 0.3,
-                              motion: const BehindMotion(),
-                              children: [
-                                SlidableAction(
-                                  backgroundColor: Colors.red,
-                                  icon: Icons.delete,
-                                  label: 'delete',
-                                  onPressed: (context) =>
-                                      deleteList(context, list.id),
-                                )
-                              ],
-                            ),
-                            endActionPane: ActionPane(
-                              extentRatio: 0.3,
-                              motion: const BehindMotion(),
-                              children: [
-                                SlidableAction(
-                                  backgroundColor:
-                                      const Color.fromARGB(255, 89, 83, 83),
-                                  icon: Icons.settings,
-                                  label: 'Settings',
-                                  onPressed: settingsList(context, list.id),
-                                )
-                              ],
-                            ),
-                            child: buildListListTile(list),
-                            // SizedBox(
-                            //     height:
-                            //         8.0),
-                          )
-                          // Add vertical spacing between tiles
-                        ],
+                      print("list item : ${list}");
+                      return Slidable(
+                        startActionPane: ActionPane(
+                          extentRatio: 0.3,
+                          motion: const BehindMotion(),
+                          children: [
+                            SlidableAction(
+                              backgroundColor: Colors.red,
+                              icon: Icons.delete,
+                              label: 'delete',
+                              onPressed: (context) =>
+                                  deleteList(context, list.id),
+                            )
+                          ],
+                        ),
+                        endActionPane: ActionPane(
+                          extentRatio: 0.3,
+                          motion: const BehindMotion(),
+                          children: [
+                            SlidableAction(
+                              backgroundColor:
+                                  const Color.fromARGB(255, 89, 83, 83),
+                              icon: Icons.settings,
+                              label: 'Settings',
+                              onPressed: (context) {
+                              //  settingsList(context, list.id);
+                              },
+                            )
+                          ],
+                        ),
+                        child: buildListListTile(list),
                       );
                     },
                   ),
@@ -237,10 +232,10 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
 
   settingsList(BuildContext context, int id) {
     _settingsOnAction(id, context);
-    (context) => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => CustomerListPage(id)),
-        );
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CustomerListPage(id)),
+    );
   }
 
   Future<void> _deleteOnAction(int id, BuildContext context) async {
