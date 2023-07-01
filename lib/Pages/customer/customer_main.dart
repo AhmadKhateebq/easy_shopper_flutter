@@ -48,6 +48,13 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
           child: ListView(
             children: [
               ListTile(
+                leading: Icon(Icons.share),
+                title: Text("Shared with me"),
+                onTap: () {
+                  sharedWithMe(context);
+                },
+              ),
+              ListTile(
                 leading: Icon(Icons.logout),
                 title: Text("Logout"),
                 onTap: () {
@@ -249,10 +256,9 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
     if (userId == null) {
       return;
     }
-    print(id);
     http.Response response = await ListApis.removeList(id, userId);
     if (response.statusCode == 204) {
-      _showSnackBar(context, "List Deleted", Colors.red);
+      print(id);
     } else {
       // List creation failed
       // Display an error message or handle the failure
@@ -261,15 +267,29 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
   }
 }
 
-void _settingsOnAction(int id, BuildContext context) {
-  print(id);
-  _showSnackBar(context, "List Deleted", const Color.fromARGB(255, 89, 83, 83));
+void sharedWithMe(BuildContext context) {
+  AlertDialog(
+    content: Text("Do you want to log out ?"),
+    actions: [
+      TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CreateListScreen(),
+                ));
+          },
+          child: Text("Yes")),
+      TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text("No"))
+    ],
+  );
 }
 
-void _showSnackBar(BuildContext context, String _mesaage, Color color) {
-  final snackBar = SnackBar(
-    content: Text(_mesaage),
-    backgroundColor: color,
-  );
-  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+void _settingsOnAction(int id, BuildContext context) {
+  print(id);
 }
