@@ -47,6 +47,7 @@ class GoogleMapPage extends StatefulWidget {
 }
 
 class _GoogleMapPageState extends State<GoogleMapPage> {
+  double _radius = 0.5;
   bool loading = true;
   LatLng userLatLong = LatLng(31.9753133, 35.1960417);
   @override
@@ -61,7 +62,7 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
     initializeUser().then((List<Product> value) {
       _listOfProducts = value;
       fetchSupermarkets(
-        1,
+        _radius,
         _listOfProducts,
         userLatLong.latitude,
         userLatLong.longitude,
