@@ -10,14 +10,14 @@ import 'create_list.dart';
 import 'data_container.dart';
 import 'model/list_data.dart';
 
-class CustomerHomePage extends StatefulWidget {
-  const CustomerHomePage({Key? key}) : super(key: key);
+class SharedWithUser extends StatefulWidget {
+  const SharedWithUser({Key? key}) : super(key: key);
 
   @override
-  State<CustomerHomePage> createState() => _CustomerHomePageState();
+  State<SharedWithUser> createState() => _SharedWithUserState();
 }
 
-class _CustomerHomePageState extends State<CustomerHomePage> {
+class _SharedWithUserState extends State<SharedWithUser> {
   late int _userid;
   late Future<List<UserList>> _userListFuture;
   @override

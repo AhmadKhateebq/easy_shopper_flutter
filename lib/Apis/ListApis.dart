@@ -64,6 +64,11 @@ class ListApis {
     return _getRequest(endpoint);
   }
 
+  static Future<http.Response> getListSharedWithUser(String id) async {
+    final endpoint = '$id/list';
+    return _getRequest(endpoint);
+  }
+
   static Future<http.Response> removeProduct(
       String supId, String prodId) async {
     final endpoint = 'list/$supId/items/$prodId';
