@@ -1,5 +1,5 @@
 import 'package:graduation_project/Pages/customer/model/product_data.dart';
-import 'package:graduation_project/model/supermarket.dart';
+import 'package:graduation_project/Pages/customer/model/supermarket.dart';
 
 class Supermarket_data {
   Supermarket supermarket;

@@ -1,26 +1,24 @@
 import "dart:convert";
 
-import "package:graduation_project/Constants/connection.dart";
 import "package:http/http.dart" as http;
-import "package:shared_preferences/shared_preferences.dart";
 
-//admin header :
-//"Authorization": "Bearer 1477",
+import "requests.dart";
+// admin header :
+// "Authorization": "Bearer 1477",
 
 String header = "Bearer";
 
 class LoginApis {
   static Future<http.Response> login(String username, String password) async {
     try {
-      return http.post(
-          Uri.parse(
-            "${ConnectionUrls.urlIp}login/",
-          ),
-          headers: {"content-type": "application/json"},
-          body: jsonEncode(
-            <String, dynamic>{"username": username, "password": password},
-          ));
-    } on Exception catch (e) {
+      final endpoint = "login/";
+      final body = jsonEncode(<String, dynamic>{
+        "username": username,
+        "password": password,
+      });
+
+      return Requests.postRequest(endpoint, body);
+    } catch (e) {
       print("login exception: $e");
       return http.Response("error login", 404);
     }
@@ -28,11 +26,9 @@ class LoginApis {
 
   static Future<http.Response> getUser() async {
     try {
-      var prefs = await SharedPreferences.getInstance();
-      String token = prefs.getString("userToken")!;
-      return http.get(Uri.parse("${ConnectionUrls.urlIp}user/"),
-          headers: {"Authorization": "${header} ${token}"});
-    } on Exception catch (e) {
+      final endpoint = "user/";
+      return Requests.getRequest(endpoint);
+    } catch (e) {
       print("get user exception: $e");
       return http.Response("error", 404);
     }
@@ -40,9 +36,10 @@ class LoginApis {
 
   static Future<http.Response> getAllUsersList(String token) async {
     try {
-      return http.get(Uri.parse("${ConnectionUrls.urlIp}list/"),
-          headers: {"Authorization": "${header} ${token}"});
-    } on Exception catch (e) {
+      final endpoint = "list/";
+
+      return Requests.getRequest(endpoint);
+    } catch (e) {
       print("get user exception: $e");
       return http.Response("error", 404);
     }
@@ -51,18 +48,17 @@ class LoginApis {
   static Future<http.Response> registerUser(String username, String fname,
       String lname, String email, String password) async {
     try {
-      return http.post(Uri.parse("${ConnectionUrls.urlIp}register/"),
-          headers: {"content-type": "application/json"},
-          body: jsonEncode(
-            <String, dynamic>{
-              "username": username,
-              "fname": fname,
-              "lname": lname,
-              "email": email,
-              "password": password
-            },
-          ));
-    } on Exception catch (e) {
+      final endpoint = "register/";
+      final body = jsonEncode(<String, dynamic>{
+        "username": username,
+        "fname": fname,
+        "lname": lname,
+        "email": email,
+        "password": password,
+      });
+
+      return Requests.postRequest(endpoint, body);
+    } catch (e) {
       print("registerUser exception: $e");
       return http.Response("error", 404);
     }
