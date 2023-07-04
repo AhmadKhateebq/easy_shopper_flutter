@@ -5,10 +5,59 @@ import '../Pages/customer/model/list_data.dart';
 import 'requests.dart';
 
 class ListApis {
+  static const String header = 'Bearer';
+  static String urlIp = ConnectionUrls.urlIp;
+
+  static Future<http.Response> _getRequest(String endpoint,
+      {bool? isAdminAuth}) async {
+    try {
+      final sp = await SharedPreferences.getInstance();
+      final token = isAdminAuth == true ? "1477" : sp.getString('userToken');
+      final url = Uri.parse('$urlIp$endpoint');
+      final response =
+          await http.get(url, headers: {'Authorization': '$header $token'});
+      return response;
+    } catch (e) {
+      print('Exception: $e');
+      return http.Response('error', 404);
+    }
+  }
+
+  static Future<http.Response> _postRequest(
+      String endpoint, String body) async {
+    try {
+      final sp = await SharedPreferences.getInstance();
+      final token = sp.getString('userToken');
+      final url = Uri.parse('$urlIp$endpoint');
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': '$header $token',
+      };
+      final response = await http.post(url, headers: headers, body: body);
+      return response;
+    } catch (e) {
+      print('Exception: $e');
+      return http.Response('error', 404);
+    }
+  }
+
+  static Future<http.Response> _deleteRequest(String endpoint) async {
+    try {
+      final sp = await SharedPreferences.getInstance();
+      final token = sp.getString('userToken');
+      final url = Uri.parse('$urlIp$endpoint');
+      final response =
+          await http.delete(url, headers: {'Authorization': '$header $token'});
+      return response;
+    } catch (e) {
+      print('Exception: $e');
+      return http.Response('error', 404);
+    }
+  }
+
   static Future<http.Response> getListItems(String id) async {
     final endpoint = 'list/$id/items';
-    return Requests.getRequest(endpoint);
-  }
+    return _getRequest(endpoint, isAdminAuth: true);
 
   static Future<http.Response> getListByUserId(String id) async {
     final endpoint = '$id/list';
@@ -24,6 +73,17 @@ class ListApis {
       String supId, String prodId) async {
     final endpoint = 'list/$supId/items/$prodId';
     return Requests.deleteRequest(endpoint);
+  }
+
+  static Future<http.Response> addItemToUserList(
+      String listId, String prodId) async {
+    final endpoint = 'list/$listId/items/$prodId';
+    return _postRequest(endpoint, "");
+  }
+  static Future<http.Response> removeItemFromUserList(
+      String listId, String prodId) async {
+    final endpoint = 'list/$listId/items/$prodId';
+    return _deleteRequest(endpoint);
   }
 
   static Future<http.Response> removeList(int listId, int userId) async {
