@@ -5,12 +5,8 @@ import 'package:graduation_project/Pages/customer/googleMap/google_map_page.dart
 import 'package:graduation_project/Pages/customer/model/product_data.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../login/login.dart';
 import '../../Style/borders.dart';
-
 import 'data_container.dart';
-import 'googleMap/google_map_page.dart';
 
 // ignore: must_be_immutable
 class CustomerListPage extends StatefulWidget {
