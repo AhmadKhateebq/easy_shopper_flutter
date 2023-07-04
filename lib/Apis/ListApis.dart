@@ -8,10 +8,11 @@ class ListApis {
   static const String header = 'Bearer';
   static String urlIp = ConnectionUrls.urlIp;
 
-  static Future<http.Response> _getRequest(String endpoint) async {
+  static Future<http.Response> _getRequest(String endpoint,
+      {bool? isAdminAuth}) async {
     try {
       final sp = await SharedPreferences.getInstance();
-      final token = sp.getString('userToken');
+      final token = isAdminAuth == true ? "1477" : sp.getString('userToken');
       final url = Uri.parse('$urlIp$endpoint');
       final response =
           await http.get(url, headers: {'Authorization': '$header $token'});
@@ -56,7 +57,7 @@ class ListApis {
 
   static Future<http.Response> getListItems(String id) async {
     final endpoint = 'list/$id/items';
-    return _getRequest(endpoint);
+    return _getRequest(endpoint, isAdminAuth: true);
   }
 
   static Future<http.Response> getListByUserId(String id) async {
@@ -67,6 +68,17 @@ class ListApis {
   static Future<http.Response> removeProduct(
       String supId, String prodId) async {
     final endpoint = 'list/$supId/items/$prodId';
+    return _deleteRequest(endpoint);
+  }
+
+  static Future<http.Response> addItemToUserList(
+      String listId, String prodId) async {
+    final endpoint = 'list/$listId/items/$prodId';
+    return _postRequest(endpoint, "");
+  }
+  static Future<http.Response> removeItemFromUserList(
+      String listId, String prodId) async {
+    final endpoint = 'list/$listId/items/$prodId';
     return _deleteRequest(endpoint);
   }
 

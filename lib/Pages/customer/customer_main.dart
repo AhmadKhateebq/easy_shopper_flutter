@@ -128,7 +128,6 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                               icon: Icons.settings,
                               label: 'Settings',
                               onPressed: (context) {
-                              //  settingsList(context, list.id);
                               },
                             )
                           ],
