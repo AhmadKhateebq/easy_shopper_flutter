@@ -4,12 +4,11 @@ import 'package:graduation_project/Pages/customer/model/list_data.dart';
 
 import '../../Apis/supermarketApi.dart';
 import '../../Apis/listApis.dart';
-import 'dummy_data/product_list.dart';
 import 'model/product_data.dart';
 
-List<Product> productList = dummyProducts;
-List<Product> doNotContain = dummyProducts.sublist(3, 4);
-List<Product> doContain = dummyProducts.sublist(0, 3);
+List<Product> productList = [];
+List<Product> doNotContain = [];
+List<Product> doContain = [];
 Future<List<Product>> getSupermarketItems(_supermarketId) async {
   await SupermarketApis.getSupermarketItems(_supermarketId).then((resp) {
     print("get supermarket products list: " +

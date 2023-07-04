@@ -27,9 +27,9 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
   @override
   void initState() {
     super.initState();
-    _setPrefs();
     _fetchUserId();
     _fetchUserData();
+    _fetchRadius();
   }
 
   Future<void> _fetchUserId() async {
@@ -37,11 +37,9 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
     _userId = prefs.getInt('userId') ?? 4;
   }
 
-  Future<void> _setPrefs() async {
+  Future<void> _fetchRadius() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("userToken", "1477");
-    prefs.setInt("userId", 4);
-    prefs.setDouble("radius", 0.5);
+    _searchDistance = prefs.getDouble('radius') ?? 0.5;
   }
 
   Future<void> _fetchUserData() async {
