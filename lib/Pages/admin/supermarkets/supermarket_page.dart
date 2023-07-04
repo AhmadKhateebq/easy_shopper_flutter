@@ -7,7 +7,7 @@ import 'package:graduation_project/Pages/admin/supermarkets/superMarketItems.dar
 import 'package:graduation_project/Style/borders.dart';
 
 import '../../../Apis/supermarketApi.dart';
-import '../../../model/supermarket.dart';
+import '../../customer/model/supermarket.dart';
 
 class SupermarketListPage extends StatefulWidget {
   @override
@@ -96,7 +96,8 @@ class _SupermarketListPageState extends State<SupermarketListPage> {
                               onTap: () {
                                 Navigator.push(context,
                                     new MaterialPageRoute(builder: (context) {
-                                  return SuperMarketItems(supermarket.name,supermarket.id.toString());
+                                  return SuperMarketItems(supermarket.name,
+                                      supermarket.id.toString());
                                 }));
                               },
                               // Add more widgets to display other information

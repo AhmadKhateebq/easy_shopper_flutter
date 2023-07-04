@@ -1,51 +1,33 @@
 import "dart:convert";
 
 import "package:http/http.dart" as http;
-import "package:shared_preferences/shared_preferences.dart";
-
-import "../Constants/connection.dart";
-
-String header = "Bearer";
+import "requests.dart";
 
 class ItemApis {
   static Future<http.Response> getAllItems() async {
     try {
-      var sp = await SharedPreferences.getInstance();
-      String? token =
-          sp.getString('userToken') != null ? sp.getString('userToken') : "";
-      return http.get(
-        Uri.parse("${ConnectionUrls.urlIp}products/"),
-        headers: {
-          "Authorization": "${header} ${token}",
-        },
-      );
-    } on Exception catch (e) {
-      print("getAllItems exception: $e");
-      return http.Response("error", 404);
+      final response = await Requests.getRequest('/products/');
+      return response;
+    } catch (e) {
+      print('getAllItems exception: $e');
+      return http.Response('error', 404);
     }
   }
 
   static Future<http.Response> createProduct(
-      name, description, category, brand) async {
+      String name, String description, String category, String brand) async {
     try {
-      var sp = await SharedPreferences.getInstance();
-      String? token =
-          sp.getString('userToken') != null ? sp.getString('userToken') : "";
-
-      return http.post(Uri.parse("${ConnectionUrls.urlIp}/products/"),
-          headers: {
-            "content-type": "application/json",
-            "Authorization": "${header} ${token}",
-          },
-          body: jsonEncode(<String, dynamic>{
-            "name": name,
-            "description": description,
-            "category": category,
-            "brand": brand,
-          }));
-    } on Exception catch (e) {
-      print("getAllItems exception: $e");
-      return http.Response("error", 404);
+      final body = jsonEncode({
+        "name": name,
+        "description": description,
+        "category": category,
+        "brand": brand,
+      });
+      final response = await Requests.postRequest('/products/', body);
+      return response;
+    } catch (e) {
+      print('createProduct exception: $e');
+      return http.Response('error', 404);
     }
   }
 }
