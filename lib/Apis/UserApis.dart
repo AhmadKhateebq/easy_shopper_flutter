@@ -42,6 +42,17 @@ class UserApi {
     }
   }
 
+  static Future<Response> getAllUserNames() async {
+    final endpoint = '$_endpoint/usernames';
+    try {
+      final response = await Requests.getRequest(endpoint);
+      return response;
+    } catch (e) {
+      print('Exception: $e');
+      return Response('error', 404);
+    }
+  }
+
   static Future<Response> deleteUser(int userId) async {
     final endpoint = '$_endpoint/$userId';
 

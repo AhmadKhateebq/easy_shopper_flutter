@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import '../../Apis/ListApis.dart';
 import 'create_list.dart';
 import 'data_container.dart';
+import 'list_settings.dart';
 import 'model/list_data.dart';
 import 'user_settings.dart';
 
@@ -257,7 +258,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
     _settingsOnAction(id, context);
     (context) => Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => CustomerListPage(id)),
+          MaterialPageRoute(builder: (context) => ListSettingsPage(id)),
         );
   }
 
