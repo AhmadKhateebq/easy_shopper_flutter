@@ -59,6 +59,7 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
       });
     });
     _getUserLocation();
+    _fetchRadius();
     initializeUser().then((List<Product> value) {
       _listOfProducts = value;
       fetchSupermarkets(
@@ -68,6 +69,11 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
         userLatLong.longitude,
       );
     });
+  }
+
+  Future<void> _fetchRadius() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _radius = prefs.getDouble('radius') ?? 0.5;
   }
 
   Future<List<Product>> initializeUser() async {
