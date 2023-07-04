@@ -2,28 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Style/borders.dart';
-import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Apis/UserApis.dart';
+import 'change_password.dart';
+import 'customer_main.dart';
 import 'model/user_data.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'User Settings Page',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: UserSettingsPage(),
-    );
-  }
-}
 
 class UserSettingsPage extends StatefulWidget {
   @override
@@ -107,144 +91,6 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
     }
   }
 
-  void _showPasswordDialog() async {
-    final TextEditingController _currentPasswordController =
-        TextEditingController();
-    final TextEditingController _newPasswordController =
-        TextEditingController();
-    final TextEditingController _confirmPasswordController =
-        TextEditingController();
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Change Password'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextFormField(
-                    controller: _currentPasswordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: 'Current Password',
-                    ),
-                  ),
-                  TextFormField(
-                    controller: _newPasswordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: 'New Password',
-                    ),
-                  ),
-                  TextFormField(
-                    controller: _confirmPasswordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: 'Confirm Password',
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                String currentPassword = _currentPasswordController.text;
-                String newPassword = _newPasswordController.text;
-                String confirmPassword = _confirmPasswordController.text;
-                if (newPassword == confirmPassword) {
-                  Response response = await UserApi.updatePassword(
-                    _userId,
-                    currentPassword,
-                    newPassword,
-                  );
-                  if (response.statusCode == 200) {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('Password updated'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text('Ok'),
-                              ),
-                            ],
-                          );
-                        });
-                    Navigator.of(context).pop();
-                  } else if (response.statusCode == 401) {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('current password is Incorrect'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text('Ok'),
-                              ),
-                            ],
-                          );
-                        });
-                  } else if (response.statusCode == 406) {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text(
-                                'New password must be different from the current password'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text('Ok'),
-                              ),
-                            ],
-                          );
-                        });
-                  }
-                } else {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text('Current password doesnt match'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text('Ok'),
-                            ),
-                          ],
-                        );
-                      });
-                }
-              },
-              child: Text('Update'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancel'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   void _setSearchDistance(double distance) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setDouble("radius", distance);
@@ -259,6 +105,18 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('User Settings'),
+        backgroundColor: AppBorders.appColor,
+        leading: IconButton(
+          icon: Icon(Icons.home), // Replace with your desired icon
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) =>
+                    CustomerHomePage(), // Replace with your desired page
+              ),
+            );
+          },
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -287,7 +145,14 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
                   onPress: _updateUser, text: 'Update user info'),
               SizedBox(height: 20),
               _buildElevatedButton(
-                  onPress: _showPasswordDialog, text: 'Change Password'),
+                  onPress: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => PasswordScreen(),
+                      ),
+                    );
+                  },
+                  text: 'Change Password'),
               SizedBox(height: 20),
               Text(
                 'Search Distance',

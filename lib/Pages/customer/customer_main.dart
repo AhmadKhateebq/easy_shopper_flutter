@@ -9,6 +9,7 @@ import '../../Apis/ListApis.dart';
 import 'create_list.dart';
 import 'data_container.dart';
 import 'model/list_data.dart';
+import 'user_settings.dart';
 
 class CustomerHomePage extends StatefulWidget {
   const CustomerHomePage({Key? key}) : super(key: key);
@@ -52,6 +53,16 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                 title: Text("Shared with me"),
                 onTap: () {
                   sharedWithMe(context);
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.settings),
+                title: Text("User settings"),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => UserSettingsPage()));
                 },
               ),
               ListTile(
