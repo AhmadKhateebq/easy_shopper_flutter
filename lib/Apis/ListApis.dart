@@ -1,8 +1,8 @@
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../Constants/connection.dart';
 import '../Pages/customer/model/list_data.dart';
+import 'requests.dart';
 
 class ListApis {
   static const String header = 'Bearer';
@@ -58,17 +58,21 @@ class ListApis {
   static Future<http.Response> getListItems(String id) async {
     final endpoint = 'list/$id/items';
     return _getRequest(endpoint, isAdminAuth: true);
-  }
 
   static Future<http.Response> getListByUserId(String id) async {
     final endpoint = '$id/list';
-    return _getRequest(endpoint);
+    return Requests.getRequest(endpoint);
+  }
+
+  static Future<http.Response> getListSharedWithUser(String id) async {
+    final endpoint = '$id/list';
+    return Requests.getRequest(endpoint);
   }
 
   static Future<http.Response> removeProduct(
       String supId, String prodId) async {
     final endpoint = 'list/$supId/items/$prodId';
-    return _deleteRequest(endpoint);
+    return Requests.deleteRequest(endpoint);
   }
 
   static Future<http.Response> addItemToUserList(
@@ -84,7 +88,7 @@ class ListApis {
 
   static Future<http.Response> removeList(int listId, int userId) async {
     final endpoint = '$userId/list/$listId/';
-    return _deleteRequest(endpoint);
+    return Requests.deleteRequest(endpoint);
   }
 
   static Future<http.Response> createList(UserList userList) async {
@@ -94,7 +98,7 @@ class ListApis {
     final userListJson = userList.toJson();
 
     try {
-      final response = await _postRequest(endpoint, userListJson);
+      final response = await Requests.postRequest(endpoint, userListJson);
       return response;
     } catch (e) {
       print('Exception: $e');

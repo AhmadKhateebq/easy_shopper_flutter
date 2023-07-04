@@ -9,16 +9,15 @@ import '../../Apis/ListApis.dart';
 import 'create_list.dart';
 import 'data_container.dart';
 import 'model/list_data.dart';
-import 'user_settings.dart';
 
-class CustomerHomePage extends StatefulWidget {
-  const CustomerHomePage({Key? key}) : super(key: key);
+class SharedWithUser extends StatefulWidget {
+  const SharedWithUser({Key? key}) : super(key: key);
 
   @override
-  State<CustomerHomePage> createState() => _CustomerHomePageState();
+  State<SharedWithUser> createState() => _SharedWithUserState();
 }
 
-class _CustomerHomePageState extends State<CustomerHomePage> {
+class _SharedWithUserState extends State<SharedWithUser> {
   late int _userid;
   late Future<List<UserList>> _userListFuture;
   @override
@@ -53,16 +52,6 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                 title: Text("Shared with me"),
                 onTap: () {
                   sharedWithMe(context);
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.settings),
-                title: Text("User settings"),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => UserSettingsPage()));
                 },
               ),
               ListTile(
@@ -121,36 +110,42 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                     itemCount: userList.length,
                     itemBuilder: (context, index) {
                       final list = userList[index];
-                      print("list item : ${list}");
-                      return Slidable(
-                        startActionPane: ActionPane(
-                          extentRatio: 0.3,
-                          motion: const BehindMotion(),
-                          children: [
-                            SlidableAction(
-                              backgroundColor: Colors.red,
-                              icon: Icons.delete,
-                              label: 'delete',
-                              onPressed: (context) =>
-                                  deleteList(context, list.id),
-                            )
-                          ],
-                        ),
-                        endActionPane: ActionPane(
-                          extentRatio: 0.3,
-                          motion: const BehindMotion(),
-                          children: [
-                            SlidableAction(
-                              backgroundColor:
-                                  const Color.fromARGB(255, 89, 83, 83),
-                              icon: Icons.settings,
-                              label: 'Settings',
-                              onPressed: (context) {
-                              },
-                            )
-                          ],
-                        ),
-                        child: buildListListTile(list),
+                      return Column(
+                        children: [
+                          Slidable(
+                            startActionPane: ActionPane(
+                              extentRatio: 0.3,
+                              motion: const BehindMotion(),
+                              children: [
+                                SlidableAction(
+                                  backgroundColor: Colors.red,
+                                  icon: Icons.delete,
+                                  label: 'delete',
+                                  onPressed: (context) =>
+                                      deleteList(context, list.id),
+                                )
+                              ],
+                            ),
+                            endActionPane: ActionPane(
+                              extentRatio: 0.3,
+                              motion: const BehindMotion(),
+                              children: [
+                                SlidableAction(
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 89, 83, 83),
+                                  icon: Icons.settings,
+                                  label: 'Settings',
+                                  onPressed: settingsList(context, list.id),
+                                )
+                              ],
+                            ),
+                            child: buildListListTile(list),
+                            // SizedBox(
+                            //     height:
+                            //         8.0),
+                          )
+                          // Add vertical spacing between tiles
+                        ],
                       );
                     },
                   ),
@@ -249,10 +244,10 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
 
   settingsList(BuildContext context, int id) {
     _settingsOnAction(id, context);
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => CustomerListPage(id)),
-    );
+    (context) => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => CustomerListPage(id)),
+        );
   }
 
   Future<void> _deleteOnAction(int id, BuildContext context) async {

@@ -4,7 +4,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart' as geolocator;
-import 'package:graduation_project/model/supermarket.dart';
+import 'package:graduation_project/Pages/customer/model/supermarket.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,6 +47,7 @@ class GoogleMapPage extends StatefulWidget {
 }
 
 class _GoogleMapPageState extends State<GoogleMapPage> {
+  double _radius = 0.5;
   bool loading = true;
   LatLng userLatLong = LatLng(31.9753133, 35.1960417);
   @override
@@ -61,7 +62,7 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
     initializeUser().then((List<Product> value) {
       _listOfProducts = value;
       fetchSupermarkets(
-        1,
+        _radius,
         _listOfProducts,
         userLatLong.latitude,
         userLatLong.longitude,

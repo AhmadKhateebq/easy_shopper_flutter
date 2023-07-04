@@ -81,6 +81,26 @@ Future<List<UserList>> getUserListByUserId(int _userId) async {
   }
 }
 
+Future<List<UserList>> getListsSharedWithUser(int _userId) async {
+  final resp = await ListApis.getListSharedWithUser(_userId.toString());
+  print("get lists list: " + resp.body + " status code ${resp.statusCode}");
+
+  try {
+    List<dynamic> responseList = jsonDecode(resp.body);
+    List<UserList> products = [];
+
+    responseList.forEach((element) {
+      print(element);
+      products.add(_decodeList(element));
+    });
+
+    return products;
+  } catch (e) {
+    print("list exception: " + e.toString());
+    return [];
+  }
+}
+
 // getListByUserId
 Product _decodeProduct(dynamic element) {
   int itemId = element['id'];
