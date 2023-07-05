@@ -43,7 +43,7 @@ Future<List<Product>> getListItems(int? listId) async {
     dynamic responseBody = jsonDecode(resp.body);
     if (responseBody is List) {
       List<Product> products = responseBody.map((element) {
-        print(element);
+        print("list product : ${element}");
         return _decodeProduct(element);
       }).toList();
 
