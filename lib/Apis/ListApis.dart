@@ -66,6 +66,11 @@ class ListApis {
     return Requests.getRequest(endpoint);
   }
 
+  static Future<http.Response> getListById(String id) async {
+    final endpoint = '/list/$id';
+    return Requests.getRequest(endpoint);
+  }
+
   static Future<http.Response> getListSharedWithUser(String id) async {
     final endpoint = '$id/list';
     return Requests.getRequest(endpoint);
@@ -106,6 +111,25 @@ class ListApis {
     } catch (e) {
       print('Exception: $e');
       return http.Response('error', 404);
+    }
+  }
+
+  static Future<http.Response> updateList(UserList userList) async {
+    try {
+      final sp = await SharedPreferences.getInstance();
+      final userId = sp.getInt('userId');
+      if (userId == null) {
+        return http.Response('User ID not found in SharedPreferences', 400);
+      }
+
+      final endpoint = '/$userId/list/${userList.id}';
+      final userListJson = userList.toJson();
+
+      final response = await Requests.putRequest(endpoint, userListJson);
+      return response;
+    } catch (e) {
+      print('Exception: $e');
+      return http.Response('An error occurred during the request', 500);
     }
   }
 }
