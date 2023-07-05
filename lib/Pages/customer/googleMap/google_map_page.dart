@@ -13,11 +13,10 @@ import '../../../Apis/supermarketApi.dart';
 import '../../../Style/borders.dart';
 import '../data_container.dart';
 import 'buildData.dart';
-import 'loadingScreen.dart';
+import '../loadingScreens/loadingScreen.dart';
 import '../model/product_data.dart';
 import '../model/supermarket_data.dart';
 
-void main() => runApp(GoogleMapHomePage());
 List<Product> _listOfProducts = [];
 late int? _listId;
 

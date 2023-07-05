@@ -33,7 +33,7 @@ class UserList {
   factory UserList.fromJson(Map<String, dynamic> json) {
     return UserList(
       id: json['id'],
-      isPrivate: json['isPrivate'],
+      isPrivate: json['private'],
       userId: json['userId'],
       name: json['name'],
       usersSharedWith: List<SharedWith>.from(
