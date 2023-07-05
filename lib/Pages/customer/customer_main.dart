@@ -78,7 +78,6 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
         ),
         appBar: AppBar(
           title: Text('My Lists'),
-
           backgroundColor: AppBorders.appColor, // Set the background color
           elevation: 10, // Set the elevation (shadow) of the app bar
           centerTitle: true,
@@ -147,7 +146,12 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                                       const Color.fromARGB(255, 89, 83, 83),
                                   icon: Icons.settings,
                                   label: 'Settings',
-                                  onPressed: settingsList(context, list.id),
+                                  onPressed: (context) => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ListSettingsPage(list.id)),
+                                  ),
                                 )
                               ],
                             ),
@@ -255,7 +259,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
   }
 
   settingsList(BuildContext context, int id) {
-    _settingsOnAction(id, context);
+    print("entered");
     (context) => Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => ListSettingsPage(id)),
@@ -300,8 +304,4 @@ void sharedWithMe(BuildContext context) {
           child: Text("No"))
     ],
   );
-}
-
-void _settingsOnAction(int id, BuildContext context) {
-  print(id);
 }
