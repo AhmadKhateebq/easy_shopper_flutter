@@ -6,6 +6,7 @@ import 'package:graduation_project/Apis/ListApis.dart';
 import 'package:graduation_project/Apis/UserApis.dart';
 import 'package:graduation_project/Pages/customer/model/list_data.dart';
 import 'package:graduation_project/Pages/customer/model/user_name_data.dart';
+import 'package:collection/collection.dart';
 
 import '../../Style/borders.dart';
 import 'customer_main.dart';
@@ -29,6 +30,7 @@ class _ListSettingsPageState extends State<ListSettingsPage> {
   List<SharedWith> sharedWithList = [];
   String searchQuery = '';
   bool _isLoading = true;
+  bool shared = false;
 
   List<AppUserUsername> filteredUsers = [];
 
@@ -41,8 +43,10 @@ class _ListSettingsPageState extends State<ListSettingsPage> {
   Future<void> _fetchData() async {
     await _fetchUserList();
     await _fetchUsers();
-    _editedUserList = UserList.copy(_list);
+
     setState(() {
+      _editedUserList = UserList.copy(_list);
+      _editedUserList = UserList.copy(_list);
       _isLoading = false;
     });
   }
@@ -190,6 +194,8 @@ class _ListSettingsPageState extends State<ListSettingsPage> {
                     title: Text(user.username),
                     onTap: () {
                       setState(() {
+                        sharedWithList.removeWhere(
+                            (sharedUser) => sharedUser.userId == user.id);
                         sharedWithList
                             .add(SharedWith(userId: user.id, canEdit: false));
                       });
@@ -198,11 +204,14 @@ class _ListSettingsPageState extends State<ListSettingsPage> {
                 : SizedBox.shrink();
           },
         ),
-        ...sharedWithList.map((sharedUser) {
-          final user =
-              _userList.firstWhere((user) => user.id == sharedUser.userId);
-          return ListTile(
-              title: Text(user.username),
+        if (sharedWithList.isNotEmpty)
+          ...sharedWithList.map((sharedUser) {
+            if (sharedUser.userId == 0)
+              return SizedBox.shrink(); // Skip the "Unknown User"
+            final user = _userList
+                .firstWhereOrNull((user) => user.id == sharedUser.userId);
+            return ListTile(
+              title: Text(user?.username ?? 'Unknown User'),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -219,8 +228,14 @@ class _ListSettingsPageState extends State<ListSettingsPage> {
                     },
                   ),
                 ],
-              ));
-        }),
+              ),
+            );
+          }),
+        if (sharedWithList.isEmpty)
+          Text(
+            "No users shared with.",
+            style: TextStyle(color: Colors.grey),
+          ),
       ],
     );
   }
