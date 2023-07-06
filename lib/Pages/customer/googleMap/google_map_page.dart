@@ -59,7 +59,7 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
     });
     _getUserLocation();
     _fetchRadius();
-    initializeUser().then((List<Product> value) {
+    initializeItems().then((List<Product> value) {
       _listOfProducts = value;
       fetchSupermarkets(
         _radius,
@@ -75,7 +75,7 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
     _radius = prefs.getDouble('radius') ?? 0.5;
   }
 
-  Future<List<Product>> initializeUser() async {
+  Future<List<Product>> initializeItems() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     // _setPrefsForTesting(preferences);
     _listId = preferences.getInt('listId')!;
