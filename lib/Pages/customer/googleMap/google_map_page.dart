@@ -191,6 +191,19 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
                             ),
                             const SizedBox(height: 12),
                             Text(
+                              'Total Price: ${supermarket.total} NIS',
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            const Divider(
+                              color: Colors.black,
+                              height: 1,
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
                               'Do Not Contain:',
                               style: const TextStyle(
                                 fontSize: 20,
