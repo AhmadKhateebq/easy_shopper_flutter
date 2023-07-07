@@ -21,7 +21,7 @@ class UserList {
   String toJson() {
     return jsonEncode(<String, dynamic>{
       'id': id,
-      'isPrivate': isPrivate,
+      'private': isPrivate,
       'userId': userId,
       'name': name,
       'usersSharedWith':

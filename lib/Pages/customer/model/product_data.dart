@@ -35,3 +35,18 @@ class Product {
     );
   }
 }
+
+class supermarketProducts {
+  double price;
+  Product product;
+  int stock;
+  supermarketProducts(
+      {required this.price, required this.stock, required this.product});
+  factory supermarketProducts.fromJson(Map<String, dynamic> json) {
+    return supermarketProducts(
+      price: json['price'],
+      stock: json['stock'],
+      product: Product.fromJson(json['product']),
+    );
+  }
+}
