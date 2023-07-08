@@ -192,7 +192,8 @@ class _SharedWithUserState extends State<SharedWithUser> {
               TextButton(
                   onPressed: () {
                     Navigator.of(alertContext).pop();
-                    Navigator.pushNamed(context, '/login');
+                    return;
+                    //  Navigator.pushNamed(context, '/login');
                     SharedPreferences.getInstance().then((prefs) {
                       prefs.clear();
                     });

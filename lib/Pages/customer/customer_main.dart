@@ -1,16 +1,36 @@
+import 'dart:async';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:graduation_project/Pages/login/login.dart';
 import 'package:graduation_project/Style/borders.dart';
 import 'package:graduation_project/Pages/customer/list_page.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import '../../Apis/ListApis.dart';
+import '../../Utils/Notifications.dart';
+import '../../firebase_options.dart';
 import 'create_list.dart';
 import 'data_container.dart';
 import 'list_settings.dart';
 import 'model/list_data.dart';
 import 'user_settings.dart';
+
+final notficationPlugin = new FlutterLocalNotificationsPlugin();
+StreamSubscription<RemoteMessage>? foregroundMsgStream;
+StreamSubscription<RemoteMessage>? backgroundMsgStream;
+
+@pragma("vm:entry-point")
+Future<void> backgroundMsgHandler(RemoteMessage msg) async {
+  print("message arrived ${msg.notification!.title}");
+  NotificationsManager.showNotification(
+      notficationPlugin, msg.notification!.title!, msg.notification!.body!);
+}
 
 class CustomerHomePage extends StatefulWidget {
   const CustomerHomePage({Key? key}) : super(key: key);
@@ -22,14 +42,49 @@ class CustomerHomePage extends StatefulWidget {
 class _CustomerHomePageState extends State<CustomerHomePage> {
   late int _userid;
   late Future<List<UserList>> _userListFuture;
+
+  Future<void> messageHandler(RemoteMessage msg) async {
+    print("message arrived ${msg.notification!.title}");
+    NotificationsManager.showNotification(
+        notficationPlugin, msg.notification!.title!, msg.notification!.body!);
+  }
+
+  _setUpFirebase() async {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+
+    await NotificationsManager.initializeFLN(notficationPlugin);
+
+    var permission = await Permission.notification.status;
+
+    if (!permission.isGranted) {
+      print("notification permission is not granted");
+      await Permission.notification.request();
+    }
+    foregroundMsgStream = FirebaseMessaging.onMessage.listen(messageHandler);
+    FirebaseMessaging.instance.getToken().then((value) {
+      print("firebase token : ${value}");
+    });
+  }
+
+  @override
+  void dispose() {
+    print("customer_main dispose called");
+    if (foregroundMsgStream != null) foregroundMsgStream!.cancel();
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
     _userid = 0;
     _userListFuture = initializeUser();
+    _setUpFirebase();
   }
 
   Future<List<UserList>> initializeUser() async {
+    print("user list loaded");
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     // preferences.setInt('userId', 4);
     _userid = preferences.getInt('userId')!;
@@ -189,12 +244,15 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
           'Privacy: ${list.isPrivate ? 'Private' : 'Shared'}',
         ),
         trailing: Text('Items: ${list.items.length}'),
-        onTap: () {
+        onTap: () async {
           productList = list.items;
-          Navigator.push(
+          await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => CustomerListPage(list.id)),
           );
+          setState(() {
+            _userListFuture = initializeUser();
+          });
         },
       );
 
@@ -208,7 +266,10 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
               TextButton(
                   onPressed: () {
                     Navigator.of(alertContext).pop();
-                    Navigator.pushNamed(context, '/login');
+                    Navigator.of(context).pushAndRemoveUntil(
+                        new MaterialPageRoute(builder: (context) {
+                      return Login();
+                    }), (route) => route.isFirst);
                     SharedPreferences.getInstance().then((prefs) {
                       prefs.clear();
                     });
