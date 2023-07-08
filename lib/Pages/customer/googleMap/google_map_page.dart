@@ -13,11 +13,10 @@ import '../../../Apis/supermarketApi.dart';
 import '../../../Style/borders.dart';
 import '../data_container.dart';
 import 'buildData.dart';
-import 'loadingScreen.dart';
+import '../loadingScreens/loadingScreen.dart';
 import '../model/product_data.dart';
 import '../model/supermarket_data.dart';
 
-void main() => runApp(GoogleMapHomePage());
 List<Product> _listOfProducts = [];
 late int? _listId;
 
@@ -60,7 +59,7 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
     });
     _getUserLocation();
     _fetchRadius();
-    initializeUser().then((List<Product> value) {
+    initializeItems().then((List<Product> value) {
       _listOfProducts = value;
       fetchSupermarkets(
         _radius,
@@ -76,7 +75,7 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
     _radius = prefs.getDouble('radius') ?? 0.5;
   }
 
-  Future<List<Product>> initializeUser() async {
+  Future<List<Product>> initializeItems() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     // _setPrefsForTesting(preferences);
     _listId = preferences.getInt('listId')!;
@@ -183,6 +182,19 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
                               'Containing Size: ${supermarket.containingSize}',
                               style: const TextStyle(
                                 fontSize: 18,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            const Divider(
+                              color: Colors.black,
+                              height: 1,
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              'Total Price: ${supermarket.total} NIS',
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                             const SizedBox(height: 12),

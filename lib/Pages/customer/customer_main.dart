@@ -17,6 +17,7 @@ import '../../Utils/Notifications.dart';
 import '../../firebase_options.dart';
 import 'create_list.dart';
 import 'data_container.dart';
+import 'list_settings.dart';
 import 'model/list_data.dart';
 import 'user_settings.dart';
 
@@ -132,7 +133,6 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
         ),
         appBar: AppBar(
           title: Text('My Lists'),
-
           backgroundColor: AppBorders.appColor, // Set the background color
           elevation: 10, // Set the elevation (shadow) of the app bar
           centerTitle: true,
@@ -176,35 +176,47 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                     itemCount: userList.length,
                     itemBuilder: (context, index) {
                       final list = userList[index];
-                      print("list item : ${list}");
-                      return Slidable(
-                        startActionPane: ActionPane(
-                          extentRatio: 0.3,
-                          motion: const BehindMotion(),
-                          children: [
-                            SlidableAction(
-                              backgroundColor: Colors.red,
-                              icon: Icons.delete,
-                              label: 'delete',
-                              onPressed: (context) =>
-                                  deleteList(context, list.id),
-                            )
-                          ],
-                        ),
-                        endActionPane: ActionPane(
-                          extentRatio: 0.3,
-                          motion: const BehindMotion(),
-                          children: [
-                            SlidableAction(
-                              backgroundColor:
-                                  const Color.fromARGB(255, 89, 83, 83),
-                              icon: Icons.settings,
-                              label: 'Settings',
-                              onPressed: (context) {},
-                            )
-                          ],
-                        ),
-                        child: buildListListTile(list),
+                      return Column(
+                        children: [
+                          Slidable(
+                            startActionPane: ActionPane(
+                              extentRatio: 0.3,
+                              motion: const BehindMotion(),
+                              children: [
+                                SlidableAction(
+                                  backgroundColor: Colors.red,
+                                  icon: Icons.delete,
+                                  label: 'delete',
+                                  onPressed: (context) =>
+                                      deleteList(context, list.id),
+                                )
+                              ],
+                            ),
+                            endActionPane: ActionPane(
+                              extentRatio: 0.3,
+                              motion: const BehindMotion(),
+                              children: [
+                                SlidableAction(
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 89, 83, 83),
+                                  icon: Icons.settings,
+                                  label: 'Settings',
+                                  onPressed: (context) => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ListSettingsPage(list.id)),
+                                  ),
+                                )
+                              ],
+                            ),
+                            child: buildListListTile(list),
+                            // SizedBox(
+                            //     height:
+                            //         8.0),
+                          )
+                          // Add vertical spacing between tiles
+                        ],
                       );
                     },
                   ),
@@ -308,11 +320,11 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
   }
 
   settingsList(BuildContext context, int id) {
-    _settingsOnAction(id, context);
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => CustomerListPage(id)),
-    );
+    print("entered");
+    (context) => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ListSettingsPage(id)),
+        );
   }
 
   Future<void> _deleteOnAction(int id, BuildContext context) async {
@@ -353,8 +365,4 @@ void sharedWithMe(BuildContext context) {
           child: Text("No"))
     ],
   );
-}
-
-void _settingsOnAction(int id, BuildContext context) {
-  print(id);
 }

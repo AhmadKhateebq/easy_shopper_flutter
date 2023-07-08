@@ -51,8 +51,8 @@ List<Widget> buildDoNotContainList(List<Product> doNotContain) {
   ];
 }
 
-List<Widget> buildDoContainList(List<Product> doContain) {
-  List<Product> doContainProducts = doContain;
+List<Widget> buildDoContainList(List<supermarketProducts> doContain) {
+  List<supermarketProducts> doContainProducts = doContain;
   return [
     // const SizedBox(height: 16),
     // const SizedBox(height: 8),
@@ -63,7 +63,7 @@ List<Widget> buildDoContainList(List<Product> doContain) {
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             crossAxisCount: 2, // Adjust the crossAxisCount here
-            children: doContainProducts.map((product) {
+            children: doContainProducts.map((details) {
               return Card(
                 child: Column(
                   children: [
@@ -71,7 +71,7 @@ List<Widget> buildDoContainList(List<Product> doContain) {
                       child: Container(
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: NetworkImage(product.imageUrl),
+                            image: NetworkImage(details.product.imageUrl),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -83,11 +83,17 @@ List<Widget> buildDoContainList(List<Product> doContain) {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            product.name,
+                            details.product.name,
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: 4.0),
-                          Text(product.category),
+                          Text(details.product.category),
+                          SizedBox(height: 4.0),
+                          Text(
+                            details.price.toString() + "NIS",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
                         ],
                       ),
                     ),
