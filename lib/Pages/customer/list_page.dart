@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Apis/ListApis.dart';
 import 'package:graduation_project/Pages/customer/add_item.dart';
 import 'package:graduation_project/Pages/customer/googleMap/google_map_page.dart';
+import 'package:graduation_project/Pages/customer/model/list_data.dart';
 import 'package:graduation_project/Pages/customer/model/product_data.dart';
+import 'package:http/http.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../Style/borders.dart';
@@ -20,20 +24,44 @@ class CustomerListPage extends StatefulWidget {
 }
 
 class _CustomerListPageState extends State<CustomerListPage> {
+  UserList _list = UserList.emptyList();
   List<Product> productList = List.empty(growable: true);
-  void loadList() {
-    getListItems(widget.listId).then((response) {
+  bool canEdit = false;
+  //if list.userId == user id in shared prefs
+  //else if user id in shared prefs = (search in list.sharedWith where user id == user id in shared & can edit)
+  Future<void> _fetchUserList() async {
+    Response response = await ListApis.getListById(widget.listId.toString());
+    if (response.statusCode == 200) {
+      var prefs = await SharedPreferences.getInstance();
+      int? currentUserId = prefs.getInt("userId");
+      if (!mounted) return;
       setState(() {
-        productList = response;
+        _list = UserList.fromJson(jsonDecode(response.body));
+        if (_list.userId == currentUserId) {
+          canEdit = true;
+        } else {
+          _list.usersSharedWith.forEach((user) {
+            if (user.userId == currentUserId && user.canEdit) {
+              canEdit = true;
+            }
+          });
+        }
+
+        productList = _list.items;
       });
-    });
+    } else {
+      setState(() {
+        print('Request failed with status: ${response.statusCode}');
+        _list = UserList.emptyList();
+      });
+    }
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    loadList();
+    _fetchUserList();
   }
 
   @override
@@ -45,20 +73,22 @@ class _CustomerListPageState extends State<CustomerListPage> {
         elevation: 10,
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: Icon(
-              Icons.add,
-              size: 30,
-            ),
-            alignment: Alignment.topLeft,
-            onPressed: () async {
-              await Navigator.push(context,
-                  new MaterialPageRoute(builder: (context) {
-                return AddItem(widget.listId!);
-              }));
-              loadList();
-            },
-          ),
+          canEdit
+              ? IconButton(
+                  icon: Icon(
+                    Icons.add,
+                    size: 30,
+                  ),
+                  alignment: Alignment.topLeft,
+                  onPressed: () async {
+                    await Navigator.push(context,
+                        new MaterialPageRoute(builder: (context) {
+                      return AddItem(widget.listId!);
+                    }));
+                    _fetchUserList();
+                  },
+                )
+              : SizedBox.shrink(),
         ],
       ),
       body: SafeArea(
@@ -100,31 +130,35 @@ class _CustomerListPageState extends State<CustomerListPage> {
                                 SizedBox(
                                   height: 4.0,
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    TextButton.icon(
-                                        onPressed: () {
-                                          ListApis.removeItemFromUserList(
-                                                  widget.listId.toString(),
-                                                  product.id.toString())
-                                              .then((delResponse) {
-                                            print(
-                                                "remove item from user list : ${delResponse.body}");
-                                            loadList();
-                                          });
-                                        },
-                                        icon: Icon(
-                                          Icons.delete,
-                                          color: AppBorders.appColor,
-                                        ),
-                                        label: Text(
-                                          "Delete Item",
-                                          style: TextStyle(
-                                              color: AppBorders.appColor),
-                                        ))
-                                  ],
-                                )
+                                canEdit
+                                    ? Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          TextButton.icon(
+                                              onPressed: () {
+                                                ListApis.removeItemFromUserList(
+                                                        widget.listId
+                                                            .toString(),
+                                                        product.id.toString())
+                                                    .then((delResponse) {
+                                                  print(
+                                                      "remove item from user list : ${delResponse.body}");
+                                                  _fetchUserList();
+                                                });
+                                              },
+                                              icon: Icon(
+                                                Icons.delete,
+                                                color: AppBorders.appColor,
+                                              ),
+                                              label: Text(
+                                                "Delete Item",
+                                                style: TextStyle(
+                                                    color: AppBorders.appColor),
+                                              ))
+                                        ],
+                                      )
+                                    : SizedBox.shrink()
                               ],
                             ),
                           ),

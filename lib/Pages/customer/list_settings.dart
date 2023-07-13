@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:graduation_project/Apis/NotificationApis.dart';
+import 'package:graduation_project/Pages/customer/model/user_data.dart';
 import 'package:http/http.dart';
 import 'package:graduation_project/Apis/ListApis.dart';
 import 'package:graduation_project/Apis/UserApis.dart';
@@ -27,6 +29,8 @@ class _ListSettingsPageState extends State<ListSettingsPage> {
   late AppUserUsername selectedUser = AppUserUsername(id: 0, username: "");
   late SharedWith selectedSharedWith = SharedWith(userId: 0, canEdit: false);
   late List<AppUserUsername> _userList = [];
+  List<SharedWith> newUserList = [];
+  List<SharedWith> canEditList = [];
   List<SharedWith> sharedWithList = [];
   String searchQuery = '';
   bool _isLoading = true;
@@ -118,7 +122,11 @@ class _ListSettingsPageState extends State<ListSettingsPage> {
   Future<void> _saveAndNavigateBack() async {
     _list = _editedUserList;
     _list.usersSharedWith = sharedWithList;
+
     await ListApis.updateList(_list);
+    //new user list to notification api
+    //edited user list to notification api
+    NotificationApis.handleList(_list.userId, canEditList, newUserList);
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -174,11 +182,13 @@ class _ListSettingsPageState extends State<ListSettingsPage> {
     });
   }
 
+  TextEditingController searchText = new TextEditingController();
   Widget searchField() {
     return Column(
       children: [
         TextField(
           decoration: InputDecoration(labelText: 'Search by Username'),
+          controller: searchText,
           onChanged: filterUsers,
         ),
         SizedBox(height: 10),
@@ -194,9 +204,13 @@ class _ListSettingsPageState extends State<ListSettingsPage> {
                     title: Text(user.username),
                     onTap: () {
                       setState(() {
+                        filterUsers("");
+                        searchText.clear();
                         sharedWithList.removeWhere(
                             (sharedUser) => sharedUser.userId == user.id);
                         sharedWithList
+                            .add(SharedWith(userId: user.id, canEdit: false));
+                        newUserList
                             .add(SharedWith(userId: user.id, canEdit: false));
                       });
                     },
@@ -224,6 +238,10 @@ class _ListSettingsPageState extends State<ListSettingsPage> {
                     onChanged: (value) {
                       setState(() {
                         sharedUser.canEdit = value;
+                        if (value == true)
+                          canEditList.add(sharedUser);
+                        else if (canEditList.contains(sharedUser))
+                          canEditList.remove(sharedUser);
                       });
                     },
                   ),
