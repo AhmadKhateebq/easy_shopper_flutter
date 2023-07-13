@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:graduation_project/Pages/customer/shared_with_user.dart';
 import 'package:graduation_project/Pages/login/login.dart';
 import 'package:graduation_project/Style/borders.dart';
 import 'package:graduation_project/Pages/customer/list_page.dart';
@@ -108,7 +109,10 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                 leading: Icon(Icons.share),
                 title: Text("Shared with me"),
                 onTap: () {
-                  sharedWithMe(context);
+                  Navigator.of(context)
+                      .push(new MaterialPageRoute(builder: (context) {
+                    return SharedWithUser();
+                  }));
                 },
               ),
               ListTile(

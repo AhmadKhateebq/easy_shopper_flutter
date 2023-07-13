@@ -43,7 +43,7 @@ class _SharedWithUserState extends State<SharedWithUser> {
     // ignore: unused_local_variable
     double screenHeight = mediaQueryData.size.height;
     return Scaffold(
-        drawer: Drawer(
+        /*drawer: Drawer(
           width: screenWidth * 0.45,
           child: ListView(
             children: [
@@ -63,10 +63,9 @@ class _SharedWithUserState extends State<SharedWithUser> {
               ),
             ],
           ),
-        ),
+        ),*/
         appBar: AppBar(
           title: Text('My Lists'),
-
           backgroundColor: AppBorders.appColor, // Set the background color
           elevation: 10, // Set the elevation (shadow) of the app bar
           centerTitle: true,
