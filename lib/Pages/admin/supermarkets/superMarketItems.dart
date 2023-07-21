@@ -3,24 +3,74 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Apis/supermarketApi.dart';
 import 'package:graduation_project/Pages/admin/supermarkets/chooseItem.dart';
+import 'package:graduation_project/Pages/admin/supermarkets/create-product-page.dart';
 import 'package:graduation_project/Style/borders.dart';
 
 String? supID, supName;
 
-class SuperMarketItems extends StatelessWidget {
+class SuperMarketItems extends StatefulWidget {
   SuperMarketItems(name, id) {
     supID = id;
     supName = name;
   }
+
+  @override
+  State<SuperMarketItems> createState() => _SuperMarketItemsState();
+}
+
+class _SuperMarketItemsState extends State<SuperMarketItems> {
+  int _selectedIndex = 0;
+
+  void _onItemTap(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _widgetOptions = [
+      ChooseItem(supID!),
+      CreateProductPage(),
+    ];
     return Scaffold(
-      appBar: AppBar(
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: AppBorders.appColor,
+        onPressed: () async {
+        },
+        label: Icon(Icons.add),
+      ),      appBar: AppBar(
         title: Text("${supName} Items"),
         backgroundColor: AppBorders.appColor,
         centerTitle: true,
       ),
-      body: SuperMarketItemsBody(supID),
+      body:   Center(
+        child: _widgetOptions.elementAt(_selectedIndex),
+    ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.supervised_user_circle_rounded,
+                color: AppBorders.appColor,
+              ),
+              label: "Add Item"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.store, color: AppBorders.appColor),
+              label: 'Create product'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_cart_rounded, color: AppBorders.appColor),
+              label: 'products'),
+
+        ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTap,
+        selectedItemColor: AppBorders.appColor,
+        selectedFontSize: 13.0,
+        unselectedFontSize: 13.0,
+      ),
+
     );
   }
 }
@@ -138,7 +188,7 @@ class SuperMarketItemsBodyState extends State<SuperMarketItemsBody> {
                 fetchItems();
               },
               icon: Icon(Icons.list),
-              label: Text("Add Item From List")),
+              label: Text(" Add Item From List")),
         )
       ],
     );

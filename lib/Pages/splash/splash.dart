@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
             : "";
         print("userToken: " + token);
         if (token != "") {
-          if (token == '1447') {
+          if (token == '1477') {
             print("route switched to main page");
             Navigator.of(context)
                 .pushReplacement(MaterialPageRoute(builder: (context) {

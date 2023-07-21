@@ -62,11 +62,7 @@ class ChooseItemState extends State<ChooseItem> {
     double screenWidth = MediaQuery.of(context).size.width,
         screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Super Market Items"),
-        backgroundColor: AppBorders.appColor,
-        centerTitle: true,
-      ),
+
       body: ListView(
         children: [
           Visibility(

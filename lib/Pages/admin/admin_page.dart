@@ -152,6 +152,7 @@ class HomeBodyState extends State<HomeBody> {
             BottomNavigationBarItem(
                 icon: Icon(Icons.store, color: AppBorders.appColor),
                 label: 'Super Markets'),
+
           ],
           currentIndex: _selectedIndex,
           onTap: _onItemTap,

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">lazy shopper</string>
+    <string name="facebook_app_id">278800664614774</string>
+    <string name="fb_login_protocol_scheme"></string>
+    <string name="facebook_client_token">6940feb79a38af00b35826538a8c39bf</string>
+</resources>

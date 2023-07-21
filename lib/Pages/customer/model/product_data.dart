@@ -23,7 +23,6 @@ class Product {
       'imageUrl': imageUrl,
     };
   }
-
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
       id: json['id'],
@@ -35,7 +34,6 @@ class Product {
     );
   }
 }
-
 class supermarketProducts {
   double price;
   Product product;
