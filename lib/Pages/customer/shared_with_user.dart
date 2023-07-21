@@ -32,7 +32,7 @@ class _SharedWithUserState extends State<SharedWithUser> {
     // preferences.setInt('userId', 4);
     _userid = preferences.getInt('userId')!;
     print(preferences.getInt('userId'));
-    return getUserListByUserId(_userid);
+    return getListsSharedWithUser(_userid);
   }
 
   @override
@@ -65,7 +65,7 @@ class _SharedWithUserState extends State<SharedWithUser> {
           ),
         ),*/
         appBar: AppBar(
-          title: Text('My Lists'),
+          title: Text('Lists shared with me'),
           backgroundColor: AppBorders.appColor, // Set the background color
           elevation: 10, // Set the elevation (shadow) of the app bar
           centerTitle: true,
@@ -112,32 +112,6 @@ class _SharedWithUserState extends State<SharedWithUser> {
                       return Column(
                         children: [
                           Slidable(
-                            startActionPane: ActionPane(
-                              extentRatio: 0.3,
-                              motion: const BehindMotion(),
-                              children: [
-                                SlidableAction(
-                                  backgroundColor: Colors.red,
-                                  icon: Icons.delete,
-                                  label: 'delete',
-                                  onPressed: (context) =>
-                                      deleteList(context, list.id),
-                                )
-                              ],
-                            ),
-                            endActionPane: ActionPane(
-                              extentRatio: 0.3,
-                              motion: const BehindMotion(),
-                              children: [
-                                SlidableAction(
-                                  backgroundColor:
-                                      const Color.fromARGB(255, 89, 83, 83),
-                                  icon: Icons.settings,
-                                  label: 'Settings',
-                                  onPressed: settingsList(context, list.id),
-                                )
-                              ],
-                            ),
                             child: buildListListTile(list),
                             // SizedBox(
                             //     height:
@@ -191,11 +165,11 @@ class _SharedWithUserState extends State<SharedWithUser> {
               TextButton(
                   onPressed: () {
                     Navigator.of(alertContext).pop();
-                    return;
                     //  Navigator.pushNamed(context, '/login');
                     SharedPreferences.getInstance().then((prefs) {
                       prefs.clear();
                     });
+                    return;
                   },
                   child: Text("Yes")),
               TextButton(
@@ -207,89 +181,4 @@ class _SharedWithUserState extends State<SharedWithUser> {
           );
         });
   }
-
-  deleteList(BuildContext context, int id) {
-    showDialog(
-      context: context,
-      builder: (alertContext) {
-        return Builder(
-          builder: (context) {
-            return AlertDialog(
-              content: Text("Do you want to delete this list?"),
-              actions: [
-                TextButton(
-                  onPressed: () async {
-                    await _deleteOnAction(id, context);
-                    Navigator.pop(context);
-
-                    // Fetch user lists again to update the UI
-                    _userListFuture = initializeUser();
-                    setState(() {});
-                  },
-                  child: Text("Yes"),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text("No"),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-
-  settingsList(BuildContext context, int id) {
-    _settingsOnAction(id, context);
-    (context) => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => CustomerListPage(id)),
-        );
-  }
-
-  Future<void> _deleteOnAction(int id, BuildContext context) async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    int? userId = preferences.getInt('userId');
-    if (userId == null) {
-      return;
-    }
-    http.Response response = await ListApis.removeList(id, userId);
-    if (response.statusCode == 204) {
-      print(id);
-    } else {
-      // List creation failed
-      // Display an error message or handle the failure
-      print('Failed to delete list. Status code: ${response.statusCode}');
-    }
-  }
-}
-
-void sharedWithMe(BuildContext context) {
-  AlertDialog(
-    content: Text("Do you want to log out ?"),
-    actions: [
-      TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CreateListScreen(),
-                ));
-          },
-          child: Text("Yes")),
-      TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text("No"))
-    ],
-  );
-}
-
-void _settingsOnAction(int id, BuildContext context) {
-  print(id);
 }

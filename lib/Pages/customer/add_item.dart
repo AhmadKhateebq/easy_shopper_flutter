@@ -6,6 +6,7 @@ import 'package:graduation_project/Apis/ListApis.dart';
 import 'package:graduation_project/Pages/customer/model/itemModel.dart';
 import 'package:graduation_project/Style/borders.dart';
 
+// ignore: must_be_immutable
 class AddItem extends StatefulWidget {
   String? listId;
   AddItem(int listId) {
