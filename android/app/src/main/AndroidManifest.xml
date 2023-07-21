@@ -6,7 +6,7 @@
         <provider android:authorities="com.facebook.katana.provider.PlatformProvider" />
     </queries>
    <application
-        android:label="Easy Shopper"
+        android:label="Lazy Shopper"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.google.android.geo.API_KEY"
