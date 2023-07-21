@@ -10,7 +10,6 @@ import 'package:http/http.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../Style/borders.dart';
-import 'data_container.dart';
 
 // ignore: must_be_immutable
 class CustomerListPage extends StatefulWidget {
@@ -24,6 +23,8 @@ class CustomerListPage extends StatefulWidget {
 }
 
 class _CustomerListPageState extends State<CustomerListPage> {
+  late String _listname = "";
+  late int _userId = 0;
   UserList _list = UserList.emptyList();
   List<Product> productList = List.empty(growable: true);
   bool canEdit = false;
@@ -34,6 +35,7 @@ class _CustomerListPageState extends State<CustomerListPage> {
     if (response.statusCode == 200) {
       var prefs = await SharedPreferences.getInstance();
       int? currentUserId = prefs.getInt("userId");
+      _userId = currentUserId!;
       if (!mounted) return;
       setState(() {
         _list = UserList.fromJson(jsonDecode(response.body));
@@ -48,6 +50,7 @@ class _CustomerListPageState extends State<CustomerListPage> {
         }
 
         productList = _list.items;
+        _listname = _list.name;
       });
     } else {
       setState(() {
@@ -59,7 +62,6 @@ class _CustomerListPageState extends State<CustomerListPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _fetchUserList();
   }
@@ -68,7 +70,21 @@ class _CustomerListPageState extends State<CustomerListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My List'),
+        title: Row(
+          children: [
+            Expanded(
+                child: Text(
+              _listname,
+              style: TextStyle(fontSize: 16),
+            )),
+            IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () {
+                _editNickname();
+              },
+            ),
+          ],
+        ),
         backgroundColor: AppBorders.appColor,
         elevation: 10,
         centerTitle: true,
@@ -200,5 +216,43 @@ class _CustomerListPageState extends State<CustomerListPage> {
         margin: EdgeInsets.only(top: 10),
       )),
     );
+  }
+
+  _editNickname() async {
+    String? newNickname = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        String? enteredText;
+        return AlertDialog(
+          title: Text('Edit Nickname'),
+          content: TextField(
+            onChanged: (value) {
+              enteredText = value;
+            },
+            decoration: InputDecoration(
+              labelText: 'Enter new nickname',
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: Text('Save'),
+              onPressed: () async {
+                Navigator.of(context).pop(enteredText);
+                if (enteredText != null) {
+                  await ListApis.setNickname(_userId, _list.id, enteredText!);
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+
+    if (newNickname != null) {
+      setState(() {
+        _list.name = newNickname;
+        _listname = newNickname;
+      });
+    }
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -72,7 +74,7 @@ class ListApis {
   }
 
   static Future<http.Response> getListSharedWithUser(String id) async {
-    final endpoint = '$id/list';
+    final endpoint = '/list/shared/$id';
     return Requests.getRequest(endpoint);
   }
 
@@ -130,6 +132,30 @@ class ListApis {
     } catch (e) {
       print('Exception: $e');
       return http.Response('An error occurred during the request', 500);
+    }
+  }
+
+  static Future<void> setNickname(
+      int userId, int listId, String nickname) async {
+    String endpoint = 'list/nickname/';
+    String body = jsonEncode({
+      'userId': userId,
+      'listId': listId,
+      'nickname': nickname,
+    });
+
+    try {
+      final response = await Requests.postRequest(endpoint, body);
+      if (response.statusCode == 200) {
+        // Request successful
+        print('Nickname set successfully!');
+      } else {
+        // Request failed
+        print('Failed to set nickname: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Exception occurred
+      print('Error setting nickname: $e');
     }
   }
 }

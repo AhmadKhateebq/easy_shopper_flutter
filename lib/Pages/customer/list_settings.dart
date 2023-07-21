@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Apis/NotificationApis.dart';
-import 'package:graduation_project/Pages/customer/model/user_data.dart';
 import 'package:http/http.dart';
 import 'package:graduation_project/Apis/ListApis.dart';
 import 'package:graduation_project/Apis/UserApis.dart';
