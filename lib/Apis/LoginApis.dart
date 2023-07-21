@@ -1,8 +1,6 @@
 import "dart:convert";
 
-
 import "package:flutter_facebook_auth/flutter_facebook_auth.dart";
-import "package:graduation_project/Constants/connection.dart";
 
 import "package:http/http.dart" as http;
 
@@ -68,16 +66,17 @@ class LoginApis {
     }
   }
 
-
   static Future<void> loginWithFacebook() async {
     await FacebookAuth.instance.logOut();
-    final LoginResult result = await FacebookAuth.instance
-        .login(permissions: ['public_profile','email'],loginBehavior: LoginBehavior.webOnly); // by default we request the email and the public profile
+    final LoginResult result = await FacebookAuth.instance.login(
+        permissions: ['public_profile', 'email'],
+        loginBehavior: LoginBehavior
+            .webOnly); // by default we request the email and the public profile
 // or FacebookAuth.i.login()
-    String accessToken ="";
+    String accessToken = "";
     if (result.status == LoginStatus.success) {
       // you are logged
-       accessToken = result.accessToken!.token;
+      accessToken = result.accessToken!.token;
     } else {
       print(result.status);
       print(result.message);

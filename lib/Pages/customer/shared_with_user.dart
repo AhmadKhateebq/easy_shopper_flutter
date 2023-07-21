@@ -3,9 +3,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:graduation_project/Style/borders.dart';
 import 'package:graduation_project/Pages/customer/list_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
-import '../../Apis/ListApis.dart';
 import 'create_list.dart';
 import 'data_container.dart';
 import 'model/list_data.dart';
@@ -39,6 +37,7 @@ class _SharedWithUserState extends State<SharedWithUser> {
   Widget build(BuildContext context) {
     MediaQueryData mediaQueryData = MediaQuery.of(context);
 
+    // ignore: unused_local_variable
     double screenWidth = mediaQueryData.size.width;
     // ignore: unused_local_variable
     double screenHeight = mediaQueryData.size.height;

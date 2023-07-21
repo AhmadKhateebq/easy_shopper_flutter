@@ -215,17 +215,12 @@
 // }
 ////////////////////////////////////////////////////////
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:graduation_project/Apis/LoginApis.dart';
 import 'package:graduation_project/Pages/admin/admin_page.dart';
 import 'package:graduation_project/Style/borders.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../customer/customer_main.dart';
-import '../../Apis/LoginApis.dart';
-import '../../Style/borders.dart';
-import '../admin/admin_page.dart';
 
 class Login extends StatelessWidget {
   @override
