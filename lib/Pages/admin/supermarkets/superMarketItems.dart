@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:graduation_project/Apis/supermarketApi.dart';
 import 'package:graduation_project/Pages/admin/supermarkets/chooseItem.dart';
 import 'package:graduation_project/Pages/admin/supermarkets/create-product-page.dart';
+import 'package:graduation_project/Pages/admin/supermarkets/supermarket_product_page.dart';
 import 'package:graduation_project/Style/borders.dart';
 
 String? supID, supName;
@@ -32,14 +33,10 @@ class _SuperMarketItemsState extends State<SuperMarketItems> {
     final List<Widget> _widgetOptions = [
       ChooseItem(supID!),
       CreateProductPage(),
+      SupermarketProductPage(id:int.parse(supID!),)
     ];
     return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: AppBorders.appColor,
-        onPressed: () async {
-        },
-        label: Icon(Icons.add),
-      ),      appBar: AppBar(
+    appBar: AppBar(
         title: Text("${supName} Items"),
         backgroundColor: AppBorders.appColor,
         centerTitle: true,

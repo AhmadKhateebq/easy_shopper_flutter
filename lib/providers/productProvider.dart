@@ -27,7 +27,7 @@ class ProductProvider extends ChangeNotifier {
   }
 
   Future<void> AddProduct(
-      String name,String brand, double price, String category, String image,String description) async {
+      String name,String brand, String category, String image,String description) async {
     setLoading(true);
     final response =
     await productApi.addProductApi(name, brand,category,image,description);
