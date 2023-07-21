@@ -215,19 +215,12 @@
 // }
 ////////////////////////////////////////////////////////
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:graduation_project/Apis/LoginApis.dart';
 import 'package:graduation_project/Pages/admin/admin_page.dart';
 import 'package:graduation_project/Style/borders.dart';
-import 'package:graduation_project/customer/list_page.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import '../customer/customer_main.dart';
-import '../../Apis/LoginApis.dart';
-import '../../Style/borders.dart';
-import '../admin/admin_page.dart';
 
 class Login extends StatelessWidget {
   @override
@@ -273,7 +266,6 @@ class _LoginHomeState extends State<LoginHome> {
       },
     );
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -285,8 +277,8 @@ class _LoginHomeState extends State<LoginHome> {
       onPressed: () async {
         LoginApis.loginWithFacebook();
       },
-      icon: const Icon(Icons.facebook),
-      label: const Text('Login with Facebook'),
+      icon: Icon(Icons.facebook),
+      label: Text('Login with Facebook'),
     );
 
     return Scaffold(
@@ -322,8 +314,7 @@ class _LoginHomeState extends State<LoginHome> {
                 child: Column(
                   children: [
                     Container(
-                      margin:
-                      EdgeInsets.only(bottom: screenHeight * 0.03),
+                      margin: EdgeInsets.only(bottom: screenHeight * 0.03),
                       child: TextFormField(
                         controller: usernameCont,
                         decoration: AppBorders.txtFieldDecoration(
@@ -333,8 +324,7 @@ class _LoginHomeState extends State<LoginHome> {
                       ),
                     ),
                     Container(
-                      margin:
-                      EdgeInsets.only(bottom: screenHeight * 0.03),
+                      margin: EdgeInsets.only(bottom: screenHeight * 0.03),
                       child: TextFormField(
                         controller: passwordCont,
                         obscureText: true,
@@ -351,104 +341,74 @@ class _LoginHomeState extends State<LoginHome> {
                         onPressed: isLoading
                             ? null
                             : () {
-                          var username = usernameCont.text;
-                          var password = passwordCont.text;
+                                var username = usernameCont.text;
+                                var password = passwordCont.text;
 
-                          if (username.isEmpty || password.isEmpty) {
-                            showAlert("Empty username or password");
-                            return;
-                          }
-                          setState(() {
-                            isLoading = true;
-                          });
-                          LoginApis.login(username, password)
-                              .then((value) {
-                            String response = value.body;
-                            print("login response: " +
-                                response +
-                                "status ${value.statusCode}");
-                            print(value.statusCode);
-                            if (value.statusCode == 200 ||
-                                value.statusCode == 201) {
-                              SharedPreferences.getInstance()
-                                  .then((prefs) {
-                                if (response == "1477") {prefs.setString(
-                                    "userToken", response);
+                                if (username.isEmpty || password.isEmpty) {
+                                  showAlert("Empty username or password");
+                                  return;
+                                }
+                                setState(() {
+                                  isLoading = true;
+                                });
+                                LoginApis.login(username, password).then(
+                                  (value) {
+                                    String response = value.body;
+                                    print("login response: " +
+                                        response +
+                                        "status ${value.statusCode}");
+                                    print(value.statusCode);
+                                    if (value.statusCode == 200 ||
+                                        value.statusCode == 201) {
+                                      SharedPreferences.getInstance()
+                                          .then((prefs) {
+                                        if (response == "1477") {
+                                          prefs.setString(
+                                              "userToken", response);
 
-                                  Navigator.of(context)
-                                      .pushReplacement(
-                                    MaterialPageRoute(
-                                      builder: (context) {
-                                        return AdminHomePage();
-                                      },
-                                          ),
-                                  );
-                                } else {List<String> userInfo =
-                                                  response.split(",");
-                                              prefs.setString(
-                                                  "userToken", userInfo[0]);
-                                              prefs.setInt("userId",
-                                                  int.parse(userInfo[1]));
-
-
-                                              Navigator.of(context)
-                                                  .pushReplacement(
-                                                      MaterialPageRoute(
-                                                          builder: (context) {
-                                                return CustomerHomePage();
-                                              }));
-                                            }
-                                            /* prefs.setString(
-                                                "adminAuth", "Bearer 1447"); */
-                                          });
-                                        } else if (value.statusCode == 418) {
-                                          showAlert(
-                                              "Wrong username or password");
-                                          ;
-                                          setState(() {
-                                            isLoading = false;
-                                          });
+                                          Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                              builder: (context) {
+                                                return AdminHomePage();
+                                              },
+                                            ),
+                                          );
                                         } else {
-                                          showAlert("Something went wrong");
-                                          setState(() {
-                                            isLoading = false;
-                                          });
+                                          List<String> userInfo =
+                                              response.split(",");
+                                          prefs.setString(
+                                              "userToken", userInfo[0]);
+                                          prefs.setInt(
+                                              "userId", int.parse(userInfo[1]));
+
+                                          Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                              builder: (context) {
+                                                return CustomerHomePage();
+                                              },
+                                            ),
+                                          );
                                         }
                                       });
-                                    },
-                              icon: isLoading
-                                  ? CircularProgressIndicator(
-                                      color: Colors.white,
-                                    )
-                                  : Icon(
-                                      Icons.login,
-                                      size: screenWidth * 0.07,
-                                    ),
-                                  );
-                                }
-                              });
-                            } else if (value.statusCode == 418) {
-                              showAlert(
-                                  "Wrong username or password");
-                              setState(() {
-                                isLoading = false;
-                              });
-                            } else {
-                              showAlert("Something went wrong");
-                              setState(() {
-                                isLoading = false;
-                              });
-                            }
-                          });
-                        },
+                                    } else if (value.statusCode == 418) {
+                                      showAlert("Wrong username or password");
+                                    } else {
+                                      showAlert("Something went wrong");
+                                    }
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                  },
+                                );
+                              },
                         icon: isLoading
                             ? CircularProgressIndicator(
-                          color: Colors.white,
-                        )
+                                color: Colors.white,
+                              )
                             : Icon(
-                          Icons.login,
-                          size: screenWidth * 0.07,
-                        ),
+                                Icons.login,
+                                size: screenWidth * 0.07,
+                              ),
                         label: Text(
                           "Login",
                           style: TextStyle(fontSize: screenWidth * 0.05),
@@ -467,5 +427,3 @@ class _LoginHomeState extends State<LoginHome> {
     );
   }
 }
-
-
