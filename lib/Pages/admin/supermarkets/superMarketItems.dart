@@ -75,6 +75,7 @@ class _SuperMarketItemsState extends State<SuperMarketItems> {
   }
 }
 
+// ignore: must_be_immutable
 class SuperMarketItemsBody extends StatefulWidget {
   String? supID;
   SuperMarketItemsBody(id) {
@@ -121,6 +122,7 @@ class SuperMarketItemsBodyState extends State<SuperMarketItemsBody> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width,
+        // ignore: unused_local_variable
         screenHeight = MediaQuery.of(context).size.height;
 
     return ListView(

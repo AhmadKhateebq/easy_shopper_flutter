@@ -1,19 +1,24 @@
+import 'dart:convert';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart' as geolocator;
+import 'package:graduation_project/Pages/customer/model/supermarket.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../Style/borders.dart';
-import 'data_container.dart';
-import 'loadingScreen.dart';
-import 'model/product_data.dart';
-import 'model/supermarket_data.dart';
-import 'dummy_data/supermarket_list.dart';
+import '../../../Apis/supermarketApi.dart';
+import '../../../Style/borders.dart';
+import '../data_container.dart';
+import 'buildData.dart';
+import '../loadingScreens/loadingScreen.dart';
+import '../model/product_data.dart';
+import '../model/supermarket_data.dart';
 
-void main() => runApp(const GoogleMapHomePage());
+List<Product> _listOfProducts = [];
+late int? _listId;
 
 class GoogleMapHomePage extends StatelessWidget {
   const GoogleMapHomePage({Key? key}) : super(key: key);
@@ -22,6 +27,7 @@ class GoogleMapHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Supermarkets location',
+      debugShowCheckedModeBanner: false,
       theme: AppBorders.themeData,
       initialRoute: '/',
       routes: {
@@ -40,6 +46,52 @@ class GoogleMapPage extends StatefulWidget {
 }
 
 class _GoogleMapPageState extends State<GoogleMapPage> {
+  double _radius = 0.5;
+  bool loading = true;
+  LatLng userLatLong = LatLng(31.9753133, 35.1960417);
+  @override
+  void initState() {
+    super.initState();
+    _createCustomIcon().then((BitmapDescriptor value) {
+      setState(() {
+        myIcon = value;
+      });
+    });
+    _getUserLocation();
+    _fetchRadius();
+    initializeItems().then((List<Product> value) {
+      _listOfProducts = value;
+      fetchSupermarkets(
+        _radius,
+        _listOfProducts,
+        userLatLong.latitude,
+        userLatLong.longitude,
+      );
+    });
+  }
+
+  Future<void> _fetchRadius() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _radius = prefs.getDouble('radius') ?? 0.5;
+  }
+
+  Future<List<Product>> initializeItems() async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    // _setPrefsForTesting(preferences);
+    _listId = preferences.getInt('listId')!;
+    print(preferences.getInt('listId'));
+    if (_listId != null) {
+      return getListItems(_listId);
+    } else {
+      return [];
+    }
+  }
+
+  // _setPrefsForTesting(SharedPreferences preferences) {
+  //   preferences.setInt('listId', 14);
+  //   preferences.setString('userToken', "1477");
+  // }
+
   // ignore: unused_field
   bool _isBottomSheetOpen = false;
   void _openBottomSheet(Supermarket_data supermarket) {
@@ -96,7 +148,7 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
                                 height: 12,
                               ),
                               Text(
-                                supermarket.name,
+                                supermarket.supermarket.name,
                                 style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -139,6 +191,19 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
                             ),
                             const SizedBox(height: 12),
                             Text(
+                              'Total Price: ${supermarket.total} NIS',
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            const Divider(
+                              color: Colors.black,
+                              height: 1,
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
                               'Do Not Contain:',
                               style: const TextStyle(
                                 fontSize: 20,
@@ -146,7 +211,7 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
                               ),
                             ),
                             const SizedBox(height: 8),
-                            ..._buildDoNotContainList(),
+                            ...buildDoNotContainList(supermarket.dontContains),
                             const SizedBox(height: 12),
                             const Divider(
                               color: Colors.black,
@@ -161,7 +226,7 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
                               ),
                             ),
                             const SizedBox(height: 8),
-                            ..._buildDoContainList(),
+                            ...buildDoContainList(supermarket.contains),
                           ],
                         ),
                       ),
@@ -180,12 +245,40 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
     });
   }
 
+  Future<void> fetchSupermarkets(
+      double radius, List<Product> products, double x, double y) async {
+    print("entered");
+    try {
+      final response = await SupermarketApis.getSupermarketsWithListOfItems(
+          radius, products, x, y);
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+        print(json);
+        print(jsonData);
+        setState(() {
+          loading = false;
+          supermarketsList = jsonData
+              .map<Supermarket_data>(
+                  (item) => Supermarket_data.parseSupermarketData(item))
+              .toList();
+        });
+      } else {
+        print(
+            'Failed to fetch supermarkets. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Exception occurred while fetching supermarkets: $e');
+    }
+  }
+
   late GoogleMapController _mapController;
   final LatLng _initialPosition = const LatLng(31.9753133, 35.1960417);
+  List<Supermarket_data> supermarketsList = [];
   Set<Marker> _createMarkers() {
     Set<Marker> markers = {};
 
-    for (final supermarket in supermarkets) {
+    for (final supermarketData in supermarketsList) {
+      Supermarket supermarket = supermarketData.supermarket;
       final LatLng position =
           LatLng(supermarket.locationX, supermarket.locationY);
 
@@ -197,7 +290,7 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
         ),
         icon: myIcon, // Set default marker icon
         onTap: () {
-          _openBottomSheet(supermarket);
+          _openBottomSheet(supermarketData);
           ;
         },
       );
@@ -220,6 +313,8 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
 
         print(
             'User Location - Latitude: ${position.latitude}, Longitude: ${position.longitude}');
+        LatLng _userLatLong = LatLng(position.latitude, position.longitude);
+        userLatLong = _userLatLong;
       } catch (e) {
         print('Failed to get location: $e');
       }
@@ -260,16 +355,6 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
       BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan);
 
   @override
-  void initState() {
-    _createCustomIcon().then((BitmapDescriptor value) {
-      setState(() {
-        myIcon = value;
-      });
-    });
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: GoogleMap(
@@ -285,104 +370,4 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
       ),
     );
   }
-}
-
-List<Widget> _buildDoNotContainList() {
-  List<Product> doNotContainProducts = doNotContain;
-  return [
-    SingleChildScrollView(
-      child: Column(
-        children: [
-          GridView.count(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            crossAxisCount: 2, // Adjust the crossAxisCount here
-            children: doNotContainProducts.map((product) {
-              return Card(
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(product.imageUrl),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            product.name,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 4.0),
-                          Text(product.category),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
-        ],
-      ),
-    ),
-  ];
-}
-
-List<Widget> _buildDoContainList() {
-  List<Product> doContainProducts = doContain;
-  return [
-    // const SizedBox(height: 16),
-    // const SizedBox(height: 8),
-    SingleChildScrollView(
-      child: Column(
-        children: [
-          GridView.count(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            crossAxisCount: 2, // Adjust the crossAxisCount here
-            children: doContainProducts.map((product) {
-              return Card(
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(product.imageUrl),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            product.name,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 4.0),
-                          Text(product.category),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
-        ],
-      ),
-    ),
-  ];
 }

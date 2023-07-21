@@ -5,63 +5,46 @@ class Product {
   String category;
   String description;
   String imageUrl;
-
   Product({
     required this.name,
     required this.brand,
     required this.category,
     required this.description,
     required this.imageUrl,
-    required id,
+    this.id,
   });
-
-  factory Product.fromJson(Map<String, dynamic> json) => Product(
-      id: json["id"],
-      name: json["name"],
-      category: json["category"],
-      description: json["description"],
-      imageUrl: json['imageUrl'],
-      brand: json['brand']);
-
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['name'] = name;
-    data['category'] = category;
-    data['imageUrl'] = imageUrl;
-    data['description'] = description;
-    data['brand'] = brand;
-    return data;
+    return {
+      'id': id,
+      'name': name,
+      'brand': brand,
+      'category': category,
+      'description': description,
+      'imageUrl': imageUrl,
+    };
+  }
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
+      id: json['id'],
+      name: json['name'],
+      brand: json['brand'],
+      category: json['category'],
+      description: json['description'],
+      imageUrl: json['imageUrl'],
+    );
   }
 }
-
-class SupermarketProduct {
-  int? id;
-  Product product;
+class supermarketProducts {
   double price;
-  double stock;
-
-  SupermarketProduct({
-    required this.id,
-    required this.product,
-    required this.price,
-    required this.stock,
-  });
-
-  factory SupermarketProduct.fromJson(Map<String, dynamic> json) =>
-      SupermarketProduct(
-        id: json['id'],
-        product: Product.fromJson(json['product']),
-        price: json['price'],
-        stock: json['stock'],
-      );
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['product'] = product.toJson();
-    data['price'] = price;
-    data['stock'] = stock;
-    return data;
+  Product product;
+  int stock;
+  supermarketProducts(
+      {required this.price, required this.stock, required this.product});
+  factory supermarketProducts.fromJson(Map<String, dynamic> json) {
+    return supermarketProducts(
+      price: json['price'],
+      stock: json['stock'],
+      product: Product.fromJson(json['product']),
+    );
   }
 }

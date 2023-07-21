@@ -1,55 +1,108 @@
 import 'package:flutter/material.dart';
 
-import '../data_container.dart';
 import '../model/product_data.dart';
 
-List<Widget> _buildDoNotContainList() {
+List<Widget> buildDoNotContainList(List<Product> doNotContain) {
   List<Product> doNotContainProducts = doNotContain;
   return [
-    const SizedBox(height: 16),
-    Text(
-      'Do Not Contain:',
-      style: const TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-    const SizedBox(height: 8),
     SingleChildScrollView(
       child: Column(
-        children: doNotContainProducts.map((product) {
-          return ListTile(
-            title: Text(product.name),
-            subtitle: Text(product.description),
-            tileColor: Colors.red[400],
-          );
-        }).toList(),
+        children: [
+          GridView.count(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            crossAxisCount: 2, // Adjust the crossAxisCount here
+            children: doNotContainProducts.map((product) {
+              return Card(
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(product.imageUrl),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            product.name,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 4.0),
+                          Text(product.category),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        ],
       ),
     ),
   ];
 }
 
-List<Widget> _buildDoContainList() {
-  List<Product> doContainProducts = doContain;
+List<Widget> buildDoContainList(List<supermarketProducts> doContain) {
+  List<supermarketProducts> doContainProducts = doContain;
   return [
-    const SizedBox(height: 16),
-    Text(
-      'Contains:',
-      style: const TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-    const SizedBox(height: 8),
+    // const SizedBox(height: 16),
+    // const SizedBox(height: 8),
     SingleChildScrollView(
       child: Column(
-        children: doContainProducts.map((product) {
-          return ListTile(
-            title: Text(product.name),
-            subtitle: Text(product.description),
-            tileColor: Colors.green[400],
-          );
-        }).toList(),
+        children: [
+          GridView.count(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            crossAxisCount: 2, // Adjust the crossAxisCount here
+            children: doContainProducts.map((details) {
+              return Card(
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(details.product.imageUrl),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            details.product.name,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 4.0),
+                          Text(details.product.category),
+                          SizedBox(height: 4.0),
+                          Text(
+                            details.price.toString() + "NIS",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        ],
       ),
     ),
   ];

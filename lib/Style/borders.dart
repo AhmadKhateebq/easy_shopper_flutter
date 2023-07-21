@@ -45,6 +45,26 @@ class AppBorders {
             borderRadius: BorderRadius.all(Radius.circular(radius))));
   }
 
+  static InputDecoration passwordFieldDecoration(
+      String label, Widget? suffIcon) {
+    Color focusColor = appColor;
+    return InputDecoration(
+        floatingLabelStyle: TextStyle(color: focusColor),
+        iconColor: focusColor,
+        labelText: label,
+        suffixIcon: suffIcon,
+        focusColor: focusColor,
+        focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: appColor),
+            borderRadius: const BorderRadius.all(Radius.circular(radius))),
+        enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Color.fromARGB(191, 216, 216, 216)),
+            borderRadius: BorderRadius.all(Radius.circular(radius))),
+        errorBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Color(0xFFff3333)),
+            borderRadius: BorderRadius.all(Radius.circular(radius))));
+  }
+
   static ButtonStyle btnStyle({Color? btnColor}) {
     return ButtonStyle(
         backgroundColor:

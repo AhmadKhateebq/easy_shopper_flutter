@@ -6,6 +6,7 @@ import 'package:graduation_project/Apis/supermarketApi.dart';
 import '../../../Apis/ItemApis.dart';
 import '../../../Style/borders.dart';
 
+// ignore: must_be_immutable
 class ChooseItem extends StatefulWidget {
   String? id;
   ChooseItem(String id) {
@@ -57,6 +58,7 @@ class ChooseItemState extends State<ChooseItem> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     double screenWidth = MediaQuery.of(context).size.width,
         screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(

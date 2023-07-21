@@ -389,12 +389,40 @@ class _LoginHomeState extends State<LoginHome> {
                                                   "userToken", userInfo[0]);
                                               prefs.setInt("userId",
                                                   int.parse(userInfo[1]));
-                                  Navigator.of(context)
-                                      .pushReplacement(
-                                    MaterialPageRoute(
-                                      builder: (context) {
-                                        return CustomerHomePage();
-                                      },
+
+
+                                              Navigator.of(context)
+                                                  .pushReplacement(
+                                                      MaterialPageRoute(
+                                                          builder: (context) {
+                                                return CustomerHomePage();
+                                              }));
+                                            }
+                                            /* prefs.setString(
+                                                "adminAuth", "Bearer 1447"); */
+                                          });
+                                        } else if (value.statusCode == 418) {
+                                          showAlert(
+                                              "Wrong username or password");
+                                          ;
+                                          setState(() {
+                                            isLoading = false;
+                                          });
+                                        } else {
+                                          showAlert("Something went wrong");
+                                          setState(() {
+                                            isLoading = false;
+                                          });
+                                        }
+                                      });
+                                    },
+                              icon: isLoading
+                                  ? CircularProgressIndicator(
+                                      color: Colors.white,
+                                    )
+                                  : Icon(
+                                      Icons.login,
+                                      size: screenWidth * 0.07,
                                     ),
                                   );
                                 }
