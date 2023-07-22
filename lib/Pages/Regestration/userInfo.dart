@@ -9,7 +9,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UserInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: _UserInfoHome());
+    return Scaffold(
+        appBar: AppBar(title: Text("Create Account"),
+        backgroundColor: AppBorders.appColor,
+        ),
+        body: _UserInfoHome());
   }
 }
 
@@ -71,7 +75,7 @@ class _UserInfoHomeState extends State<_UserInfoHome> {
           child: ListView(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             children: [
-              Container(
+         /*     Container(
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(color: Colors.white, width: 3)),
@@ -84,16 +88,7 @@ class _UserInfoHomeState extends State<_UserInfoHome> {
                       size: screenWidth * 0.11,
                     )),
               ),
-              Container(
-                alignment: Alignment.center,
-                margin: EdgeInsets.all(screenWidth * 0.05),
-                child: Text(
-                  "User Regestration",
-                  style: TextStyle(
-                      fontSize: screenWidth * 0.08,
-                      color: Color.fromARGB(255, 144, 144, 144)),
-                ),
-              ),
+*/
               Container(
                   alignment: Alignment.center,
                   width: double.infinity,

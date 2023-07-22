@@ -216,6 +216,7 @@
 ////////////////////////////////////////////////////////
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Apis/LoginApis.dart';
+import 'package:graduation_project/Pages/Regestration/userInfo.dart';
 import 'package:graduation_project/Pages/admin/admin_page.dart';
 import 'package:graduation_project/Style/borders.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -415,6 +416,16 @@ class _LoginHomeState extends State<LoginHome> {
                         ),
                         style: AppBorders.btnStyle(),
                       ),
+                    ),
+                    SizedBox(height: 35,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                      Text("You don't have an account ?"),
+                      TextButton(onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> UserInfo()));
+                      }, child: Text("Create Account",style: TextStyle(color: AppBorders.appColor),))
+                    ],),
                     ),
                     facebookLoginButton,
                   ],
