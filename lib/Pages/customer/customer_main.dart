@@ -290,9 +290,8 @@ class CustomerHomePageState extends State<CustomerHomePage> {
                         new MaterialPageRoute(builder: (context) {
                       return Login();
                     }), (route) => route.isFirst);
-                    SharedPreferences.getInstance().then((prefs) {
-                      prefs.clear();
-                    });
+                    var prefs = SharedPreferencesManager.sharedPrefences;
+                    prefs!.remove("userToken");
                   },
                   child: Text("Yes")),
               TextButton(

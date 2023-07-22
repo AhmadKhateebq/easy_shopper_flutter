@@ -297,7 +297,7 @@ class _LoginHomeState extends State<LoginHome> {
                   border: Border.all(color: Colors.white, width: 3),
                 ),
                 child: CircleAvatar(
-                  backgroundColor: AppBorders.appColor,
+                  backgroundColor: Color(0xFFee1754),
                   radius: screenWidth * 0.15,
                   child: Image.asset(
                     "lib/Assets/Images/cart.png",
@@ -391,7 +391,7 @@ class _LoginHomeState extends State<LoginHome> {
                                           );
                                         }
                                       });
-                                    } else if (value.statusCode == 418) {
+                                    } else if (value.statusCode == 418 || value.statusCode == 401) {
                                       showAlert("Wrong username or password");
                                     } else {
                                       showAlert("Something went wrong");
