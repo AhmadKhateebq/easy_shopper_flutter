@@ -2,6 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Apis/LoginApis.dart';
 import 'package:graduation_project/Apis/NotificationApis.dart';
+import 'package:graduation_project/Pages/Regestration/userInfo.dart';
 import 'package:graduation_project/Pages/admin/admin_page.dart';
 import 'package:graduation_project/Style/borders.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -82,7 +83,7 @@ class _LoginHomeState extends State<LoginHome> {
                   border: Border.all(color: Colors.white, width: 3),
                 ),
                 child: CircleAvatar(
-                  backgroundColor: AppBorders.appColor,
+                  backgroundColor: Color(0xFFee1754),
                   radius: screenWidth * 0.15,
                   child: Image.asset(
                     "lib/Assets/Images/cart.png",
@@ -181,7 +182,7 @@ class _LoginHomeState extends State<LoginHome> {
                                           );
                                         }
                                       });
-                                    } else if (value.statusCode == 418) {
+                                    } else if (value.statusCode == 418 || value.statusCode == 401) {
                                       showAlert("Wrong username or password");
                                     } else {
                                       showAlert("Something went wrong");
@@ -206,6 +207,16 @@ class _LoginHomeState extends State<LoginHome> {
                         ),
                         style: AppBorders.btnStyle(),
                       ),
+                    ),
+                    SizedBox(height: 35,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                      Text("You don't have an account ?"),
+                      TextButton(onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> UserInfo()));
+                      }, child: Text("Create Account",style: TextStyle(color: AppBorders.appColor),))
+                    ],),
                     ),
                     facebookLoginButton,
                   ],

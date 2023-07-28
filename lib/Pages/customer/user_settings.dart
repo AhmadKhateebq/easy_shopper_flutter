@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Style/borders.dart';
+import 'package:graduation_project/providers/AppColorProvider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Apis/UserApis.dart';
@@ -24,6 +26,14 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
 
   double _searchDistance = 0.5;
 
+  List<Color> appColors = [
+    Color(0xFFee1754),
+    Color(0xFF4c1a4c),
+    Color(0xFFffc300),
+    Color(0xFF4af13d)
+    ,Color(0xFF1c3bec)
+
+  ];
   @override
   void initState() {
     super.initState();
@@ -31,6 +41,9 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
     _fetchUserData();
     _fetchRadius();
   }
+
+
+
 
   Future<void> _fetchUserId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -41,7 +54,11 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _searchDistance = prefs.getDouble('radius') ?? 0.5;
   }
-
+  @override
+  dispose(){
+    print("user settings page disposed");
+    super.dispose();
+  }
   Future<void> _fetchUserData() async {
     try {
       final response = await UserApi.getUser(_userId);
@@ -97,81 +114,115 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
       _searchDistance = distance;
     });
   }
-
+  AppColorProvider appColorProvider = new AppColorProvider();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('User Settings'),
-        backgroundColor: AppBorders.appColor,
-        leading: IconButton(
-          icon: Icon(Icons.home), // Replace with your desired icon
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) =>
-                    CustomerHomePage(), // Replace with your desired page
-              ),
-            );
-          },
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              _buildFormField(
-                controller: _usernameController,
-                labelText: 'Username',
-              ),
-              _buildFormField(
-                controller: _fnameController,
-                labelText: 'First Name',
-              ),
-              _buildFormField(
-                controller: _lnameController,
-                labelText: 'Last Name',
-              ),
-              _buildFormField(
-                controller: _emailController,
-                labelText: 'Email',
-              ),
-              _buildConnectionStatus('Facebook', _user.facebookId != null),
-              _buildConnectionStatus('Google', _user.googleId != null),
-              _buildElevatedButton(
-                  onPress: _updateUser, text: 'Update user info'),
-              SizedBox(height: 20),
-              _buildElevatedButton(
-                  onPress: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => PasswordScreen(),
-                      ),
-                    );
-                  },
-                  text: 'Change Password'),
-              SizedBox(height: 20),
-              Text(
-                'Search Distance',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              Slider(
-                value: _searchDistance,
-                min: 0.5,
-                max: 10.0,
-                divisions: 19,
-                onChanged: (double value) {
-                  setState(() {
-                    _setSearchDistance(value);
-                  });
-                },
-                label: _searchDistance.toString() + ' km',
-              ),
-            ],
+    return ChangeNotifierProvider(create: (_){
+      return appColorProvider;
+    }
+      ,child: Consumer<AppColorProvider>(builder: (context,model,child){
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('User Settings'),
+            backgroundColor: model.appColor,
+            leading: IconButton(
+              icon: Icon(Icons.home), // Replace with your desired icon
+              onPressed: () {
+                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context){
+                  return CustomerHomePage();
+                }), (route) => route.isFirst);
+              },
+            ),
           ),
-        ),
-      ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  _buildFormField(
+                    controller: _usernameController,
+                    labelText: 'Username',
+                  ),
+                  SizedBox(height: 20,),
+                  _buildFormField(
+                    controller: _fnameController,
+                    labelText: 'First Name',
+                  ),
+                  SizedBox(height: 20,),
+
+                  _buildFormField(
+                    controller: _lnameController,
+                    labelText: 'Last Name',
+                  ),
+                  SizedBox(height: 20,),
+
+                  _buildFormField(
+                    controller: _emailController,
+                    labelText: 'Email',
+                  ),
+                  _buildConnectionStatus('Facebook', _user.facebookId != null),
+                  _buildConnectionStatus('Google', _user.googleId != null),
+                  _buildElevatedButton(
+                      onPress: _updateUser, text: 'Update user info'),
+                  SizedBox(height: 20),
+                  _buildElevatedButton(
+                      onPress: () {
+                        Navigator.of(context).pop();
+                      },
+                      text: 'Change Password'),
+                  SizedBox(height: 20),
+                  Text(
+                    'Search Distance',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Slider(
+                    value: _searchDistance,
+                    min: 0.5,
+                    max: 10.0,
+                    divisions: 19,
+                    onChanged: (double value) {
+                      setState(() {
+                        _setSearchDistance(value);
+                      });
+                    },
+                    label: _searchDistance.toString() + ' km',
+                  ),
+                  SizedBox(height: 20),
+                  Align(alignment: Alignment.centerLeft,
+                    child: Text("App Theme",style: TextStyle(
+                        fontSize: 16,
+                        color: AppBorders.appColor),),
+                  )
+                  ,SizedBox(height: 15,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      for(int i =0; i<appColors.length; i++)
+                        GestureDetector(
+                          onTap: ()async{
+                            await model.setAppColor(appColors[i]);
+                            ;
+                          },
+                          child:
+                          Container(
+
+                            color: appColors[i],
+                            width: 50,height: 50,
+                          )
+
+
+                          , )
+
+
+
+
+                    ],)
+                ],
+              ),
+            ),
+          ),
+        );
+      },),
     );
   }
 
@@ -202,7 +253,7 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
 
   Widget _buildConnectionStatus(String platform, bool isConnected) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 2),
       child: Row(
         children: [
           Text(
@@ -212,7 +263,7 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
               color: isConnected ? Colors.green : Colors.red,
             ),
           ),
-          SizedBox(width: 10),
+          Spacer(),//SizedBox(width: 10),
           Icon(
             isConnected ? Icons.check_circle : Icons.cancel,
             color: isConnected ? Colors.green : Colors.red,

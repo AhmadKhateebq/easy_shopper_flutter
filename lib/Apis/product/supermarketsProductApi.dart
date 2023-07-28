@@ -30,12 +30,12 @@ class SupermarketProductApi extends DioClient {
     }
   }
 
-  Future<List<Product>> getProductsApi() async {
+  Future<List<supermarketProducts>> getProductsApi(int supermarketId) async {
     try {
-      final Response response = await dio.get(Endpoints.products);
+      final Response response = await dio.get( '${Endpoints.supermarkets}/${supermarketId}${Endpoints.products}');
       final List<dynamic> responseData = response.data;
 
-      final List<Product> products = responseData.map((e) => Product.fromJson(e)).toList();
+      final List<supermarketProducts> products = responseData.map((e) => supermarketProducts.fromJson(e)).toList();
 
       return products;
     } catch (e) {
