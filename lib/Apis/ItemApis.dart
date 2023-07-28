@@ -14,6 +14,17 @@ class ItemApis {
     }
   }
 
+
+  static Future<http.Response> getAllItemsForSupermarket() async {
+    try {
+      final response = await Requests.getRequest('/products/');
+      return response;
+    } catch (e) {
+      print('getAllItems exception: $e');
+      return http.Response('error', 404);
+    }
+  }
+
   static Future<http.Response> createProduct(
       String name, String description, String category, String brand) async {
     try {
