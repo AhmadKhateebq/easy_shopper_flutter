@@ -9,7 +9,9 @@ import 'package:graduation_project/Pages/customer/shared_with_user.dart';
 
 import 'package:graduation_project/Style/borders.dart';
 import 'package:graduation_project/Pages/customer/list_page.dart';
+import 'package:graduation_project/providers/AppColorProvider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -38,10 +40,10 @@ class CustomerHomePage extends StatefulWidget {
   const CustomerHomePage({Key? key}) : super(key: key);
 
   @override
-  State<CustomerHomePage> createState() => _CustomerHomePageState();
+  State<CustomerHomePage> createState() => CustomerHomePageState();
 }
 
-class _CustomerHomePageState extends State<CustomerHomePage> {
+class CustomerHomePageState extends State<CustomerHomePage> {
   late int _userid;
   late Future<List<UserList>> _userListFuture;
 
@@ -49,6 +51,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
     print("message arrived ${msg.notification!.title}");
     NotificationsManager.showNotification(
         notficationPlugin, msg.notification!.title!, msg.notification!.body!);
+
   }
 
   _setUpFirebase() async {
@@ -93,7 +96,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
     print(preferences.getInt('userId'));
     return getUserListByUserId(_userid);
   }
-
+   AppColorProvider colorProvider = new AppColorProvider();
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQueryData = MediaQuery.of(context);
@@ -101,133 +104,145 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
     double screenWidth = mediaQueryData.size.width;
     // ignore: unused_local_variable
     double screenHeight = mediaQueryData.size.height;
-    return Scaffold(
-        drawer: Drawer(
-          width: screenWidth * 0.45,
-          child: ListView(
-            children: [
-              ListTile(
-                leading: Icon(Icons.share),
-                title: Text("Shared with me"),
-                onTap: () {
-                  Navigator.of(context)
-                      .push(new MaterialPageRoute(builder: (context) {
-                    return SharedWithUser();
-                  }));
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.settings),
-                title: Text("User settings"),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => UserSettingsPage()));
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.logout),
-                title: Text("Logout"),
-                onTap: () {
-                  logout(context);
-                },
-              ),
-            ],
-          ),
-        ),
-        appBar: AppBar(
-          title: Text('My Lists'),
-          backgroundColor: AppBorders.appColor, // Set the background color
-          elevation: 10, // Set the elevation (shadow) of the app bar
-          centerTitle: true,
-          actions: [
-            IconButton(
-              icon: Icon(
-                Icons.post_add_rounded,
-                size: 35,
-              ),
-              alignment: Alignment.topLeft,
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CreateListScreen(),
-                    ));
-              },
-            ),
-          ],
-        ),
-        body: FutureBuilder<List<UserList>>(
-            future: _userListFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                // Display a loading indicator while waiting for the data
-                return Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                // Handle the error state
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else if (!snapshot.hasData) {
-                // Handle the case where there is no data available
-                return Center(child: Text('No data available'));
-              } else {
-                // Data has been successfully fetched
-                List<UserList> userList = snapshot.data!;
-                return Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: 8.0), // Add vertical spacing
-                  child: ListView.builder(
-                    //get data from api
-                    itemCount: userList.length,
-                    itemBuilder: (context, index) {
-                      final list = userList[index];
-                      return Column(
-                        children: [
-                          Slidable(
-                            startActionPane: ActionPane(
-                              extentRatio: 0.3,
-                              motion: const BehindMotion(),
-                              children: [
-                                SlidableAction(
-                                  backgroundColor: Colors.red,
-                                  icon: Icons.delete,
-                                  label: 'delete',
-                                  onPressed: (context) =>
-                                      deleteList(context, list.id),
-                                )
-                              ],
-                            ),
-                            endActionPane: ActionPane(
-                              extentRatio: 0.3,
-                              motion: const BehindMotion(),
-                              children: [
-                                SlidableAction(
-                                  backgroundColor:
-                                      const Color.fromARGB(255, 89, 83, 83),
-                                  icon: Icons.settings,
-                                  label: 'Settings',
-                                  onPressed: (context) => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            ListSettingsPage(list.id)),
-                                  ),
-                                )
-                              ],
-                            ),
-                            child: buildListListTile(list),
-                            // SizedBox(
-                            //     height:
-                            //         8.0),
-                          )
-                          // Add vertical spacing between tiles
-                        ],
-                      );
+    return ChangeNotifierProvider(create: (_){
+      return colorProvider;
+    }
+      ,child: Consumer<AppColorProvider>(builder: (context,model,child){
+        print("main listener notified");
+        return Scaffold(
+            drawer: Drawer(
+              width: screenWidth * 0.45,
+              child: ListView(
+                children: [
+                  ListTile(
+                    leading: Icon(Icons.share),
+                    title: Text("Shared with me"),
+                    onTap: () {
+                      Navigator.of(context)
+                          .push(new MaterialPageRoute(builder: (context) {
+                        return SharedWithUser();
+                      }));
                     },
                   ),
-                );
-              }
-            }));
+                  ListTile(
+                    leading: Icon(Icons.settings),
+                    title: Text("User settings"),
+                    onTap: () async {
+
+                     await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => UserSettingsPage())
+                      );
+                     setState(() {
+
+                     });
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.logout),
+                    title: Text("Logout"),
+                    onTap: () {
+                      logout(context);
+                    },
+                  ),
+                ],
+              ),
+            ),
+            appBar: AppBar(
+              title: Text('My Lists'),
+              backgroundColor: model.appColor, // Set the background color
+              elevation: 10, // Set the elevation (shadow) of the app bar
+              centerTitle: true,
+              actions: [
+                IconButton(
+                  icon: Icon(
+                    Icons.post_add_rounded,
+                    size: 35,
+                  ),
+                  alignment: Alignment.topLeft,
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CreateListScreen(),
+                        ));
+                  },
+                ),
+              ],
+            ),
+            body: FutureBuilder<List<UserList>>(
+                future: _userListFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    // Display a loading indicator while waiting for the data
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    // Handle the error state
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData) {
+                    // Handle the case where there is no data available
+                    return Center(child: Text('No data available'));
+                  } else {
+                    // Data has been successfully fetched
+                    List<UserList> userList = snapshot.data!;
+                    return Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: 8.0), // Add vertical spacing
+                      child: ListView.builder(
+                        //get data from api
+                        itemCount: userList.length,
+                        itemBuilder: (context, index) {
+                          final list = userList[index];
+                          return Column(
+                            children: [
+                              Slidable(
+                                startActionPane: ActionPane(
+                                  extentRatio: 0.3,
+                                  motion: const BehindMotion(),
+                                  children: [
+                                    SlidableAction(
+                                      backgroundColor: Colors.red,
+                                      icon: Icons.delete,
+                                      label: 'delete',
+                                      onPressed: (context) =>
+                                          deleteList(context, list.id),
+                                    )
+                                  ],
+                                ),
+                                endActionPane: ActionPane(
+                                  extentRatio: 0.3,
+                                  motion: const BehindMotion(),
+                                  children: [
+                                    SlidableAction(
+                                      backgroundColor:
+                                      const Color.fromARGB(255, 89, 83, 83),
+                                      icon: Icons.settings,
+                                      label: 'Settings',
+                                      onPressed: (context) => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ListSettingsPage(list.id)),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                child: buildListListTile(list),
+                                // SizedBox(
+                                //     height:
+                                //         8.0),
+                              )
+                              // Add vertical spacing between tiles
+                            ],
+                          );
+                        },
+                      ),
+                    );
+                  }
+                }));
+      },),
+    );
   }
 
   Widget buildListListTile(UserList list) => ListTile(
@@ -275,9 +290,8 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                         new MaterialPageRoute(builder: (context) {
                       return Login();
                     }), (route) => route.isFirst);
-                    SharedPreferences.getInstance().then((prefs) {
-                      prefs.clear();
-                    });
+                    var prefs = SharedPreferencesManager.sharedPrefences;
+                    prefs!.remove("userToken");
                   },
                   child: Text("Yes")),
               TextButton(

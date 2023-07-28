@@ -62,7 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
               shape: BoxShape.circle,
               border: Border.all(color: Colors.white, width: 3)),
           child: CircleAvatar(
-              backgroundColor: AppBorders.appColor,
+              backgroundColor: Color(0xFFee1754),
               radius: screenWidth * 0.15,
               child: Image.asset(
                 "lib/Assets/Images/cart.png",
