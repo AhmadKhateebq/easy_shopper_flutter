@@ -76,11 +76,15 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
+  fonts:
+  - family: Caveat
+    fonts:
+      - asset: lib/Assets/Fonts/Caveat-Bold.ttf
   # To add assets to your application, add an assets section, like this:
   assets:
     - lib/Assets/Images/
     - lib/Assets/icons/supermarket_icon.png
+    - lib/Assets/Fonts/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

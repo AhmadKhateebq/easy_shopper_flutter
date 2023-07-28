@@ -114,8 +114,8 @@ class UsersPageState extends State {
                                         usersList[i]["username"].toString()),
                                     subtitle: Text(
                                         "# ${usersList[i]["id"].toString()}"),
-                                    trailing: Material(
-                                      child: InkWell(
+                                    /*trailing: Material(
+                                      child:  InkWell(
                                         radius: 20,
                                         borderRadius: BorderRadius.circular(50),
                                         splashColor: Colors.grey,
@@ -168,7 +168,7 @@ class UsersPageState extends State {
                                               });
                                         },
                                       ),
-                                    )),
+                                    )*/),
                               )
                           ],
                         )

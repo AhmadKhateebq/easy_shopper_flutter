@@ -19,6 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     // Add any necessary initialization or data loading logic here
     // After a certain duration, navigate to the next screen
+
     Future.delayed(Duration(seconds: 3), () {
       SharedPreferences.getInstance().then((value) {
         token = value.getString("userToken") != null
@@ -61,14 +62,28 @@ class _SplashScreenState extends State<SplashScreen> {
           decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(color: Colors.white, width: 3)),
-          child: CircleAvatar(
-              backgroundColor: Color(0xFFee1754),
-              radius: screenWidth * 0.15,
-              child: Image.asset(
-                "lib/Assets/Images/cart.png",
-                width: screenWidth * 0.15,
-                height: screenHeight * 0.15,
-              )),
+          child:
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+            CircleAvatar(
+                backgroundColor: Color(0xFFee1754),
+                radius: 60,
+                child: Image.asset(
+                  "lib/Assets/Images/cart.png",
+                  width: 80,
+                  height: 70,
+                )),
+            SizedBox(height: 15,),
+            Text("Lazy Shopper"
+
+              ,style: TextStyle(fontFamily: "Caveat"
+                ,fontSize: 45
+              ,//color: Color(0xFFee1754)
+              ),
+            )
+          ],)
+
         ),
       ),
     );
