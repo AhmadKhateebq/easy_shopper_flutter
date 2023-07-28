@@ -23,7 +23,7 @@ class DioClient {
       var prefs = await SharedPreferences.getInstance();
       String token = prefs.getString("userToken")!;
       print("token: " + token);
-      options.headers['Authorization'] = 'Bearer $accessToken';
+      options.headers['Authorization'] = 'Bearer $token';
       print(options.headers);
       return handler.next(options);
     }, onError: (DioError error, handler) async {
