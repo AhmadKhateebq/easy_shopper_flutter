@@ -2,6 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Apis/LoginApis.dart';
 import 'package:graduation_project/Pages/admin/admin_page.dart';
+import 'package:graduation_project/Pages/login/login.dart';
 import 'package:graduation_project/Style/borders.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -42,7 +43,7 @@ class _UserInfoHomeState extends State<_UserInfoHome> {
                       Navigator.of(alertContext).pop();
                       Navigator.of(context).pushReplacement(
                           new MaterialPageRoute(builder: (context) {
-                        return AdminHomePage();
+                        return Login();
                       }));
                     }
                   },
