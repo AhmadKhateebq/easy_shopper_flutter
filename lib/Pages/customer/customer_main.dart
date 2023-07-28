@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:graduation_project/Apis/NotificationApis.dart';
 import 'package:graduation_project/Pages/customer/shared_with_user.dart';
 
 import 'package:graduation_project/Style/borders.dart';
@@ -285,6 +286,8 @@ class CustomerHomePageState extends State<CustomerHomePage> {
             actions: [
               TextButton(
                   onPressed: () {
+                    FirebaseMessaging.instance.getToken().then((value) =>
+                        {NotificationApis.deleteUserTokin(_userid, value!)});
                     Navigator.of(alertContext).pop();
                     Navigator.of(context).pushAndRemoveUntil(
                         new MaterialPageRoute(builder: (context) {
