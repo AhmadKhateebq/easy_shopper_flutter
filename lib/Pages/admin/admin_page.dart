@@ -88,7 +88,7 @@ class HomeBodyState extends State<HomeBody> {
                   child: Text("Yes")),
               TextButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.pop(alertContext);
                   },
                   child: Text("No"))
             ],
@@ -109,31 +109,40 @@ class HomeBodyState extends State<HomeBody> {
 
     return SafeArea(
       child: Scaffold(
-        drawer: Drawer(
-          width: screenWidth * 0.45,
-          child: ListView(
-            children: [
-              ListTile(
-                leading: Icon(Icons.logout),
-                title: Text("Logout"),
-                onTap: () {
-                  logout(context);
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.create),
-                title: Text(
-                  "Create Product",
-                ),
-                onTap: () {},
-              )
-            ],
-          ),
-        ),
+        // drawer: Drawer(
+        //   width: screenWidth * 0.45,
+        //   child: ListView(
+        //     children: [
+        //       ListTile(
+        //         leading: Icon(Icons.logout),
+        //         title: Text("Logout"),
+        //         onTap: () {
+        //           logout(context);
+        //         },
+        //       ),
+        //     ],
+        //   ),
+        // ),
         appBar: AppBar(
           title: const Text(
             "Lazy Shopper",
           ),
+          leading: Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: AppBorders.appColor,
+          ),
+          child: IconButton(
+            icon: Icon(Icons.logout, color: Color.fromARGB(255, 255, 255, 255),
+              size: 30,),
+            onPressed: (){
+              logout(context);
+            },
+
+          ),
+        ),
           backgroundColor: AppBorders.appColor,
           centerTitle: true,
         ),

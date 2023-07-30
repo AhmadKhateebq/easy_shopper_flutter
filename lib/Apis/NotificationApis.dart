@@ -21,7 +21,7 @@ class NotificationApis {
       "userId": userId,
       "token": token,
     });
-    var response = await Requests.postRequest("/notification/add", body);
+    var response = await Requests.postRequest("/notification/user", body);
     print("notification list response : ${response.body}");
     return response;
   }

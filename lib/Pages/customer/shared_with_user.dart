@@ -68,22 +68,7 @@ class _SharedWithUserState extends State<SharedWithUser> {
           backgroundColor: AppBorders.appColor, // Set the background color
           elevation: 10, // Set the elevation (shadow) of the app bar
           centerTitle: true,
-          actions: [
-            IconButton(
-              icon: Icon(
-                Icons.post_add_rounded,
-                size: 35,
-              ),
-              alignment: Alignment.topLeft,
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CreateListScreen(),
-                    ));
-              },
-            ),
-          ],
+
         ),
         body: FutureBuilder<List<UserList>>(
             future: _userListFuture,

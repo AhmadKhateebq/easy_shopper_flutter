@@ -8,7 +8,7 @@
    <application
         android:label="Lazy Shopper"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@drawable/icon">
         <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyCpvTqI5yckd44k57KLeuK6yOdZ0LW_rEg"/>
        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
